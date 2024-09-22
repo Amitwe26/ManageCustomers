@@ -5,10 +5,16 @@ import axios from 'axios';
 import ButtonUi from '../ButtonUi/ButtonUi';
 
 const SideNavUi = () => {
+  const BASE_URL = 'http://localhost:4000/api';
   const fetchData = async () => {
-    const response = await axios.get('http://localhost:4000/');
-    console.log(response.data);
+    try {
+      const response = await axios.get(`${BASE_URL}`);
+      console.log(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   };
+
   return (
     <NavContainer>
       <NavList>
