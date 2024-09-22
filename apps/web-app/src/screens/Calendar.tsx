@@ -1,4 +1,3 @@
-import axios, { AxiosError } from 'axios';
 import OpenAI from 'openai';
 import React, { useState } from 'react';
 

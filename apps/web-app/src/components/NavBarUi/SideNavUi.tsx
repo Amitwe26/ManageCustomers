@@ -1,20 +1,8 @@
 import React, { useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
-import axios from 'axios';
-import ButtonUi from '../ButtonUi/ButtonUi';
 
 const SideNavUi = () => {
-  const BASE_URL = 'http://localhost:4000/api';
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}`);
-      console.log(response.data);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-
   return (
     <NavContainer>
       <NavList>
@@ -24,7 +12,6 @@ const SideNavUi = () => {
         <NavItem>
           <StyledNavLink to="/calendar">Calendar</StyledNavLink>
         </NavItem>
-        <ButtonUi label={'click'} onClick={fetchData} />
       </NavList>
     </NavContainer>
   );
