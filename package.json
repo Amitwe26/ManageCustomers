@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "apps/*",
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/electron",
+      "**/electron/**"
+    ]
+  },
+  "devDependencies": {
+    "typescript": "^4.9.0"
+  },
+  "scripts": {
+    "format": "prettier --write ."
+  }
+}
