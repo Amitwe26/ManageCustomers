@@ -40,7 +40,7 @@ const StyledButton = styled.button<ButtonProps>`
   cursor: pointer;
   color: white;
   background-color: ${({ $variant }) =>
-    $variant === 'primary' ? 'rgb(59,83,120)' : 'rgb(96,169,239)'};
+    $variant === 'primary' ? 'rgb(59,83,120)' : 'rgb(96,169,239,.9)'};
   transition:
     background-color 0.3s ease,
     transform 0.2s ease;

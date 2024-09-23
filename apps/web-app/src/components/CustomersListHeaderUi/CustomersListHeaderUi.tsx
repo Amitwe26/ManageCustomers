@@ -20,12 +20,12 @@ const CustomersListHeaderUi = ({
         <p> {customers.length}</p>
       </TitleContainer>
       <FilterContainer>
-        <input placeholder={'filter'} />
         <ButtonStyled
           onClick={() => setAddCustomerOpen(true)}
           label={'+'}
           variant="secondary"
         />
+        <input placeholder={'Filter'} />
       </FilterContainer>
     </Header>
   );

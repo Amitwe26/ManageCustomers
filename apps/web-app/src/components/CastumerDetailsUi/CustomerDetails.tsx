@@ -6,6 +6,7 @@ import MenusForm from '../MenusForm/MenusForm';
 import MealsUi from '../MealsUi/MealsUi';
 import { Customer, FitnessMenu } from '../../types/customers';
 import SummaryConversation from '../SummaryConversationUi/SummaryConversation';
+import ButtonUi from '../ButtonUi/ButtonUi';
 
 const CustomerDetails = () => {
   const location = useLocation();
@@ -48,12 +49,19 @@ const CustomerDetails = () => {
         ) : (
           <div>
             <MenusHeaderContainer>
-              <button type="button" onClick={() => setAddMenuIsOpen(true)}>
-                Add Fitness Menu
-              </button>
+              <ButtonUi
+                type="button"
+                onClick={() => setAddMenuIsOpen(true)}
+                label={'Add Fitness Menu'}
+                variant={'secondary'}
+              />
             </MenusHeaderContainer>
             {addMenuIsOpen && (
-              <MenusForm customer={customer} onAddMenu={handleAddMenu} />
+              <MenusForm
+                customer={customer}
+                onAddMenu={handleAddMenu}
+                onClose={() => setAddMenuIsOpen(false)}
+              />
             )}
             <MealsUi fitnessMenus={fitnessMenus} />
           </div>

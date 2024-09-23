@@ -113,5 +113,3 @@ const InputsWrapper = styled.div`
   gap: 20px;
   margin-bottom: 20px;
 `;
-
-// Assuming ButtonUi is already styled nicely, no further modifications required there.

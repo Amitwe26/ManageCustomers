@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Customer, FitnessMenu, Meal } from '../../types/customers';
+import styled from 'styled-components';
+import ButtonUi from '../ButtonUi/ButtonUi';
 // import { FitnessMenu, Customer } from '../../utils/getCustomersList';
 
 interface MenusFormProps {
   customer: Customer;
   onAddMenu: (newMenu: FitnessMenu) => void;
+  onClose: () => void;
 }
 
-const MenusForm = ({ customer, onAddMenu }: MenusFormProps) => {
+const MenusForm = ({ customer, onAddMenu, onClose }: MenusFormProps) => {
   const { register, handleSubmit, reset } = useForm<FitnessMenu>();
   const [meals, setMeals] = useState<FitnessMenu['meals']>([]);
 
@@ -32,29 +35,32 @@ const MenusForm = ({ customer, onAddMenu }: MenusFormProps) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <h2>Add Fitness Menu for {customer.name}</h2>
-      <label>
-        Name:
-        <input {...register('title')} required />
-      </label>
+    <FormContainer onSubmit={handleSubmit(onSubmit)}>
+      <FormHeader>
+        Add Fitness Menu for {customer.name}
+        <CloseButton onClick={onClose}>Close</CloseButton>
+      </FormHeader>
+      <InputsWrapper>
+        <Label>
+          Name:
+          <Input {...register('title')} required />
+        </Label>
 
-      <label>
-        Date:
-        <input type="date" {...register('date')} required />
-      </label>
+        <Label>
+          Date:
+          <Input type="date" {...register('date')} required />
+        </Label>
 
-      <label>
-        Notes:
-        <textarea {...register('notes')} />
-      </label>
-
-      <h3>Meals:</h3>
+        <Label>
+          Notes:
+          <TextArea {...register('notes')} />
+        </Label>
+      </InputsWrapper>
       {meals.map((meal: Meal, index) => (
-        <div key={index}>
-          <label>
+        <MealContainer key={index}>
+          <Label>
             Meal Name:
-            <input
+            <Input
               value={meal.nameMeal}
               onChange={(e) => {
                 const newMeals = [...meals];
@@ -63,11 +69,11 @@ const MenusForm = ({ customer, onAddMenu }: MenusFormProps) => {
               }}
               required
             />
-          </label>
+          </Label>
 
-          <label>
+          <Label>
             Ingredients:
-            <input
+            <Input
               value={meal.ingredients}
               onChange={(e) => {
                 const newMeals = [...meals];
@@ -76,21 +82,9 @@ const MenusForm = ({ customer, onAddMenu }: MenusFormProps) => {
               }}
               required
             />
-          </label>
+          </Label>
 
-          <label>
-            Notes:
-            <textarea
-              value={meal.notes}
-              onChange={(e) => {
-                const newMeals = [...meals];
-                newMeals[index].notes = e.target.value;
-                setMeals(newMeals);
-              }}
-            />
-          </label>
-
-          <label>
+          <Label>
             Start Time:
             <input
               type="time"
@@ -101,9 +95,9 @@ const MenusForm = ({ customer, onAddMenu }: MenusFormProps) => {
                 setMeals(newMeals);
               }}
             />
-          </label>
+          </Label>
 
-          <label>
+          <Label>
             End Time:
             <input
               type="time"
@@ -114,17 +108,109 @@ const MenusForm = ({ customer, onAddMenu }: MenusFormProps) => {
                 setMeals(newMeals);
               }}
             />
-          </label>
-        </div>
+          </Label>
+
+          <Label>
+            Notes:
+            <TextArea
+              value={meal.notes}
+              placeholder={'You can write everything'}
+              onChange={(e) => {
+                const newMeals = [...meals];
+                newMeals[index].notes = e.target.value;
+                setMeals(newMeals);
+              }}
+            />
+          </Label>
+        </MealContainer>
       ))}
+      <ButtonsContainer>
+        <ButtonUi
+          type="button"
+          variant={'secondary'}
+          label={'Add Meal'}
+          onClick={addMeal}
+        />
 
-      <button type="button" onClick={addMeal}>
-        Add Meal
-      </button>
-
-      <button type="submit">Submit</button>
-    </form>
+        <ButtonUi
+          type="submit"
+          variant={'secondary'}
+          label={'Submit'}
+          onClick={() => {}}
+        />
+      </ButtonsContainer>
+    </FormContainer>
   );
 };
 
 export default MenusForm;
+
+const FormContainer = styled.form`
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+`;
+
+const FormHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+`;
+
+const CloseButton = styled.button`
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: #666;
+`;
+
+const InputsWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 33% 33%;
+  gap: 20px;
+  margin-bottom: 20px;
+`;
+
+const Label = styled.label`
+  font-size: 17px;
+  margin-bottom: 5px;
+  color: #333;
+`;
+
+const ButtonsContainer = styled.div`
+  width: 20%;
+  align-self: center;
+  display: flex;
+  justify-content: space-between;
+  height: 100px;
+  flex-direction: column;
+`;
+
+const Input = styled.input`
+  width: 200px;
+  height: 20px;
+  border-radius: 10px;
+  margin: 0 5px 0;
+`;
+
+const MealContainer = styled.div`
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+  padding: 20px 0;
+  border-top: 0.6px solid ${({ theme }) => theme.colors.gray};
+`;
+
+const TextArea = styled.textarea`
+  width: 400px;
+  height: 50px;
+  border-radius: 20px;
+  padding: 10px;
+`;
