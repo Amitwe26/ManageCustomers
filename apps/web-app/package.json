@@ -2,7 +2,7 @@
   "name": "web-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": ".",
+  "homepage": "git@github.com:Amitwe26/ManageCustomers.git",
   "dependencies": {
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
@@ -17,6 +17,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.36.1",
+    "gh-pages": "^6.1.1",
     "openai": "^4.63.0",
     "prettier": "^3.3.3",
     "react": "^18.3.1",
@@ -33,7 +34,9 @@
     "start": "react-scripts start --port $PORT",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -b main -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -62,6 +65,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.36.1",
+    "gh-pages": "^6.1.1",
     "prettier": "^3.3.3"
   }
 }
