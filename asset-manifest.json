@@ -1,0 +1,12 @@
+{
+  "files": {
+    "main.js": "/ManageCustomers/static/js/main.bb4fa71e.js",
+    "static/js/400.6f746f1f.chunk.js": "/ManageCustomers/static/js/400.6f746f1f.chunk.js",
+    "index.html": "/ManageCustomers/index.html",
+    "main.bb4fa71e.js.map": "/ManageCustomers/static/js/main.bb4fa71e.js.map",
+    "400.6f746f1f.chunk.js.map": "/ManageCustomers/static/js/400.6f746f1f.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.bb4fa71e.js"
+  ]
+}
