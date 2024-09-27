@@ -40,7 +40,7 @@
     "deploy": "gh-pages -d build",
     "firebase-login": "firebase login",
     "firebase-login-npx": " npx ~/.yarn/bin/firebase login",
-    "firebase-deploy": "firebase deploy"
+    "firebase-deploy": "yarn build && firebase deploy"
   },
   "eslintConfig": {
     "extends": [
