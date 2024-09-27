@@ -158,10 +158,7 @@ export const addCustomerHistory = async (
 ) => {
   try {
     const customerDocRef = doc(db, 'users', userId, 'customers', customerId);
-
-    // Fetch the current customer document
     const customerDoc = await getDoc(customerDocRef);
-
     if (customerDoc.exists()) {
       const customerData = customerDoc.data();
       console.log({ customerData });

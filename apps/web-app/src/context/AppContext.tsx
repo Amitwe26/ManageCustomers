@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getUserInfo, observeAuthState } from '../utils/firebase';
 import { User } from '../types/userType';
+import { getUserInfo, observeAuthState } from '../utils/firebase';
 
 interface AppContextType {
   user: User | null;
@@ -26,7 +26,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
 
   useEffect(() => {
     observeAuthState(async (user) => {
-      setIsLoading(true);
       if (user) {
         const getUser = await getUserInfo().then((res) => {
           return res.find(
@@ -34,7 +33,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
           );
         });
         if (getUser) setUser(getUser);
-        setIsLoading(false);
       } else {
         console.log('No user logged in');
       }

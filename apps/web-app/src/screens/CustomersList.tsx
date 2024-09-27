@@ -5,40 +5,57 @@ import { CustomerFields, User } from '../types/userType';
 import { Customer } from '../types/customers';
 import CustomersListHeaderUi from '../components/CustomersListHeaderUi/CustomersListHeaderUi';
 import ChangeForm from '../components/GenericFormUi/GenericFormUi';
-import { getCustomersUser } from '../utils/firebase';
+import {
+  getCustomersUser,
+  getUserInfo,
+  observeAuthState,
+} from '../utils/firebase';
 import { useAppContext } from '../context/AppContext';
 
-interface CustomersListProps {
-  data: {
-    customers: Customer<CustomerFields>[];
-    userInfo?: User;
-  };
-}
-const CustomersList = ({ data }: CustomersListProps) => {
+const CustomersList = () => {
   const { isLoading } = useAppContext();
   const [customers, setCustomers] = useState<Customer<CustomerFields>[] | null>(
-    data.customers,
+    [],
   );
   const [addCustomerOpen, setAddCustomerOpen] = useState<boolean>(false);
+  const [userInfo, setUserInfo] = useState<User>();
+
   const getList = async () => {
-    if (data?.userInfo) {
-      const list = await getCustomersUser(data?.userInfo?.id);
+    if (userInfo) {
+      const list = await getCustomersUser(userInfo?.id);
       setCustomers(list);
     }
   };
   useEffect(() => {
-    setCustomers(data.customers);
-  }, [data.customers]);
+    observeAuthState(async (user) => {
+      if (user) {
+        const getUser = await getUserInfo().then((res) => {
+          return res.find(
+            (userInfo: { id: any }) => userInfo?.id === user?.uid,
+          );
+        });
+        const customers = await getCustomersUser(user.uid);
+        setUserInfo(getUser);
+        setCustomers(customers);
+      } else {
+        console.log('No user logged in');
+      }
+    });
+  }, []);
 
   return (
     <Container>
+      <div>
+        <p>{userInfo?.email}</p>
+        <p>{userInfo?.typeOfUser}</p>
+      </div>
       <CustomersListHeaderUi
         customers={customers}
         setAddCustomerOpen={setAddCustomerOpen}
         setCustomers={setCustomers}
       />
-      {data.userInfo?.profession && addCustomerOpen ? (
-        <ChangeForm user={data.userInfo} getList={getList} />
+      {userInfo?.profession && addCustomerOpen ? (
+        <ChangeForm user={userInfo} getList={getList} />
       ) : null}
       {isLoading ? (
         <p>Loading...</p>
