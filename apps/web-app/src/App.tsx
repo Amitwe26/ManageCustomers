@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import CustomersList from './screens/CustomersList';
 import Calendar from './screens/Calendar';
@@ -7,13 +7,40 @@ import styled, { ThemeProvider } from 'styled-components';
 import { theme } from './utils/theme';
 import CustomerDetails from './components/CastumerDetailsUi/CustomerDetails';
 import AppContext from './context/AppContext';
+import { loginUser } from './utils/firebase';
 
 function App() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      const user = await loginUser({ email, password });
+      console.log('Logged in:', user);
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
+  };
   return (
     <AppContext>
       <ThemeProvider theme={theme}>
         <Router>
           <Container>
+            <div>
+              <input
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button onClick={handleLogin}>Login</button>
+            </div>
             <NavBar />
             <RouteContainer>
               <Routes>
