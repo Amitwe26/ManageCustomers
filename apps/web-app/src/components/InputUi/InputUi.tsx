@@ -1,16 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form';
-import { Customer, CustomerFormKeys } from '../../types/customers';
+import { Customer, CustomerKeys, InputField } from '../../types/customers';
+import { CustomerFields } from '../../types/userType';
 
 interface InputUiProps {
   label: string;
-  name: CustomerFormKeys;
-  type: 'number' | 'text';
+  name: string;
+  type: 'text' | 'number' | 'email' | 'textarea';
   required?: boolean;
-  setValue: UseFormSetValue<Customer>;
-  register: UseFormRegister<Customer>;
-  error: FieldErrors;
+  register: UseFormRegister<Customer<CustomerFields>>;
+  errors: FieldErrors;
+  field: InputField;
 }
 
 const InputUi = ({
@@ -19,18 +20,19 @@ const InputUi = ({
   type,
   required = true,
   register,
-  error,
+  errors,
+  field,
 }: InputUiProps) => {
   return (
     <InputContainer>
-      <Label>{label}</Label>
+      {/*<Label>{type}</Label>*/}
       <StyledInput
-        {...register(name, { required })}
         type={type}
+        {...register(field.key as CustomerKeys)}
         placeholder={label}
         required={required}
       />
-      {error[name] && <ErrorText>This field is required</ErrorText>}
+      {errors[name] && <ErrorText>This field is required</ErrorText>}
     </InputContainer>
   );
 };

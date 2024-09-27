@@ -2,22 +2,25 @@ import React from 'react';
 import styled from 'styled-components';
 import ButtonUi from '../ButtonUi/ButtonUi';
 import { Customer } from '../../types/customers';
+import { CustomerFields } from '../../types/userType';
 
 interface CustomersListHeaderUiProps {
-  customers: Customer[];
+  customers: Customer<CustomerFields>[] | null;
   setAddCustomerOpen: (open: boolean) => void;
-  setCustomers: (customers: Customer[]) => void;
+  setCustomers: React.Dispatch<
+    React.SetStateAction<Customer<CustomerFields>[] | null>
+  >;
 }
 const CustomersListHeaderUi = ({
   customers,
   setAddCustomerOpen,
-  // setCustomers,
+  setCustomers,
 }: CustomersListHeaderUiProps) => {
   return (
     <Header>
       <TitleContainer>
         <h2>Customers </h2>
-        <p> {customers.length}</p>
+        <p> {customers?.length}</p>
       </TitleContainer>
       <FilterContainer>
         <ButtonStyled

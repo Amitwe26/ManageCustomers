@@ -1,25 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Customer } from '../../types/customers';
+import { CustomerFields } from '../../types/userType';
 
-const CustomerHeaderUi = ({ customer }: { customer: Customer }) => {
+const CustomerHeaderUi = ({
+  customer,
+}: {
+  customer: Customer<CustomerFields>;
+}) => {
   return (
     <>
       <Container>
         <Title>{customer.name}</Title>
         <FlexContainer>
           <InfoContainer>
-            <Label>Age: {customer.age}</Label>
-            <Label>Gender: {customer.gender}</Label>
-            <Label>Height: {customer.height} cm</Label>
-            <Label>Weight: {customer.weight} kg</Label>
-          </InfoContainer>
-          <InfoContainer>
-            <Label>{customer?.summaryConversation?.[0].description}</Label>
-          </InfoContainer>
-          <InfoContainer>
-            <Label>{customer?.summaryConversation?.[0].date}</Label>
-            <Label>{customer?.summaryConversation?.[0].timestamp}</Label>
+            {Object.entries(customer).map(([name, value]) => {
+              if (name === 'id' || name === 'type' || name === 'history')
+                return;
+              return (
+                <Label key={customer.id + name}>{`${name}: ${value}`}</Label>
+              );
+            })}
           </InfoContainer>
         </FlexContainer>
       </Container>
@@ -45,7 +46,7 @@ const FlexContainer = styled.div`
 const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 20%;
+  width: 25%;
   height: 10vh;
   padding: 0 10px 8px;
   justify-content: space-around;

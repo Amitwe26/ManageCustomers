@@ -2,30 +2,30 @@ import React from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import CustomerHeaderUi from '../CustomerHeaderInfoUi/customerHeaderUi';
-import MenusForm from '../MenusForm/MenusForm';
+// import MenusForm from '../MenusForm/MenusForm';
 import MealsUi from '../MealsUi/MealsUi';
 import { Customer, FitnessMenu } from '../../types/customers';
 import SummaryConversation from '../SummaryConversationUi/SummaryConversation';
 import ButtonUi from '../ButtonUi/ButtonUi';
+import { CustomerFields } from '../../types/userType';
 
 const CustomerDetails = () => {
   const location = useLocation();
-  const { customer } = location.state as { customer: Customer };
+  const { customer } = location.state as { customer: Customer<CustomerFields> };
   const [addMenuIsOpen, setAddMenuIsOpen] = React.useState(false);
   const [fitnessMenus, setFitnessMenus] = React.useState<
-    FitnessMenu[] | undefined
-  >(customer?.fitnessMenus ?? []);
+    Customer<CustomerFields>['history'] | undefined
+  >(customer?.history);
   const [activeTab, setActiveTab] = React.useState<'summary' | 'fitnessMenus'>(
     'summary',
   );
-
   if (!customer) {
     return <h1>Customer not found</h1>;
   }
 
-  const handleAddMenu = (newMenu: FitnessMenu) => {
-    setFitnessMenus((prev) => [...(prev ?? []), newMenu]);
-  };
+  // const handleAddMenu = (newMenu: FitnessMenu) => {
+  //   setFitnessMenus((prev) => [...(prev ?? []), newMenu]);
+  // };
   return (
     <CustomerContainer>
       <CustomerHeaderUi customer={customer} />
@@ -56,14 +56,14 @@ const CustomerDetails = () => {
                 variant={'secondary'}
               />
             </MenusHeaderContainer>
-            {addMenuIsOpen && (
-              <MenusForm
-                customer={customer}
-                onAddMenu={handleAddMenu}
-                onClose={() => setAddMenuIsOpen(false)}
-              />
-            )}
-            <MealsUi fitnessMenus={fitnessMenus} />
+            {/*{addMenuIsOpen && (*/}
+            {/*  <MenusForm*/}
+            {/*    customer={customer}*/}
+            {/*    onAddMenu={handleAddMenu}*/}
+            {/*    onClose={() => setAddMenuIsOpen(false)}*/}
+            {/*  />*/}
+            {/*)}*/}
+            {/*<MealsUi fitnessMenus={fitnessMenus} />*/}
           </div>
         )}
       </TabContent>

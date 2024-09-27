@@ -1,18 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import CustomerForm from '../components/CustomerFormUi/CustomerForm';
-import { customersArray } from '../utils/getCustomersList';
-import CustomersListHeaderUi from '../components/CustomersListHeaderUi/CustomersListHeaderUi';
+import { CustomerFields, User } from '../types/userType';
 import { Customer } from '../types/customers';
+import CustomersListHeaderUi from '../components/CustomersListHeaderUi/CustomersListHeaderUi';
+import ChangeForm from '../components/GenericFormUi/GenericFormUi';
+import { getCustomersUser } from '../utils/firebase';
+import { useAppContext } from '../context/AppContext';
 
-const CustomersList: React.FC = () => {
-  const [customers, setCustomers] = useState<Customer[]>(customersArray);
-  const [addCustomerOpen, setAddCustomerOpen] = useState<boolean>(false);
-
-  const handleAddCustomer = (newCustomer: Customer) => {
-    setCustomers((prev: Customer[]) => [...prev, newCustomer]);
+interface CustomersListProps {
+  data: {
+    customers: Customer<CustomerFields>[];
+    userInfo?: User;
   };
+}
+const CustomersList = ({ data }: CustomersListProps) => {
+  const { isLoading } = useAppContext();
+  const [customers, setCustomers] = useState<Customer<CustomerFields>[] | null>(
+    data.customers,
+  );
+  const [addCustomerOpen, setAddCustomerOpen] = useState<boolean>(false);
+  const getList = async () => {
+    if (data?.userInfo) {
+      const list = await getCustomersUser(data?.userInfo?.id);
+      setCustomers(list);
+    }
+  };
+  useEffect(() => {
+    setCustomers(data.customers);
+  }, [data.customers]);
 
   return (
     <Container>
@@ -21,41 +37,36 @@ const CustomersList: React.FC = () => {
         setAddCustomerOpen={setAddCustomerOpen}
         setCustomers={setCustomers}
       />
-      {addCustomerOpen ? (
-        <CustomerForm
-          onAddCustomer={handleAddCustomer}
-          setAddCustomerOpen={setAddCustomerOpen}
-        />
+      {data.userInfo?.profession && addCustomerOpen ? (
+        <ChangeForm user={data.userInfo} getList={getList} />
       ) : null}
-      {customers.map((customer) => (
-        <CustomerContainer
-          key={customer.id}
-          to={`/customers/customer/${customer.id}`}
-          state={{ customer }}
-        >
-          <CustomerDetails>
-            <DetailItem>
-              <CustomerName>{customer.name}</CustomerName>
-            </DetailItem>
-            <DetailItem>
-              <DetailLabel>Age:</DetailLabel>
-              <DetailValue>{customer.age}</DetailValue>
-            </DetailItem>
-            <DetailItem>
-              <DetailLabel>Gender:</DetailLabel>
-              <DetailValue>{customer.gender}</DetailValue>
-            </DetailItem>
-            <DetailItem>
-              <DetailLabel>Height:</DetailLabel>
-              <DetailValue>{customer.height} cm</DetailValue>
-            </DetailItem>
-            <DetailItem>
-              <DetailLabel>Weight:</DetailLabel>
-              <DetailValue>{customer.weight} kg</DetailValue>
-            </DetailItem>
-          </CustomerDetails>
-        </CustomerContainer>
-      ))}
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        customers?.map((customer) => (
+          <CustomerContainer
+            key={customer.id}
+            to={`/customers/customer/${customer.id}`}
+            state={{ customer }}
+          >
+            <CustomerDetails>
+              <DetailItem>
+                <CustomerName>{customer.name}</CustomerName>
+              </DetailItem>
+              <DetailItem>
+                <CustomerName>{customer.phone}</CustomerName>
+              </DetailItem>
+              <DetailItem>
+                <DetailLabel>Age:</DetailLabel>
+                <DetailValue>{customer.email}</DetailValue>
+              </DetailItem>
+              <DetailItem>
+                <DetailValue>{customer.type}</DetailValue>
+              </DetailItem>
+            </CustomerDetails>
+          </CustomerContainer>
+        ))
+      )}
     </Container>
   );
 };

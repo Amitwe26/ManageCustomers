@@ -1,48 +1,44 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import CustomerHeaderUi from '../CustomerHeaderInfoUi/customerHeaderUi';
-import MenusForm from '../MenusForm/MenusForm';
-import MealsUi from '../MealsUi/MealsUi';
-import {
-  Customer,
-  FitnessMenu,
-  SummaryConversationType,
-} from '../../types/customers';
+import { Customer, CustomerHistory, FitnessMenu } from '../../types/customers';
 import ButtonUi from '../ButtonUi/ButtonUi';
+import { CustomerFields } from '../../types/userType';
+import { addCustomerHistory, getHistoryUser } from '../../utils/firebase';
+import { useAppContext } from '../../context/AppContext';
 
-const CustomerDetails = () => {
+const SummaryConversation = () => {
   const location = useLocation();
-  const { customer } = location.state as { customer: Customer };
+  const { user } = useAppContext();
+  const { customer } = location.state as {
+    customer: Customer<CustomerFields>;
+  };
+
   const [addMenuIsOpen, setAddMenuIsOpen] = useState(false);
   const [fitnessMenus, setFitnessMenus] = useState<FitnessMenu[] | undefined>(
-    customer?.fitnessMenus ?? []
+    [],
   );
   const [summaryConversation, setSummaryConversation] = useState<
-    SummaryConversationType[]
-  >(customer?.summaryConversation ?? []);
+    CustomerHistory[]
+  >(customer?.history ?? []);
   const [newDescription, setNewDescription] = useState('');
-
-  if (!customer) {
-    return <h1>Customer not found</h1>;
-  }
-
   const handleAddMenu = (newMenu: FitnessMenu) => {
     setFitnessMenus((prev) => [...(prev ?? []), newMenu]);
   };
 
-  const handleAddSummary = () => {
+  const handleAddSummary = async () => {
     const newSummary = {
-      date: new Date().toLocaleDateString(),
-      description: newDescription,
-      timestamp: new Date().toLocaleTimeString([], {
-        hour: '2-digit',
-        minute: '2-digit',
-      }),
+      date: new Date().toISOString(),
+      summery: newDescription,
+      timestamp: new Date().toISOString(),
     };
 
-    setSummaryConversation((prev) => [...prev, newSummary]);
-    setNewDescription(''); // Clear the input box after submission
+    if (user) {
+      await addCustomerHistory(user.id, customer.id, newSummary);
+      const res = await getHistoryUser(user?.id, customer.id);
+      if (res?.history) setSummaryConversation(res.history ?? []);
+    }
+    setNewDescription('');
   };
 
   return (
@@ -61,21 +57,23 @@ const CustomerDetails = () => {
       </TextBoxContainer>
 
       <SummaryList>
-        {summaryConversation.map((conversation, index) => (
-          <SummaryItem key={index}>
-            <SummaryHeader>
-              <span>{conversation.date}</span>
-              <span>{conversation.timestamp}</span>
-            </SummaryHeader>
-            <SummaryDescription>{conversation.description}</SummaryDescription>
-          </SummaryItem>
-        ))}
+        {summaryConversation
+          ?.map((conversation, index) => (
+            <SummaryItem key={index}>
+              <SummaryHeader>
+                <p>{new Date(conversation?.date).toLocaleDateString()}</p>
+                <p>{new Date(conversation?.timestamp).toLocaleTimeString()}</p>
+              </SummaryHeader>
+              <SummaryDescription>{conversation.summery}</SummaryDescription>
+            </SummaryItem>
+          ))
+          .reverse()}
       </SummaryList>
     </CustomerContainer>
   );
 };
 
-export default CustomerDetails;
+export default SummaryConversation;
 
 const CustomerContainer = styled.div`
   padding: 0 15px;

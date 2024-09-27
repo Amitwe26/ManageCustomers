@@ -17,6 +17,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.36.1",
+    "firebase": "^10.13.2",
     "gh-pages": "^6.1.1",
     "openai": "^4.63.0",
     "prettier": "^3.3.3",
@@ -36,7 +37,10 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "firebase-login": "firebase login",
+    "firebase-login-npx": " npx ~/.yarn/bin/firebase login",
+    "firebase-deploy": "firebase deploy"
   },
   "eslintConfig": {
     "extends": [
