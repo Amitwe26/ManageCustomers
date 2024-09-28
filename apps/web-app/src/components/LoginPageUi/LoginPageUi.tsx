@@ -1,7 +1,7 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import InputUi from '../InputUi/InputUi';
 import React from 'react';
-import { getUserInfo, observeAuthState } from '../../utils/firebase';
+import { getUserInfo, loginUser, observeAuthState } from '../../utils/firebase';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -18,9 +18,17 @@ const LoginPageUi: React.FC = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormFields>();
-
+  const handleLogin = async (data: LoginFormFields) => {
+    try {
+      const user = await loginUser(data);
+      console.log('Logged in:', user);
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
+  };
   const onSubmit: SubmitHandler<LoginFormFields> = async (data) => {
     if (data) {
+      await handleLogin(data);
       observeAuthState(async (user) => {
         if (user) {
           const getUser = await getUserInfo().then((res) => {
