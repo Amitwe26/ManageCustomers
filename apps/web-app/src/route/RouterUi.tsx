@@ -13,7 +13,6 @@ const RoutesComponent = () => {
   const noSidebarRoutes = ['/', '/signup'];
 
   const showSidebar = !noSidebarRoutes.includes(location.pathname);
-  console.log(location.pathname);
   return (
     //   <NavBar />
     <Container>

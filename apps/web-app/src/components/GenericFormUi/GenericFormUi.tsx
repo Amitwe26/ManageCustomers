@@ -7,8 +7,8 @@ import {
 import styled from 'styled-components';
 import InputUi from '../InputUi/InputUi';
 import ButtonUi from '../ButtonUi/ButtonUi';
-import { Customer, CustomerKeys, InputField } from '../../types/customers';
-import { CustomerFields, FitnessFields, User } from '../../types/userType';
+import { Customer, InputField } from '../../types/customers';
+import { CustomerFields, User } from '../../types/userType';
 import { Path, useForm } from 'react-hook-form';
 
 export const GenericFormUi: React.FC<{
@@ -28,8 +28,12 @@ export const GenericFormUi: React.FC<{
     const fetchFields = async () => {
       const data = await getUserProfession();
       const res = data.find((elem) => elem.professionName === user?.profession);
-      const res2 = await getCollectionWithId('professions', res?.id, 'fields');
-      setFields(res2);
+      const professionFields = await getCollectionWithId(
+        'professions',
+        res?.id,
+        'fields',
+      );
+      setFields(professionFields);
     };
 
     fetchFields();
@@ -118,6 +122,7 @@ const ChangeForm = ({
 };
 
 export default ChangeForm;
+
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
@@ -130,11 +135,13 @@ const FormContainer = styled.form`
 const InputContainer = styled.div`
   margin-bottom: 20px;
 `;
+
 const FormHeader = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-bottom: 20px;
 `;
+
 const CloseButton = styled.button`
   background: none;
   border: none;
