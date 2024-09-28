@@ -46,7 +46,7 @@ const FlexContainer = styled.div`
 const InfoContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 25%;
+  width: 30%;
   height: 10vh;
   padding: 0 10px 8px;
   justify-content: space-around;

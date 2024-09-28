@@ -1,34 +1,36 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FieldErrors, UseFormRegister, UseFormSetValue } from 'react-hook-form';
-import { Customer, CustomerKeys, InputField } from '../../types/customers';
-import { CustomerFields } from '../../types/userType';
+import {
+  FieldErrors,
+  FieldValues,
+  Path,
+  UseFormRegister,
+} from 'react-hook-form';
+import { InputField } from '../../types/customers';
 
-interface InputUiProps {
+interface InputUiProps<T extends FieldValues> {
   label: string;
-  name: string;
+  name: Path<T>; // Ensure `name` matches one of the form data keys
   type: 'text' | 'number' | 'email' | 'textarea';
   required?: boolean;
-  register: UseFormRegister<Customer<CustomerFields>>;
-  errors: FieldErrors;
+  register: UseFormRegister<T>; // `register` should match the form data type
+  errors: FieldErrors<T>; // Errors should match the form data type
   field: InputField;
 }
 
-const InputUi = ({
+const InputUi = <T extends FieldValues>({
   label,
   name,
   type,
   required = true,
   register,
   errors,
-  field,
-}: InputUiProps) => {
+}: InputUiProps<T>) => {
   return (
     <InputContainer>
-      {/*<Label>{type}</Label>*/}
       <StyledInput
         type={type}
-        {...register(field.key as CustomerKeys)}
+        {...register(name)}
         placeholder={label}
         required={required}
       />
@@ -36,7 +38,6 @@ const InputUi = ({
     </InputContainer>
   );
 };
-
 export default InputUi;
 
 const InputContainer = styled.div`

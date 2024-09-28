@@ -7,15 +7,15 @@ import {
 import styled from 'styled-components';
 import InputUi from '../InputUi/InputUi';
 import ButtonUi from '../ButtonUi/ButtonUi';
-import { Customer, InputField } from '../../types/customers';
+import { Customer, CustomerKeys, InputField } from '../../types/customers';
 import { CustomerFields, FitnessFields, User } from '../../types/userType';
-import { useForm } from 'react-hook-form';
+import { Path, useForm } from 'react-hook-form';
 
 export const GenericFormUi: React.FC<{
   professionId: string;
   user?: User;
-  getList: () => Promise<void>;
-}> = ({ professionId, user, getList }) => {
+  setAddCustomerOpen: (open: boolean) => void;
+}> = ({ professionId, user, setAddCustomerOpen }) => {
   const [fields, setFields] = useState<InputField[]>([]);
   const {
     register,
@@ -40,9 +40,9 @@ export const GenericFormUi: React.FC<{
       if (field.type === 'textarea') {
         return (
           <InputContainer key={field.key}>
-            <InputUi
+            <InputUi<Customer<CustomerFields>>
               label={field.label}
-              name={field.key}
+              name={field.key as Path<Customer<CustomerFields>>}
               type={field.type}
               field={field}
               register={register}
@@ -54,9 +54,9 @@ export const GenericFormUi: React.FC<{
 
       return (
         <InputContainer key={field.key}>
-          <InputUi
+          <InputUi<Customer<CustomerFields>>
             label={field.label}
-            name={field.key}
+            name={field.key as Path<Customer<CustomerFields>>}
             field={field}
             type={field.type}
             register={register}
@@ -70,13 +70,18 @@ export const GenericFormUi: React.FC<{
   const onSubmit = async (data: Customer<CustomerFields>) => {
     if (user?.id) {
       await setNewCustomer(user?.id, data);
-      await getList();
+      await setAddCustomerOpen(false);
       reset();
     }
   };
 
   return (
     <FormContainer onSubmit={handleSubmit(onSubmit)}>
+      <FormHeader>
+        <CloseButton onClick={() => setAddCustomerOpen(false)}>
+          Close
+        </CloseButton>
+      </FormHeader>
       <InputsWrapper>{renderFields()}</InputsWrapper>
       <ButtonUi
         type="submit"
@@ -91,10 +96,10 @@ export const GenericFormUi: React.FC<{
 // Example usage in a parent component
 const ChangeForm = ({
   user,
-  getList,
+  setAddCustomerOpen,
 }: {
   user?: User;
-  getList: () => Promise<void>;
+  setAddCustomerOpen: (open: boolean) => void;
 }) => {
   const [selectedProfessionId, setSelectedProfessionId] =
     useState<string>('fitness');
@@ -107,7 +112,7 @@ const ChangeForm = ({
     <GenericFormUi
       professionId={selectedProfessionId}
       user={user}
-      getList={getList}
+      setAddCustomerOpen={setAddCustomerOpen}
     />
   );
 };
@@ -122,17 +127,14 @@ const FormContainer = styled.form`
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 `;
 
-const FormHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-`;
-
 const InputContainer = styled.div`
   margin-bottom: 20px;
 `;
-
+const FormHeader = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+`;
 const CloseButton = styled.button`
   background: none;
   border: none;

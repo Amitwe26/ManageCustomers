@@ -5,17 +5,23 @@ import { Customer } from '../../types/customers';
 import { CustomerFields } from '../../types/userType';
 
 interface CustomersListHeaderUiProps {
-  customers: Customer<CustomerFields>[] | null;
+  customers?: Customer<CustomerFields>[];
   setAddCustomerOpen: (open: boolean) => void;
-  setCustomers: React.Dispatch<
-    React.SetStateAction<Customer<CustomerFields>[] | null>
+  setFilterList: React.Dispatch<
+    React.SetStateAction<Customer<CustomerFields>[] | undefined>
   >;
 }
 const CustomersListHeaderUi = ({
   customers,
   setAddCustomerOpen,
-  setCustomers,
+  setFilterList,
 }: CustomersListHeaderUiProps) => {
+  const onChange = (value: any) => {
+    const newList = customers?.filter((customer) =>
+      customer.name.includes(value.target.value),
+    );
+    setFilterList(newList);
+  };
   return (
     <Header>
       <TitleContainer>
@@ -28,7 +34,7 @@ const CustomersListHeaderUi = ({
           label={'+'}
           variant="secondary"
         />
-        <input placeholder={'Filter'} />
+        <input placeholder={'Filter'} onChange={onChange} />
       </FilterContainer>
     </Header>
   );

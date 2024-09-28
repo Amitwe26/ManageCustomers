@@ -5,86 +5,70 @@ import { CustomerFields, User } from '../types/userType';
 import { Customer } from '../types/customers';
 import CustomersListHeaderUi from '../components/CustomersListHeaderUi/CustomersListHeaderUi';
 import ChangeForm from '../components/GenericFormUi/GenericFormUi';
-import {
-  getCustomersUser,
-  getUserInfo,
-  observeAuthState,
-} from '../utils/firebase';
+import { getCustomersUser } from '../utils/firebase';
+import { useQuery } from 'react-query';
 import { useAppContext } from '../context/AppContext';
 
 const CustomersList = () => {
-  const { isLoading } = useAppContext();
-  const [customers, setCustomers] = useState<Customer<CustomerFields>[] | null>(
-    [],
+  const { user } = useAppContext();
+  const {
+    data: customers,
+    isLoading,
+    error,
+    refetch: refechCustomersData,
+  } = useQuery<Customer<CustomerFields>[]>(['customers', user?.id], () =>
+    getCustomersUser(user?.id ?? ''),
   );
+  const [filterList, setFilterList] = useState<
+    Customer<CustomerFields>[] | undefined
+  >([]);
   const [addCustomerOpen, setAddCustomerOpen] = useState<boolean>(false);
-  const [userInfo, setUserInfo] = useState<User>();
-
-  const getList = async () => {
-    if (userInfo) {
-      const list = await getCustomersUser(userInfo?.id);
-      setCustomers(list);
-    }
-  };
-  useEffect(() => {
-    observeAuthState(async (user) => {
-      if (user) {
-        const getUser = await getUserInfo().then((res) => {
-          return res.find(
-            (userInfo: { id: any }) => userInfo?.id === user?.uid,
-          );
-        });
-        const customers = await getCustomersUser(user.uid);
-        setUserInfo(getUser);
-        setCustomers(customers);
-      } else {
-        console.log('No user logged in');
-      }
-    });
-  }, []);
-
+  if (error) return <div>Error: {error?.toString()}</div>;
   return (
-    <Container>
-      <div>
-        <p>{userInfo?.email}</p>
-        <p>{userInfo?.typeOfUser}</p>
-      </div>
-      <CustomersListHeaderUi
-        customers={customers}
-        setAddCustomerOpen={setAddCustomerOpen}
-        setCustomers={setCustomers}
-      />
-      {userInfo?.profession && addCustomerOpen ? (
-        <ChangeForm user={userInfo} getList={getList} />
-      ) : null}
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
-        customers?.map((customer) => (
-          <CustomerContainer
-            key={customer.id}
-            to={`/customers/customer/${customer.id}`}
-            state={{ customer }}
-          >
-            <CustomerDetails>
-              <DetailItem>
-                <CustomerName>{customer.name}</CustomerName>
-              </DetailItem>
-              <DetailItem>
-                <CustomerName>{customer.phone}</CustomerName>
-              </DetailItem>
-              <DetailItem>
-                <DetailLabel>Age:</DetailLabel>
-                <DetailValue>{customer.email}</DetailValue>
-              </DetailItem>
-              <DetailItem>
-                <DetailValue>{customer.type}</DetailValue>
-              </DetailItem>
-            </CustomerDetails>
-          </CustomerContainer>
-        ))
-      )}
-    </Container>
+    <>
+      <Container>
+        <div>
+          <p>{user?.email}</p>
+          <p>{user?.typeOfUser}</p>
+        </div>
+        <CustomersListHeaderUi
+          customers={customers}
+          setAddCustomerOpen={setAddCustomerOpen}
+          setFilterList={setFilterList}
+        />
+        {user?.profession && addCustomerOpen ? (
+          <ChangeForm user={user} setAddCustomerOpen={setAddCustomerOpen} />
+        ) : null}
+        {!isLoading && customers ? (
+          (filterList?.length ? filterList : customers).map(
+            (customer: Customer<CustomerFields>) => (
+              <CustomerContainer
+                key={customer.id}
+                to={`/customers/customer/${customer.id}`}
+                state={{ customer }}
+              >
+                <CustomerDetails>
+                  <DetailItem>
+                    <CustomerName>{customer.name}</CustomerName>
+                  </DetailItem>
+                  <DetailItem>
+                    <CustomerName>{customer.phone}</CustomerName>
+                  </DetailItem>
+                  <DetailItem>
+                    <DetailValue>{customer.email}</DetailValue>
+                  </DetailItem>
+                  <DetailItem>
+                    <DetailValue>{customer.type}</DetailValue>
+                  </DetailItem>
+                </CustomerDetails>
+              </CustomerContainer>
+            ),
+          )
+        ) : (
+          <p>Loading...</p>
+        )}
+      </Container>
+    </>
   );
 };
 
@@ -94,6 +78,7 @@ const Container = styled.div`
 
 const CustomerContainer = styled(Link)`
   display: flex;
+  width: 100%;
   flex-direction: column;
   border-top: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
@@ -128,11 +113,6 @@ const DetailItem = styled.div`
   display: flex;
   width: 20%;
   align-items: center;
-`;
-
-const DetailLabel = styled.span`
-  font-weight: bold;
-  margin-right: 5px;
 `;
 
 const DetailValue = styled.span`

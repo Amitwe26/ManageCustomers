@@ -46,7 +46,7 @@ export const loginUser = async ({ email, password }: UserType) => {
     return userCredential.user; // Return the user on success
   } catch (error) {
     console.error('Login error:', error);
-    throw error; // Re-throw error to be caught in the component
+    throw error;
   }
 };
 
@@ -54,11 +54,12 @@ export const observeAuthState = (callback: (user: any) => Promise<void>) => {
   onAuthStateChanged(auth, callback); // Pass in the callback to handle auth state changes
 };
 
-export const getUserInfo: () => Promise<User[]> = () =>
-  getCollection('users') as Promise<User[]>;
+export const getUserInfo = async (): Promise<User[]> => {
+  return await getCollection<User>('users');
+};
 
 export const getUserProfession: () => Promise<Profession[]> = () =>
-  getCollection('professions') as unknown as Promise<Profession[]>;
+  getCollection('professions');
 
 export const getCustomersUser: (
   id: string,
@@ -68,7 +69,7 @@ export const getCustomersUser: (
   return snapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
-  })) as unknown as Customer<CustomerFields>[];
+  })) as Customer<CustomerFields>[];
 };
 
 export const getHistoryUser: (
@@ -93,13 +94,15 @@ export const getHistoryUser: (
     throw error;
   }
 };
-export const getCollection = async (collectionName: string) => {
+export const getCollection = async <T>(
+  collectionName: string,
+): Promise<T[]> => {
   const userInfo = collection(db, collectionName);
   const snapshot = await getDocs(userInfo);
   return snapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
-  }));
+  })) as T[];
 };
 
 export const getCollectionWithId: (
@@ -116,7 +119,6 @@ export const getCollectionWithId: (
   }
 
   const professionRef = doc(db, collectionName, id);
-  // const fieldsRef = collection(professionRef, subCollection);
   const fieldsRef = collection(professionRef, subCollection);
   const snapshot = await getDocs(fieldsRef);
   return snapshot.docs.map((doc) => ({

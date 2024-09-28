@@ -7,7 +7,7 @@ const SideNavUi = () => {
     <NavContainer>
       <NavList>
         <NavItem>
-          <StyledNavLink to="/">Customers List</StyledNavLink>
+          <StyledNavLink to="/customers">Customers List</StyledNavLink>
         </NavItem>
         <NavItem>
           <StyledNavLink to="/calendar">Calendar</StyledNavLink>
@@ -54,7 +54,7 @@ const StyledNavLink = styled(NavLink)`
   }
 
   &.active {
-    background-color: rgb(242, 249, 252, 0.9);
+    background-color: rgba(242, 249, 251, 0.5);
     border-bottom-right-radius: 4px;
     border-top-right-radius: 4px;
   }
