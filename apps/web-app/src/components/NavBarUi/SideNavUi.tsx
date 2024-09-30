@@ -1,8 +1,30 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { auth, getUserInfo, observeAuthState } from '../../utils/firebase';
+import { signOut } from 'firebase/auth';
 
 const SideNavUi = () => {
+  const navigate = useNavigate();
+  const [isUserLogin, setIsUserLogin] = useState(true);
+
+  useEffect(() => {
+    observeAuthState(async (user) => {
+      if (user) setIsUserLogin(true);
+      else {
+        setIsUserLogin(false);
+        navigate('/');
+      }
+    });
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error('Error signing out:', error);
+    }
+  };
   return (
     <NavContainer>
       <NavList>
@@ -12,6 +34,13 @@ const SideNavUi = () => {
         <NavItem>
           <StyledNavLink to="/calendar">Calendar</StyledNavLink>
         </NavItem>
+        {isUserLogin && (
+          <NavItem>
+            <StyledNavLink onClick={() => handleLogout()} to="/">
+              Log out
+            </StyledNavLink>
+          </NavItem>
+        )}
       </NavList>
     </NavContainer>
   );
@@ -54,7 +83,7 @@ const StyledNavLink = styled(NavLink)`
   }
 
   &.active {
-    background-color: rgba(242, 249, 251, 0.5);
+    background-color: rgba(249, 251, 253);
     border-bottom-right-radius: 4px;
     border-top-right-radius: 4px;
   }

@@ -1,26 +1,43 @@
-import React from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
-import LoginPageUi from '../components/LoginPageUi/LoginPageUi';
+import React, { useEffect } from 'react';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import LoginPage from '../screens/LoginPage';
 import SideNavUi from '../components/NavBarUi/SideNavUi';
 import CustomersList from '../screens/CustomersList';
 import Calendar from '../screens/Calendar';
 import CustomerDetails from '../components/CastumerDetailsUi/CustomerDetails';
 import styled from 'styled-components';
+import { getUserInfo, observeAuthState } from '../utils/firebase';
+import { useAppContext } from '../context/AppContext';
 
 const RoutesComponent = () => {
   const location = useLocation();
+  const { setUser } = useAppContext();
 
   const noSidebarRoutes = ['/', '/signup'];
 
   const showSidebar = !noSidebarRoutes.includes(location.pathname);
-  console.log(location.pathname);
+
+  const navigate = useNavigate();
+  useEffect(() => {
+    observeAuthState(async (user) => {
+      if (user) {
+        const getUser = await getUserInfo().then((res) =>
+          res.find((userInfo: { id: any }) => userInfo?.id === user?.uid),
+        );
+        if (getUser) setUser(getUser);
+      } else {
+        console.log('No user logged in');
+        navigate('/');
+      }
+    });
+  }, []);
   return (
     //   <NavBar />
     <Container>
       {showSidebar && <SideNavUi />}
       <RouteContainer>
         <Routes>
-          <Route path={'/'} element={<LoginPageUi />} />
+          <Route path={'/'} element={<LoginPage />} />
           <Route path={'/customers'} element={<CustomersList />} />
           <Route path={'/calendar'} element={<Calendar />} />
           <Route
@@ -40,7 +57,7 @@ const Container = styled.div`
 `;
 
 const RouteContainer = styled.div`
-  background-color: rgba(242, 249, 251, 0.5);
+  background-color: rgba(249, 251, 253);
   border-top: 1px solid rgba(243, 243, 243, 0.71);
   margin-top: 25px;
   width: 100%;

@@ -3,6 +3,7 @@ import {
   getAuth,
   signInWithEmailAndPassword,
   onAuthStateChanged,
+  User as authUser,
 } from 'firebase/auth';
 import {
   getFirestore,
@@ -16,6 +17,7 @@ import {
 } from 'firebase/firestore';
 import { Customer, CustomerHistory } from '../types/customers';
 import { CustomerFields, Profession, User } from '../types/userType';
+import { SignUpFormFields } from '../components/LoginForm/SignUpForm';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDA6zaJH9ZLBMXZB13Y_GBh8mwjMy7NUws',
@@ -43,14 +45,16 @@ export const loginUser = async ({ email, password }: UserType) => {
       email,
       password,
     );
-    return userCredential.user; // Return the user on success
+    return userCredential.user;
   } catch (error) {
     console.error('Login error:', error);
     throw error;
   }
 };
 
-export const observeAuthState = (callback: (user: any) => Promise<void>) => {
+export const observeAuthState = (
+  callback: (user: authUser | null) => Promise<void> | void,
+) => {
   onAuthStateChanged(auth, callback); // Pass in the callback to handle auth state changes
 };
 
@@ -105,26 +109,47 @@ export const getCollection = async <T>(
   })) as T[];
 };
 
-export const getCollectionWithId: (
+export const getCollectionWithId = async (
   collectionName: string,
   id?: string,
   subCollection?: string,
-) => Promise<any> = async (
-  collectionName: string,
-  id?: string,
-  subCollection?: string,
-) => {
-  if (!id || !subCollection) {
+): Promise<any> => {
+  if (!id) {
     throw new Error('A valid ID must be provided to fetch fields.');
   }
+  const docRef = doc(db, collectionName, id);
 
-  const professionRef = doc(db, collectionName, id);
-  const fieldsRef = collection(professionRef, subCollection);
-  const snapshot = await getDocs(fieldsRef);
-  return snapshot.docs.map((doc) => ({
-    id: doc.id, // Use doc.id instead of doc.ref.id for cleaner syntax
-    ...doc.data(),
-  }));
+  if (subCollection) {
+    const subCollectionRef = collection(docRef, subCollection);
+    const subCollectionSnapshot = await getDocs(subCollectionRef);
+    return subCollectionSnapshot.docs.map((doc) => ({
+      id: doc.id, // Use doc.id for subcollection documents
+      ...doc.data(),
+    }));
+  }
+  const docSnapshot = await getDoc(docRef);
+  if (docSnapshot.exists()) {
+    return {
+      id: docSnapshot.id,
+      ...docSnapshot.data(),
+    };
+  } else {
+    throw new Error('Document does not exist.');
+  }
+};
+
+export const setNewUser = async (data: SignUpFormFields, userId: string) => {
+  const newUser: User = {
+    id: userId,
+    email: data.email,
+    password: data.password,
+    profession: data.profession,
+    typeOfUser: 'manager', // Example value for user type
+    customers: [], // Empty customers for now
+  };
+
+  await setDoc(doc(db, 'users', userId), newUser);
+  return await getCollectionWithId('users', userId);
 };
 
 export const setNewCustomer = async (

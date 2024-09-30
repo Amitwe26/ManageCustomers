@@ -24,6 +24,7 @@ export type DigitalFields = {
 export type User = {
   id: string;
   email: string;
+  password: string;
   profession: string;
   typeOfUser: string;
   customers: Customer<CustomerFields>[];

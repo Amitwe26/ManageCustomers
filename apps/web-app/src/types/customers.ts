@@ -20,7 +20,7 @@ export type Meal = {
 export interface InputField {
   id: string;
   label: string;
-  type: 'text' | 'number' | 'email' | 'textarea';
+  type: 'text' | 'number' | 'email' | 'textarea' | 'password';
   key: string;
 }
 

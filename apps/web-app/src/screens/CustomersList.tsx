@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { CustomerFields, User } from '../types/userType';
+import { CustomerFields } from '../types/userType';
 import { Customer } from '../types/customers';
 import CustomersListHeaderUi from '../components/CustomersListHeaderUi/CustomersListHeaderUi';
 import ChangeForm from '../components/GenericFormUi/GenericFormUi';
@@ -37,7 +37,11 @@ const CustomersList = () => {
           setFilterList={setFilterList}
         />
         {user?.profession && addCustomerOpen ? (
-          <ChangeForm user={user} setAddCustomerOpen={setAddCustomerOpen} />
+          <ChangeForm
+            user={user}
+            setAddCustomerOpen={setAddCustomerOpen}
+            refechCustomersData={() => refechCustomersData()}
+          />
         ) : null}
         {!isLoading && customers ? (
           (filterList?.length ? filterList : customers).map(

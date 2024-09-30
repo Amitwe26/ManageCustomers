@@ -11,24 +11,19 @@ import { InputField } from '../../types/customers';
 interface InputUiProps<T extends FieldValues> {
   label: string;
   name: Path<T>; // Ensure `name` matches one of the form data keys
-  type: 'text' | 'number' | 'email' | 'textarea';
+  type: 'text' | 'number' | 'email' | 'textarea' | 'password';
   required?: boolean;
   register: UseFormRegister<T>; // `register` should match the form data type
   errors: FieldErrors<T>; // Errors should match the form data type
   field: InputField;
 }
 
-const InputUi = <T extends FieldValues>({
-  label,
-  name,
-  type,
-  required = true,
-  register,
-  errors,
-}: InputUiProps<T>) => {
+const InputUi = <T extends FieldValues>(props: InputUiProps<T>) => {
+  const { label, name, type, required = true, register, errors } = props;
   return (
     <InputContainer>
       <StyledInput
+        // {/*{...props}*/}
         type={type}
         {...register(name)}
         placeholder={label}

@@ -7,15 +7,16 @@ import {
 import styled from 'styled-components';
 import InputUi from '../InputUi/InputUi';
 import ButtonUi from '../ButtonUi/ButtonUi';
-import { Customer, CustomerKeys, InputField } from '../../types/customers';
-import { CustomerFields, FitnessFields, User } from '../../types/userType';
+import { Customer, InputField } from '../../types/customers';
+import { CustomerFields, User } from '../../types/userType';
 import { Path, useForm } from 'react-hook-form';
 
 export const GenericFormUi: React.FC<{
   professionId: string;
   user?: User;
   setAddCustomerOpen: (open: boolean) => void;
-}> = ({ professionId, user, setAddCustomerOpen }) => {
+  refechCustomersData: () => void;
+}> = ({ professionId, user, setAddCustomerOpen, refechCustomersData }) => {
   const [fields, setFields] = useState<InputField[]>([]);
   const {
     register,
@@ -70,7 +71,8 @@ export const GenericFormUi: React.FC<{
   const onSubmit = async (data: Customer<CustomerFields>) => {
     if (user?.id) {
       await setNewCustomer(user?.id, data);
-      await setAddCustomerOpen(false);
+      refechCustomersData();
+      setAddCustomerOpen(false);
       reset();
     }
   };
@@ -97,9 +99,11 @@ export const GenericFormUi: React.FC<{
 const ChangeForm = ({
   user,
   setAddCustomerOpen,
+  refechCustomersData,
 }: {
   user?: User;
   setAddCustomerOpen: (open: boolean) => void;
+  refechCustomersData: () => void;
 }) => {
   const [selectedProfessionId, setSelectedProfessionId] =
     useState<string>('fitness');
@@ -113,6 +117,7 @@ const ChangeForm = ({
       professionId={selectedProfessionId}
       user={user}
       setAddCustomerOpen={setAddCustomerOpen}
+      refechCustomersData={refechCustomersData}
     />
   );
 };

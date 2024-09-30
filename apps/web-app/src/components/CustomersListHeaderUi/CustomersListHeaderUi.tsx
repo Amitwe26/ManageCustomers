@@ -18,10 +18,11 @@ const CustomersListHeaderUi = ({
 }: CustomersListHeaderUiProps) => {
   const onChange = (value: any) => {
     const newList = customers?.filter((customer) =>
-      customer.name.includes(value.target.value),
+      customer.name.toLowerCase().includes(value.target.value.toLowerCase()),
     );
     setFilterList(newList);
   };
+
   return (
     <Header>
       <TitleContainer>
