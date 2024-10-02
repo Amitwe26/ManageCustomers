@@ -15,16 +15,15 @@ interface InputUiProps<T extends FieldValues> {
   required?: boolean;
   register: UseFormRegister<T>; // `register` should match the form data type
   errors: FieldErrors<T>; // Errors should match the form data type
-  field: InputField;
+  field?: InputField;
+  className?: string;
 }
 
 const InputUi = <T extends FieldValues>(props: InputUiProps<T>) => {
-  const { label, name, type, required = true, register, errors } = props;
+  const { label, name, required = true, className, register, errors } = props;
   return (
-    <InputContainer>
+    <InputContainer className={className}>
       <StyledInput
-        // {/*{...props}*/}
-        type={type}
         {...register(name)}
         placeholder={label}
         required={required}

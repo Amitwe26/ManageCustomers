@@ -1,10 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import LoginForm from '../components/LoginForm/LoginForm';
-import SignUpForm from '../components/LoginForm/SignUpForm';
+import { getFormFields } from '../utils/firebase';
+import {
+  FormField,
+  LoginFormFields,
+  SignUpFormFields,
+} from '../types/loginTypes';
 
 const LoginPage: React.FC = () => {
-  const [activeTab, setActiveTab] = React.useState<string>('login');
+  const [activeTab, setActiveTab] = React.useState<'login' | 'signup'>('login');
+  const [loginFields, setLoginFields] = useState<FormField<LoginFormFields>[]>(
+    [],
+  );
+  const [signupFields, setSignupFields] = useState<
+    FormField<SignUpFormFields>[]
+  >([]);
+  const isLoginForm = activeTab === 'login';
+
+  useEffect(() => {
+    const fetchFields = async () => {
+      const formFields = await getFormFields(activeTab);
+      if (isLoginForm) {
+        setLoginFields(formFields as FormField<LoginFormFields>[]);
+      } else {
+        setSignupFields(formFields as FormField<SignUpFormFields>[]);
+      }
+    };
+
+    fetchFields();
+  }, [activeTab]);
 
   return (
     <Main>
@@ -12,18 +37,21 @@ const LoginPage: React.FC = () => {
         <TabContainer>
           <TabButton
             onClick={() => setActiveTab('login')}
-            $isActive={activeTab === 'login'}
+            $isActive={isLoginForm}
           >
             Login
           </TabButton>
           <TabButton
             onClick={() => setActiveTab('signup')}
-            $isActive={activeTab === 'signup'}
+            $isActive={!isLoginForm}
           >
             Sign up
           </TabButton>
         </TabContainer>
-        {activeTab === 'login' ? <LoginForm /> : <SignUpForm />}
+        <LoginForm
+          fields={isLoginForm ? loginFields : signupFields}
+          isLoginForm={isLoginForm}
+        />
       </Container>
     </Main>
   );
@@ -35,9 +63,8 @@ const Main = styled.div`
   display: flex;
   justify-content: center;
   padding-top: 200px;
-  width: 100%;
   height: 100vh;
-  border: 1px solid;
+  box-shadow: 0 4px 7px rgba(128, 0, 128, 0.1);
 `;
 
 const Container = styled.div`
@@ -46,7 +73,7 @@ const Container = styled.div`
   width: 35%;
   max-height: 400px;
   align-content: center;
-  box-shadow: 1px 2px 2px 2px #d6d3d3;
+  box-shadow: 0 4px 7px rgba(128, 0, 128, 0.1);
   background-color: white;
 `;
 

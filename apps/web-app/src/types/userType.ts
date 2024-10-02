@@ -25,6 +25,7 @@ export type User = {
   id: string;
   email: string;
   password: string;
+  name: string;
   profession: string;
   typeOfUser: string;
   customers: Customer<CustomerFields>[];

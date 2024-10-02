@@ -52,13 +52,13 @@ const RoutesComponent = () => {
 
 export default RoutesComponent;
 const Container = styled.div`
+  background-color: ${({ theme }) => theme.colors.backgroundColor.white};
   display: flex;
-  background-color: white;
 `;
 
 const RouteContainer = styled.div`
-  background-color: rgba(249, 251, 253);
-  border-top: 1px solid rgba(243, 243, 243, 0.71);
+  background-color: ${({ theme }) => theme.colors.backgroundColor.base};
+  border-top: 1px solid ${({ theme }) => theme.colors.border.gray};
   margin-top: 25px;
   width: 100%;
   border-top-left-radius: 10px;

@@ -17,7 +17,12 @@ import {
 } from 'firebase/firestore';
 import { Customer, CustomerHistory } from '../types/customers';
 import { CustomerFields, Profession, User } from '../types/userType';
-import { SignUpFormFields } from '../components/LoginForm/SignUpForm';
+import {
+  AuthFormDocument,
+  FormField,
+  LoginFormFields,
+  SignUpFormFields,
+} from '../types/loginTypes';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyDA6zaJH9ZLBMXZB13Y_GBh8mwjMy7NUws',
@@ -98,6 +103,7 @@ export const getHistoryUser: (
     throw error;
   }
 };
+
 export const getCollection = async <T>(
   collectionName: string,
 ): Promise<T[]> => {
@@ -141,6 +147,7 @@ export const getCollectionWithId = async (
 export const setNewUser = async (data: SignUpFormFields, userId: string) => {
   const newUser: User = {
     id: userId,
+    name: data.name,
     email: data.email,
     password: data.password,
     profession: data.profession,
@@ -199,5 +206,38 @@ export const addCustomerHistory = async (
     }
   } catch (error) {
     console.error('Error updating customer history: ', error);
+  }
+};
+
+export const getFormFields = async (
+  formType: 'login' | 'signup',
+): Promise<FormField<LoginFormFields>[] | FormField<SignUpFormFields>[]> => {
+  try {
+    const formDoc: AuthFormDocument | undefined =
+      await getDocument<AuthFormDocument>('authentication');
+
+    if (formDoc) {
+      return formType === 'login' ? formDoc.login : formDoc.signup;
+    } else {
+      console.log('No such form document!');
+      return [];
+    }
+  } catch (error) {
+    console.error('Error fetching form fields:', error);
+    return [];
+  }
+};
+
+export const getDocument = async <T>(
+  collectionName: string,
+): Promise<T | undefined> => {
+  const userInfo = collection(db, collectionName);
+  const snapshot = await getDocs(userInfo);
+
+  const doc = snapshot.docs[0]; // Assuming there's only one document for authentication
+  if (doc) {
+    return { id: doc.id, ...doc.data() } as T;
+  } else {
+    return undefined;
   }
 };

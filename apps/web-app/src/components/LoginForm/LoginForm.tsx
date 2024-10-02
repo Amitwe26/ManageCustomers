@@ -1,70 +1,98 @@
 import InputUi from '../InputUi/InputUi';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { getUserInfo, loginUser } from '../../utils/firebase';
+import { auth, getUserInfo, loginUser, setNewUser } from '../../utils/firebase';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { User } from '../../types/userType';
+import {
+  FormField,
+  LoginFormFields,
+  SignUpFormFields,
+} from '../../types/loginTypes';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
-export interface LoginFormFields {
-  email: string;
-  password: string;
-}
-
-const LoginForm = () => {
+const LoginForm = ({
+  fields,
+  isLoginForm,
+}: {
+  fields?: FormField<LoginFormFields>[] | FormField<SignUpFormFields>[];
+  isLoginForm: boolean;
+}) => {
   const navigate = useNavigate();
-
+  const [isLoading, setIsLoading] = React.useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginFormFields>();
+  } = useForm<LoginFormFields | SignUpFormFields>();
 
-  const onSubmit: SubmitHandler<LoginFormFields> = async (data) => {
+  const onSubmit: SubmitHandler<LoginFormFields | SignUpFormFields> = async (
+    data,
+  ) => {
     if (data) {
-      const user = await loginUser(data);
-      if (user) {
-        const getUser = await getUserInfo().then((users) =>
-          users.find((userInfo: User) => userInfo?.email === data?.email),
-        );
-        if (getUser) navigate('/customers');
-      } else {
-        console.log('No user logged in');
+      setIsLoading(true);
+      try {
+        if (isLoginForm) {
+          const user = await loginUser(data);
+          if (user) {
+            const getUser = await getUserInfo().then((users) =>
+              users.find((userInfo: User) => userInfo?.email === data?.email),
+            );
+            if (getUser) navigate('/customers');
+          } else {
+            console.log('No user logged in');
+          }
+        } else {
+          const userCredential = await createUserWithEmailAndPassword(
+            auth,
+            data.email,
+            data.password,
+          );
+          const user = userCredential.user;
+          const createdUser = await setNewUser(
+            data as SignUpFormFields,
+            user.uid,
+          );
+          if (createdUser) {
+            const userLogin = await loginUser(data);
+            if (userLogin) navigate('/customers');
+          }
+        }
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error signing up:', error);
       }
     }
   };
 
   return (
     <StyledForm onSubmit={handleSubmit(onSubmit)}>
-      <StyledInput
-        label="Email"
-        name="email"
-        type="email"
-        required
-        register={register}
-        errors={errors}
-        field={{
-          key: 'email',
-          label: 'Enter your email',
-          type: 'email',
-          id: '1',
-        }}
-      />
-      <StyledInput
-        label="Password"
-        name="password"
-        type="text"
-        required
-        register={register}
-        errors={errors}
-        field={{
-          key: 'password',
-          label: 'Enter your password',
-          type: 'text',
-          id: '2',
-        }}
-      />
+      {isLoginForm
+        ? fields?.map((field, index) => (
+            <StyledInput
+              key={index}
+              label={field.label}
+              name={field.key as keyof LoginFormFields}
+              type={field.type}
+              required
+              register={register}
+              errors={errors}
+            />
+          ))
+        : fields?.map((field, index) => (
+            <StyledInput
+              key={index}
+              label={field.label}
+              name={field.key as keyof SignUpFormFields}
+              type={field.type}
+              required
+              register={register}
+              errors={errors}
+            />
+          ))}
       <button type="submit">Login</button>
+      {isLoading && <p>Loading...</p>}
     </StyledForm>
   );
 };
@@ -78,6 +106,6 @@ const StyledForm = styled.form`
   place-items: center;
 `;
 
-const StyledInput = styled(InputUi<LoginFormFields>)`
+const StyledInput = styled(InputUi<LoginFormFields | SignUpFormFields>)`
   margin-bottom: 10px;
 `;
