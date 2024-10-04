@@ -7,6 +7,7 @@ interface ButtonUiProps {
   type?: 'button' | 'submit';
   variant?: 'primary' | 'secondary'; // Optional, to switch between button styles
   disabled?: boolean;
+  className?: string;
 }
 
 const ButtonUi = ({
@@ -15,14 +16,16 @@ const ButtonUi = ({
   variant = 'primary',
   type = 'button',
   disabled = false,
+  className,
 }: ButtonUiProps) => (
   <StyledButton
+    className={className}
     type={type}
     onClick={onClick}
     $variant={variant}
     disabled={disabled}
   >
-    {label}
+    <div>{label}</div>
   </StyledButton>
 );
 
@@ -39,8 +42,10 @@ const StyledButton = styled.button<ButtonProps>`
   font-size: 16px;
   cursor: pointer;
   color: white;
-  background-color: ${({ $variant }) =>
-    $variant === 'primary' ? 'rgb(59,83,120)' : 'rgb(96,169,239,.9)'};
+  background-color: ${({ $variant, theme }) =>
+    $variant === 'primary'
+      ? theme.colors.backgroundColor.softOrange
+      : 'rgb(96,169,239,.9)'};
   transition:
     background-color 0.3s ease,
     transform 0.2s ease;

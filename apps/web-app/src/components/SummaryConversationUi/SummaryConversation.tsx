@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { Customer, CustomerHistory, FitnessMenu } from '../../types/customers';
+import { Customer, CustomerHistory, PlanningType } from '../../types/customers';
 import ButtonUi from '../ButtonUi/ButtonUi';
 import { CustomerFields } from '../../types/userType';
 import { addCustomerHistory, getHistoryUser } from '../../utils/firebase';
@@ -15,14 +15,14 @@ const SummaryConversation = () => {
   };
 
   const [addMenuIsOpen, setAddMenuIsOpen] = useState(false);
-  const [fitnessMenus, setFitnessMenus] = useState<FitnessMenu[] | undefined>(
+  const [fitnessMenus, setFitnessMenus] = useState<PlanningType[] | undefined>(
     [],
   );
   const [summaryConversation, setSummaryConversation] = useState<
     CustomerHistory[]
   >(customer?.history ?? []);
   const [newDescription, setNewDescription] = useState('');
-  const handleAddMenu = (newMenu: FitnessMenu) => {
+  const handleAddMenu = (newMenu: PlanningType) => {
     setFitnessMenus((prev) => [...(prev ?? []), newMenu]);
   };
 

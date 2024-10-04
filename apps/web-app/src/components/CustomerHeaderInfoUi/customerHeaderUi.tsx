@@ -8,20 +8,38 @@ const CustomerHeaderUi = ({
 }: {
   customer: Customer<CustomerFields>;
 }) => {
+  const rednerInfo = () => {
+    const labelsToRender = [
+      'name',
+      'email',
+      'phone',
+      'activityLevel',
+      'age',
+      'gender',
+      'startDate',
+      'endDate',
+    ];
+    return (
+      <>
+        {Object.entries(customer)
+          .filter(([name]) => labelsToRender.includes(name))
+          .sort(
+            ([nameA], [nameB]) =>
+              labelsToRender.indexOf(nameA) - labelsToRender.indexOf(nameB),
+          )
+          .map(([name, value]) => (
+            <Label key={customer.id + name}>{`${name}: ${value}`}</Label>
+          ))}
+      </>
+    );
+  };
+
   return (
     <>
       <Container>
         <Title>{customer.name}</Title>
         <FlexContainer>
-          <InfoContainer>
-            {Object.entries(customer).map(([name, value]) => {
-              if (name === 'id' || name === 'type' || name === 'history')
-                return;
-              return (
-                <Label key={customer.id + name}>{`${name}: ${value}`}</Label>
-              );
-            })}
-          </InfoContainer>
+          <InfoContainer>{rednerInfo()}</InfoContainer>
         </FlexContainer>
       </Container>
     </>
@@ -44,9 +62,10 @@ const FlexContainer = styled.div`
 `;
 
 const InfoContainer = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 25% 25% 25% 25%;
   flex-direction: column;
-  width: 30%;
+  width: 80%;
   height: 10vh;
   padding: 0 10px 8px;
   justify-content: space-around;

@@ -1,23 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import {
-  getCollectionWithId,
-  getUserProfession,
-  setNewCustomer,
-} from '../../utils/firebase';
+import React from 'react';
+import { setNewCustomer } from '../../utils/firebase';
 import styled from 'styled-components';
 import InputUi from '../InputUi/InputUi';
 import ButtonUi from '../ButtonUi/ButtonUi';
 import { Customer, InputField } from '../../types/customers';
 import { CustomerFields, User } from '../../types/userType';
 import { Path, useForm } from 'react-hook-form';
+import { useAppContext } from '../../context/AppContext';
+import SelectionUi from '../SelectionUi/SelectionUi';
 
-export const GenericFormUi: React.FC<{
-  professionId: string;
-  user?: User;
+export const GenericCustomerFormUi = ({
+  fields,
+  setAddCustomerOpen,
+  refetchCustomersData,
+}: {
+  fields: InputField[];
   setAddCustomerOpen: (open: boolean) => void;
-  refechCustomersData: () => void;
-}> = ({ professionId, user, setAddCustomerOpen, refechCustomersData }) => {
-  const [fields, setFields] = useState<InputField[]>([]);
+  refetchCustomersData: () => void;
+}) => {
+  const { user } = useAppContext();
   const {
     register,
     handleSubmit,
@@ -25,31 +26,29 @@ export const GenericFormUi: React.FC<{
     formState: { errors },
   } = useForm<Customer<CustomerFields>>();
 
-  useEffect(() => {
-    const fetchFields = async () => {
-      const data = await getUserProfession();
-      const res = data.find((elem) => elem.professionName === user?.profession);
-      const res2 = await getCollectionWithId('professions', res?.id, 'fields');
-      setFields(res2);
-    };
-
-    fetchFields();
-  }, [professionId]);
-
   const renderFields = () => {
-    return fields?.map((field) => {
+    return fields.map((field) => {
       if (field.type === 'textarea') {
         return (
           <InputContainer key={field.key}>
-            <InputUi<Customer<CustomerFields>>
-              label={field.label}
-              name={field.key as Path<Customer<CustomerFields>>}
-              type={field.type}
-              field={field}
-              register={register}
-              errors={errors}
+            <TextAreaStyled
+              id={field.key}
+              {...register(field.key as Path<Customer<CustomerFields>>)}
             />
           </InputContainer>
+        );
+      }
+
+      if (field.type === 'selection') {
+        return (
+          <SelectionUi<Customer<CustomerFields>>
+            key={field.key}
+            label={field.label}
+            name={field.key as Path<Customer<CustomerFields>>} // Ensuring type safety with Path
+            options={field?.options ?? undefined}
+            register={register}
+            errors={errors}
+          />
         );
       }
 
@@ -57,7 +56,7 @@ export const GenericFormUi: React.FC<{
         <InputContainer key={field.key}>
           <InputUi<Customer<CustomerFields>>
             label={field.label}
-            name={field.key as Path<Customer<CustomerFields>>}
+            name={field.key as Path<Customer<CustomerFields>>} // Ensuring type safety with Path
             field={field}
             type={field.type}
             register={register}
@@ -70,8 +69,8 @@ export const GenericFormUi: React.FC<{
 
   const onSubmit = async (data: Customer<CustomerFields>) => {
     if (user?.id) {
-      await setNewCustomer(user?.id, data);
-      refechCustomersData();
+      await setNewCustomer(user.id, data);
+      refetchCustomersData();
       setAddCustomerOpen(false);
       reset();
     }
@@ -95,34 +94,6 @@ export const GenericFormUi: React.FC<{
   );
 };
 
-// Example usage in a parent component
-const ChangeForm = ({
-  user,
-  setAddCustomerOpen,
-  refechCustomersData,
-}: {
-  user?: User;
-  setAddCustomerOpen: (open: boolean) => void;
-  refechCustomersData: () => void;
-}) => {
-  const [selectedProfessionId, setSelectedProfessionId] =
-    useState<string>('fitness');
-
-  const handleProfessionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedProfessionId(e.target.value);
-  };
-
-  return (
-    <GenericFormUi
-      professionId={selectedProfessionId}
-      user={user}
-      setAddCustomerOpen={setAddCustomerOpen}
-      refechCustomersData={refechCustomersData}
-    />
-  );
-};
-
-export default ChangeForm;
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
@@ -135,11 +106,28 @@ const FormContainer = styled.form`
 const InputContainer = styled.div`
   margin-bottom: 20px;
 `;
+
+const TextAreaStyled = styled.textarea`
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 38px;
+  max-height: 78px;
+  resize: vertical;
+  &:focus {
+    outline: none;
+    border-color: #1a4098;
+  }
+`;
 const FormHeader = styled.div`
   display: flex;
   justify-content: flex-end;
   margin-bottom: 20px;
 `;
+
 const CloseButton = styled.button`
   background: none;
   border: none;

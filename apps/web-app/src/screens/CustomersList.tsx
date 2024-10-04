@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 import { CustomerFields } from '../types/userType';
 import { Customer } from '../types/customers';
 import CustomersListHeaderUi from '../components/CustomersListHeaderUi/CustomersListHeaderUi';
-import ChangeForm from '../components/GenericFormUi/GenericFormUi';
 import { getCustomersUser } from '../utils/firebase';
 import { useQuery } from 'react-query';
 import { useAppContext } from '../context/AppContext';
+import AddCustomerForm from '../components/AddCustomerFormUi/AddCustomerForm';
 
 const CustomersList = () => {
   const { user } = useAppContext();
@@ -37,8 +37,7 @@ const CustomersList = () => {
           setFilterList={setFilterList}
         />
         {user?.profession && addCustomerOpen ? (
-          <ChangeForm
-            user={user}
+          <AddCustomerForm
             setAddCustomerOpen={setAddCustomerOpen}
             refechCustomersData={() => refechCustomersData()}
           />

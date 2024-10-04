@@ -2,13 +2,13 @@ export const theme = {
   colors: {
     backgroundColor: {
       base: 'rgba(249, 251, 253)',
-      primary: '#7e57c2',
       secondary: '#1e90ff',
       light: '#b39ddb',
       deep: '#512da8',
       baseBlue: 'rgba(96, 169, 239, 0.9)',
       yellow: '#ffeb3b',
-      softOrange: '#ffcc80',
+      // softOrange: '#ffcc80',
+      softOrange: '#fdc566',
       white: '#fff',
     },
     border: {
@@ -17,7 +17,8 @@ export const theme = {
       darkGray: '#424242',
     },
     button: {
-      purple: '#7e57c2',
+      primary: '#7e57c2',
+      light: '#b39ddb',
     },
   },
   spacing: {

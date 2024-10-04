@@ -15,7 +15,7 @@ import {
   updateDoc,
   getDoc,
 } from 'firebase/firestore';
-import { Customer, CustomerHistory } from '../types/customers';
+import { Customer, CustomerHistory, PlanningType } from '../types/customers';
 import { CustomerFields, Profession, User } from '../types/userType';
 import {
   AuthFormDocument,
@@ -185,6 +185,50 @@ export const setNewCustomer = async (
   }
 };
 
+export const setNewPlanning = async (
+  userId: string,
+  customerId: string,
+  data: PlanningType,
+) => {
+  const { title, planningDate, planningNotes, options } = data;
+
+  const planningColRef = collection(
+    db,
+    'users',
+    userId,
+    'customers',
+    customerId,
+    'planning',
+  );
+
+  const docRef = (await addDoc(planningColRef, {
+    title,
+    planningDate,
+    planningNotes,
+    options,
+  })) as unknown as PlanningType[];
+
+  console.log('Planning added successfully with ID:', docRef);
+  return docRef;
+};
+
+export const getPlanningList = async (userId: string, customerId: string) => {
+  const planningColRef = collection(
+    db,
+    'users',
+    userId,
+    'customers',
+    customerId,
+    'planning',
+  );
+
+  const docRef = await getDocs(planningColRef);
+  return docRef.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as unknown as PlanningType[];
+};
+
 export const addCustomerHistory = async (
   userId: string,
   customerId: string,
@@ -195,7 +239,6 @@ export const addCustomerHistory = async (
     const customerDoc = await getDoc(customerDocRef);
     if (customerDoc.exists()) {
       const customerData = customerDoc.data();
-      console.log({ customerData });
       const updatedHistory = [...(customerData.history || []), newHistory];
 
       await updateDoc(customerDocRef, { history: updatedHistory });

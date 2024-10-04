@@ -1,36 +1,38 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FitnessMenu, Meal } from '../../types/customers';
+import { BasePlanning, Meal } from '../../types/customers';
 
-const MealsUi = ({ fitnessMenus }: { fitnessMenus?: FitnessMenu[] }) => {
+const MealsUi = ({ strategyList }: { strategyList?: BasePlanning<Meal>[] }) => {
   const [isMealsOpen, setIsMealsOpen] = React.useState(false);
 
   return (
     <div>
-      {fitnessMenus?.map((item, index) => (
+      {strategyList?.map((item, index) => (
         <div key={index}>
           <MenuContainer>
             <Title>{item.title}</Title>
-            <p>{item.notes}</p>
-            <p>{item.date}</p>
+            <p>{item.planningNotes}</p>
+            <p>{item.planningDate}</p>
             <button onClick={() => setIsMealsOpen((prev) => !prev)}>
               {isMealsOpen ? 'close Meals' : 'open Meals'}
             </button>
           </MenuContainer>
           <Container>
             {isMealsOpen &&
-              item?.meals?.map((meal: Meal, index) => (
-                <MealContainer key={index}>
-                  <h4>{meal.nameMeal}</h4>
-                  <p>Ingredients: {meal.ingredients}</p>
-                  <p>Notes: {meal.notes}</p>
-                  <TimeContainer>
-                    <p>Time: </p>
-                    <p>{meal.startTime}-</p>
-                    <p>{meal.endTime}</p>
-                  </TimeContainer>
-                </MealContainer>
-              ))}
+              item?.options?.map((meal: Meal, index) => {
+                return (
+                  <MealContainer key={index}>
+                    <h4>{meal.optionName}</h4>
+                    <p>Ingredients: {meal.ingredients}</p>
+                    <p>Notes: {meal.notes}</p>
+                    <TimeContainer>
+                      <p>Time: </p>
+                      <p>{meal.startTime}-</p>
+                      <p>{meal.endTime}</p>
+                    </TimeContainer>
+                  </MealContainer>
+                );
+              })}
           </Container>
         </div>
       ))}

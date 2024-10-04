@@ -6,12 +6,12 @@ import {
   Path,
   UseFormRegister,
 } from 'react-hook-form';
-import { InputField } from '../../types/customers';
+import { InputField, InputFieldType } from '../../types/customers';
 
 interface InputUiProps<T extends FieldValues> {
   label: string;
   name: Path<T>; // Ensure `name` matches one of the form data keys
-  type: 'text' | 'number' | 'email' | 'textarea' | 'password';
+  type: InputFieldType;
   required?: boolean;
   register: UseFormRegister<T>; // `register` should match the form data type
   errors: FieldErrors<T>; // Errors should match the form data type
@@ -20,15 +20,26 @@ interface InputUiProps<T extends FieldValues> {
 }
 
 const InputUi = <T extends FieldValues>(props: InputUiProps<T>) => {
-  const { label, name, required = true, className, register, errors } = props;
+  const {
+    label,
+    name,
+    required = true,
+    className,
+    type,
+    register,
+    errors,
+  } = props;
   return (
     <InputContainer className={className}>
       <StyledInput
+        type={type}
         {...register(name)}
         placeholder={label}
         required={required}
       />
-      {errors[name] && <ErrorText>This field is required</ErrorText>}
+      {errors[name] && (
+        <ErrorText className="error-massage">This field is required</ErrorText>
+      )}
     </InputContainer>
   );
 };

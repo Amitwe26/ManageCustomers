@@ -1,28 +1,41 @@
-import { CustomerFields } from './userType';
+import { CustomerFields, DietitianFields, DigitalFields } from './userType';
+import React from 'react';
 
 export type CustomerKeys = NestedKeys<Customer<CustomerFields>>;
+export type PlanningType = BasePlanning<Meal>;
 
-export type FitnessMenu = {
+export type BasePlanning<T> = {
   title: string;
-  date: string;
-  notes: string;
-  meals: Meal[];
+  planningDate: string;
+  planningNotes: string;
+  options: T[];
 };
 
 export type Meal = {
-  nameMeal: string;
+  optionName: string;
   ingredients: string;
   notes: string;
   startTime: string;
   endTime: string;
 };
 
-export interface InputField {
+export type InputField = {
   id: string;
   label: string;
-  type: 'text' | 'number' | 'email' | 'textarea' | 'password';
+  type: InputFieldType;
   key: string;
-}
+  options?: { label: string; value: string | number }[];
+};
+
+export type InputFieldType =
+  | 'text'
+  | 'number'
+  | 'email'
+  | 'textarea'
+  | 'password'
+  | 'date'
+  | 'time'
+  | 'selection';
 
 type CustomerData<T> = {
   [K in keyof T]: string | number;
@@ -45,11 +58,8 @@ export type Customer<T> = {
   phone: string;
   email: string;
   type: string;
-  history?: {
-    date: string;
-    summery: string;
-    timestamp: string;
-  }[];
+  history?: CustomerHistory[];
+  planningList: PlanningType[];
 } & T;
 
 export interface CustomerHistory {
@@ -57,3 +67,13 @@ export interface CustomerHistory {
   summery: string;
   timestamp: string;
 }
+
+export enum CustomerTabs {
+  SUMMARY = 'summary',
+  STRATEGY = 'strategy',
+  INFO = 'info',
+}
+
+export type TabComponents = {
+  [key in CustomerTabs]: React.FC;
+};
