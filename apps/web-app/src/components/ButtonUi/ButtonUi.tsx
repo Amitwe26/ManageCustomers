@@ -36,7 +36,7 @@ interface ButtonProps {
 }
 
 const StyledButton = styled.button<ButtonProps>`
-  padding: 10px 20px;
+  padding: 5px 15px;
   border: none;
   border-radius: 8px;
   font-size: 16px;
@@ -53,7 +53,7 @@ const StyledButton = styled.button<ButtonProps>`
   &:hover {
     background-color: ${({ $variant }) =>
       $variant === 'primary'
-        ? 'rgba(26, 64, 124, 0.9)'
+        ? 'rgba(103,230,119,0.76)'
         : 'rgba(96,169,239, 0.9)'};
   }
 

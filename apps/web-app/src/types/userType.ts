@@ -7,14 +7,14 @@ export type DietitianFields = {
   name: string;
   phone: string;
   email: string;
-  gender: string;
+  gender: 'male' | 'female';
   age: number;
   height: number;
   startWeight: number;
   endWeight: number;
   startDate: number;
   endDate: number;
-  activityLabel: string;
+  activityLevel: string;
   notes: string;
   // professionData: DietitianMenu[];
 };
@@ -24,6 +24,11 @@ export type DigitalFields = {
   name: string;
   email: string;
   phone: string;
+  cardNumber: number;
+  months: number;
+  years: number;
+  facebookUrl: string;
+  instagram: string;
   website: string;
   marketingBudget: string;
   // professionData: DigitalMenu[];
@@ -34,7 +39,7 @@ export type User = {
   email: string;
   password: string;
   name: string;
-  profession: string;
+  profession: 'digital' | 'dietitian';
   typeOfUser: string;
   customers: Customer<CustomerFields>[];
 };

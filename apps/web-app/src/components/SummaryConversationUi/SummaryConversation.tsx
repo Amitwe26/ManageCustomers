@@ -14,17 +14,10 @@ const SummaryConversation = () => {
     customer: Customer<CustomerFields>;
   };
 
-  const [addMenuIsOpen, setAddMenuIsOpen] = useState(false);
-  const [fitnessMenus, setFitnessMenus] = useState<PlanningType[] | undefined>(
-    [],
-  );
   const [summaryConversation, setSummaryConversation] = useState<
     CustomerHistory[]
   >(customer?.history ?? []);
   const [newDescription, setNewDescription] = useState('');
-  const handleAddMenu = (newMenu: PlanningType) => {
-    setFitnessMenus((prev) => [...(prev ?? []), newMenu]);
-  };
 
   const handleAddSummary = async () => {
     const newSummary = {
@@ -49,11 +42,7 @@ const SummaryConversation = () => {
           onChange={(e) => setNewDescription(e.target.value)}
           placeholder="Add new summary conversation here..."
         />
-        <ButtonUi
-          label="Submit"
-          variant={'secondary'}
-          onClick={handleAddSummary}
-        />
+        <ButtonUi label="Submit" variant="primary" onClick={handleAddSummary} />
       </TextBoxContainer>
 
       <SummaryList>
@@ -105,7 +94,7 @@ const SummaryItem = styled.div`
   padding: 15px;
   border-radius: 5px;
   margin-bottom: 10px;
-  border-left: 5px solid #1e90ff;
+  border-left: 5px solid ${({ theme }) => theme.colors.button.light};
 `;
 
 const SummaryHeader = styled.div`

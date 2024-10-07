@@ -1,5 +1,5 @@
 import React from 'react';
-import { setNewCustomer } from '../../utils/firebase';
+import { saveCustomer } from '../../utils/firebase';
 import styled from 'styled-components';
 import InputUi from '../InputUi/InputUi';
 import ButtonUi from '../ButtonUi/ButtonUi';
@@ -26,50 +26,63 @@ export const GenericCustomerFormUi = ({
     formState: { errors },
   } = useForm<Customer<CustomerFields>>();
 
-  const renderFields = () => {
-    return fields.map((field) => {
-      if (field.type === 'textarea') {
+  const renderFields = (isFirstInput?: boolean) => {
+    const specificKeys = ['name', 'email', 'phone']; // The specific fields to render in the first form
+
+    const firstFormFields = fields.filter((field) =>
+      specificKeys.includes(field.key),
+    );
+    const secondFormFields = fields.filter(
+      (field) => !specificKeys.includes(field.key),
+    );
+
+    return (isFirstInput ? firstFormFields : secondFormFields).map(
+      (field, index) => {
+        if (field.type === 'textarea') {
+          return (
+            <InputContainer key={field.key}>
+              <TextAreaStyled
+                id={field.key}
+                placeholder={field.label}
+                {...register(field.key as Path<Customer<CustomerFields>>)}
+              />
+            </InputContainer>
+          );
+        }
+
+        if (field.type === 'selection') {
+          return (
+            <SelectionUi<Customer<CustomerFields>>
+              key={field.key}
+              label={field.label}
+              name={field.key as Path<Customer<CustomerFields>>} // Ensuring type safety with Path
+              options={field?.options ?? undefined}
+              register={register}
+              errors={errors}
+            />
+          );
+        }
+
         return (
           <InputContainer key={field.key}>
-            <TextAreaStyled
-              id={field.key}
-              {...register(field.key as Path<Customer<CustomerFields>>)}
+            <StyledInput
+              fullWidth={specificKeys?.includes(field.key) ?? false}
+              label={field.label}
+              name={field.key as Path<Customer<CustomerFields>>} // Ensuring type safety with Path
+              field={field}
+              type={field.type}
+              register={register}
+              errors={errors}
             />
           </InputContainer>
         );
-      }
-
-      if (field.type === 'selection') {
-        return (
-          <SelectionUi<Customer<CustomerFields>>
-            key={field.key}
-            label={field.label}
-            name={field.key as Path<Customer<CustomerFields>>} // Ensuring type safety with Path
-            options={field?.options ?? undefined}
-            register={register}
-            errors={errors}
-          />
-        );
-      }
-
-      return (
-        <InputContainer key={field.key}>
-          <InputUi<Customer<CustomerFields>>
-            label={field.label}
-            name={field.key as Path<Customer<CustomerFields>>} // Ensuring type safety with Path
-            field={field}
-            type={field.type}
-            register={register}
-            errors={errors}
-          />
-        </InputContainer>
-      );
-    });
+      },
+    );
   };
 
   const onSubmit = async (data: Customer<CustomerFields>) => {
     if (user?.id) {
-      await setNewCustomer(user.id, data);
+      await saveCustomer(user.id, data);
       refetchCustomersData();
       setAddCustomerOpen(false);
       reset();
@@ -83,6 +96,7 @@ export const GenericCustomerFormUi = ({
           Close
         </CloseButton>
       </FormHeader>
+      <InputsWrapper isFirstInputs>{renderFields(true)}</InputsWrapper>
       <InputsWrapper>{renderFields()}</InputsWrapper>
       <ButtonUi
         type="submit"
@@ -107,6 +121,12 @@ const InputContainer = styled.div`
   margin-bottom: 20px;
 `;
 
+const StyledInput = styled(InputUi<Customer<CustomerFields>>)<{
+  fullWidth: boolean;
+}>`
+  width: ${({ fullWidth }) => (fullWidth ? '100%' : '50%')};
+`;
+
 const TextAreaStyled = styled.textarea`
   padding: 10px;
   border-radius: 8px;
@@ -116,7 +136,7 @@ const TextAreaStyled = styled.textarea`
   box-sizing: border-box;
   min-height: 38px;
   max-height: 78px;
-  resize: vertical;
+  resize: horizontal;
   &:focus {
     outline: none;
     border-color: #1a4098;
@@ -136,9 +156,13 @@ const CloseButton = styled.button`
   color: #666;
 `;
 
-const InputsWrapper = styled.div`
+const InputsWrapper = styled.div<{ isFirstInputs?: boolean }>`
   display: grid;
-  grid-template-columns: 32% 32% 32%;
+  grid-template-columns: ${({ isFirstInputs }) =>
+    isFirstInputs ? '2fr 2fr 2fr' : '.5fr .5fr .5fr'};
+  grid-template-rows: 1fr;
+  align-items: center;
+  width: 100%;
   gap: 20px;
   margin-bottom: 20px;
 `;

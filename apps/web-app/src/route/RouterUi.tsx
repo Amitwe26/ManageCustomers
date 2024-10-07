@@ -22,7 +22,7 @@ const RoutesComponent = () => {
     observeAuthState(async (user) => {
       if (user) {
         const getUser = await getUserInfo().then((res) =>
-          res.find((userInfo: { id: any }) => userInfo?.id === user?.uid),
+          res.find((userInfo: { id: any }) => userInfo.id === user.uid),
         );
         if (getUser) setUser(getUser);
       } else {

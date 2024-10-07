@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ButtonUi from '../ButtonUi/ButtonUi';
 import { Customer, InputField, PlanningType } from '../../types/customers';
-import { CustomerFields } from '../../types/userType';
+import { CustomerFields, DietitianFields } from '../../types/userType';
 import { useAppContext } from '../../context/AppContext';
 import { getPlanningList, getUserProfession } from '../../utils/firebase';
 import GenericPlanningForm from '../GenericFormUi/GenericPlanningForm';
 import MealsUi from '../MealsUi/MealsUi';
+import CalculateInfo from '../DietitianComponents/CalculateInfo';
 
 const StrategyUi = ({ customer }: { customer: Customer<CustomerFields> }) => {
   const { user } = useAppContext();
@@ -14,25 +15,34 @@ const StrategyUi = ({ customer }: { customer: Customer<CustomerFields> }) => {
   const [fields, setFields] = useState<InputField[]>([]);
 
   const [strategyList, setStrategyList] = React.useState<PlanningType[]>();
-  useEffect(() => {
-    const fetchFields = async () => {
-      if (user) {
-        const data = await getUserProfession();
-        const planningList = await getPlanningList(user.id, customer.id);
-        setStrategyList(planningList);
-        const res = data.find(
-          (elem) => elem.professionName === user?.profession,
-        );
-        if (res) setFields(res.taskPlanningInputList);
-      }
-    };
+  const fetchData = useCallback(async () => {
+    if (user) {
+      const [data, planningList] = await Promise.all([
+        getUserProfession(),
+        getPlanningList(user.id, customer.id),
+      ]);
+      setStrategyList(planningList);
 
-    fetchFields();
-  }, []);
+      const professionData = data.find(
+        (elem) => elem.professionName === user?.profession,
+      );
+      if (professionData) {
+        setFields(professionData.taskPlanningInputList);
+      }
+    }
+  }, [user, customer.id]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
 
   return (
     <div>
       <MenusHeaderContainer>
+        {user?.profession === 'dietitian' && (
+          <CalculateInfo customer={customer as Customer<DietitianFields>} />
+        )}
+
         <ButtonUi
           type="button"
           onClick={() => setAddMenuIsOpen(true)}

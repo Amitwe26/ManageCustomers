@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { CustomerFields } from '../types/userType';
@@ -11,6 +11,11 @@ import AddCustomerForm from '../components/AddCustomerFormUi/AddCustomerForm';
 
 const CustomersList = () => {
   const { user } = useAppContext();
+  const [filterList, setFilterList] = useState<
+    Customer<CustomerFields>[] | undefined
+  >([]);
+  const [addCustomerOpen, setAddCustomerOpen] = useState<boolean>(false);
+
   const {
     data: customers,
     isLoading,
@@ -19,11 +24,12 @@ const CustomersList = () => {
   } = useQuery<Customer<CustomerFields>[]>(['customers', user?.id], () =>
     getCustomersUser(user?.id ?? ''),
   );
-  const [filterList, setFilterList] = useState<
-    Customer<CustomerFields>[] | undefined
-  >([]);
-  const [addCustomerOpen, setAddCustomerOpen] = useState<boolean>(false);
+  const renderList = useCallback(() => {
+    return filterList?.length ? filterList : customers;
+  }, [filterList, customers]);
+
   if (error) return <div>Error: {error?.toString()}</div>;
+
   return (
     <>
       <Container>
@@ -43,30 +49,33 @@ const CustomersList = () => {
           />
         ) : null}
         {!isLoading && customers ? (
-          (filterList?.length ? filterList : customers).map(
-            (customer: Customer<CustomerFields>) => (
-              <CustomerContainer
-                key={customer.id}
-                to={`/customers/customer/${customer.id}`}
-                state={{ customer }}
-              >
-                <CustomerDetails>
-                  <DetailItem>
-                    <CustomerName>{customer.name}</CustomerName>
-                  </DetailItem>
-                  <DetailItem>
-                    <CustomerName>{customer.phone}</CustomerName>
-                  </DetailItem>
-                  <DetailItem>
-                    <DetailValue>{customer.email}</DetailValue>
-                  </DetailItem>
-                  <DetailItem>
-                    <DetailValue>{customer.type}</DetailValue>
-                  </DetailItem>
-                </CustomerDetails>
-              </CustomerContainer>
-            ),
-          )
+          renderList()?.map((customer: Customer<CustomerFields>) => (
+            <CustomerContainer
+              key={customer.id}
+              to={`/customers/customer/${customer.id}`}
+              state={{ customer }}
+            >
+              <CustomerDetails>
+                <DetailItem>
+                  <CustomerName>{customer.name}</CustomerName>
+                </DetailItem>
+                <DetailItem>
+                  <DetailValue>{customer.phone}</DetailValue>
+                </DetailItem>
+                <DetailItem>
+                  <DetailValue>{customer.status}</DetailValue>
+                </DetailItem>
+                <DetailItem>
+                  <DetailValue>{customer.email}</DetailValue>
+                </DetailItem>
+                <DetailItem>
+                  <DetailValue>
+                    {new Date(customer.date).toLocaleDateString()}
+                  </DetailValue>
+                </DetailItem>
+              </CustomerDetails>
+            </CustomerContainer>
+          ))
         ) : (
           <p>Loading...</p>
         )}

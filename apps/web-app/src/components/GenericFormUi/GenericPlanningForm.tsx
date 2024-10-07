@@ -16,7 +16,7 @@ const GenericPlanningForm = ({
   customerId: string;
   fields: InputField[];
   setAddCustomerOpen: (open: boolean) => void;
-  refetchCustomersData: () => void;
+  refetchCustomersData: VoidFunction;
 }) => {
   const { user } = useAppContext();
   const {
@@ -31,8 +31,8 @@ const GenericPlanningForm = ({
     append,
     remove,
   } = useFieldArray({
-    control, // control is needed to manage field arrays
-    name: 'options', // This corresponds to the options array in PlanningType
+    control,
+    name: 'options',
   });
 
   const onSubmit = async (data: PlanningType) => {

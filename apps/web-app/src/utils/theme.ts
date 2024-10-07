@@ -1,5 +1,8 @@
 export const theme = {
   colors: {
+    text: {
+      gray: 'rgba(64,64,64,0.71)',
+    },
     backgroundColor: {
       base: 'rgba(249, 251, 253)',
       secondary: '#1e90ff',
@@ -12,7 +15,7 @@ export const theme = {
       white: '#fff',
     },
     border: {
-      gray: 'rgba(243, 243, 243, 0.71)',
+      gray: 'rgba(221, 221, 221, 0.4)',
       lightGray: '#f5f5f5',
       darkGray: '#424242',
     },

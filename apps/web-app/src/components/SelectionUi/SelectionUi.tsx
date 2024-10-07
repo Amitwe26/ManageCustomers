@@ -22,12 +22,10 @@ const SelectionUi = <T extends FieldValues>({
   register,
   errors,
 }: SelectionUiProps<T>) => {
-  console.log({ name, options, label });
   return (
     <Container>
-      <label htmlFor={name}>{label}</label>
       <SelectionStyled id={name} {...register(name)}>
-        {/*<option value={`${options[0]}`}>{options[0].label}</option>*/}
+        <option>{name}</option>
         {options?.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
@@ -46,5 +44,13 @@ export default SelectionUi;
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  width: 50%;
 `;
-const SelectionStyled = styled.select``;
+
+const SelectionStyled = styled.select`
+  padding: 9px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+`;

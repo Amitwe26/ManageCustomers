@@ -58,6 +58,8 @@ export type Customer<T> = {
   phone: string;
   email: string;
   type: string;
+  date: string;
+  status: string;
   history?: CustomerHistory[];
   planningList: PlanningType[];
 } & T;

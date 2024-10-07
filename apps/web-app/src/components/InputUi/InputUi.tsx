@@ -29,6 +29,7 @@ const InputUi = <T extends FieldValues>(props: InputUiProps<T>) => {
     register,
     errors,
   } = props;
+
   return (
     <InputContainer className={className}>
       <StyledInput

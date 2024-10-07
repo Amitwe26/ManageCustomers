@@ -11,6 +11,7 @@ import {
   SignUpFormFields,
 } from '../../types/loginTypes';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import SelectionUi from '../SelectionUi/SelectionUi';
 
 const LoginForm = ({
   fields,
@@ -80,17 +81,29 @@ const LoginForm = ({
               errors={errors}
             />
           ))
-        : fields?.map((field, index) => (
-            <StyledInput
-              key={index}
-              label={field.label}
-              name={field.key as keyof SignUpFormFields}
-              type={field.type}
-              required
-              register={register}
-              errors={errors}
-            />
-          ))}
+        : fields?.map((field, index) => {
+            if (field?.type === 'selection') {
+              return (
+                <SelectionUi
+                  label={field.label}
+                  name={field.key}
+                  register={register}
+                  options={field?.options}
+                />
+              );
+            }
+            return (
+              <StyledInput
+                key={index}
+                label={field.label}
+                name={field.key as keyof SignUpFormFields}
+                type={field.type}
+                required
+                register={register}
+                errors={errors}
+              />
+            );
+          })}
       <button type="submit">Login</button>
       {isLoading && <p>Loading...</p>}
     </StyledForm>

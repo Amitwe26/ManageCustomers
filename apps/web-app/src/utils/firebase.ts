@@ -91,7 +91,7 @@ export const getHistoryUser: (
     if (snapshot.exists()) {
       const data = snapshot.data();
       return {
-        id: snapshot.id, // Get the document ID
+        id: snapshot.id,
         ...data,
       } as Customer<CustomerFields>;
     } else {
@@ -151,37 +151,58 @@ export const setNewUser = async (data: SignUpFormFields, userId: string) => {
     email: data.email,
     password: data.password,
     profession: data.profession,
-    typeOfUser: 'manager', // Example value for user type
-    customers: [], // Empty customers for now
+    typeOfUser: 'manager',
+    customers: [],
   };
 
   await setDoc(doc(db, 'users', userId), newUser);
   return await getCollectionWithId('users', userId);
 };
 
-export const setNewCustomer = async (
+export const saveCustomer = async (
   userId: string,
   data: Customer<CustomerFields>,
+  customerId?: string,
 ) => {
   try {
     const customersColRef = collection(db, 'users', userId, 'customers');
+    let docRef;
 
-    if (!data.history || data.history.length === 0) {
-      const initialHistory = {
-        date: new Date().toISOString(), // Current date
-        summery: 'New text for summery', // Empty summary
-        timestamp: new Date().toISOString(),
+    if (customerId) {
+      docRef = doc(customersColRef, customerId);
+      const customerDoc = await getDoc(docRef);
+
+      if (customerDoc.exists()) {
+        await updateDoc(docRef, {
+          ...data,
+          date: new Date().toLocaleString(),
+        });
+      } else {
+        throw new Error('Customer does not exist');
+      }
+    } else {
+      if (!data.history || data.history.length === 0) {
+        const initialHistory = {
+          date: new Date().toISOString(),
+          summery: 'New text for summery',
+          timestamp: new Date().toISOString(),
+        };
+        data.history = [initialHistory];
+      }
+
+      data = {
+        ...data,
+        type: 'user',
+        date: new Date().toLocaleString(),
+        status: 'Thinking',
       };
-      data.history = [initialHistory];
-    }
-    data.type = 'user';
-    const docRef = await addDoc(customersColRef, data);
-    data.id = docRef.id;
-    await setDoc(docRef, { id: docRef.id }, { merge: true });
 
-    console.log('Customer data added successfully with ID:', docRef.id);
+      docRef = await addDoc(customersColRef, data);
+      data.id = docRef.id; // Set the newly generated ID
+      await setDoc(docRef, { id: docRef.id }, { merge: true });
+    }
   } catch (error) {
-    console.error('Error adding customer data:', error);
+    console.error('Error saving customer data:', error);
   }
 };
 
@@ -201,15 +222,12 @@ export const setNewPlanning = async (
     'planning',
   );
 
-  const docRef = (await addDoc(planningColRef, {
+  return (await addDoc(planningColRef, {
     title,
     planningDate,
     planningNotes,
     options,
   })) as unknown as PlanningType[];
-
-  console.log('Planning added successfully with ID:', docRef);
-  return docRef;
 };
 
 export const getPlanningList = async (userId: string, customerId: string) => {
@@ -238,12 +256,11 @@ export const addCustomerHistory = async (
     const customerDocRef = doc(db, 'users', userId, 'customers', customerId);
     const customerDoc = await getDoc(customerDocRef);
     if (customerDoc.exists()) {
-      const customerData = customerDoc.data();
-      const updatedHistory = [...(customerData.history || []), newHistory];
-
+      const updatedHistory = [
+        ...(customerDoc.data().history || []),
+        newHistory,
+      ];
       await updateDoc(customerDocRef, { history: updatedHistory });
-
-      console.log('Customer history updated successfully!');
     } else {
       console.error('Customer does not exist!');
     }

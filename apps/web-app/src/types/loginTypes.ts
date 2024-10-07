@@ -5,8 +5,9 @@ interface BaseFormFields {
 
 export interface FormField<T> {
   key: keyof T;
-  type: 'text' | 'number' | 'email' | 'textarea' | 'password';
+  type: 'text' | 'number' | 'email' | 'password' | 'selection';
   label: string;
+  options?: { label: string; value: string | number }[];
 }
 
 export type LoginFormFields = BaseFormFields;
@@ -15,7 +16,7 @@ export type SignUpFormFields = BaseFormFields & {
   confirmPassword: string;
   phone: string;
   name: string;
-  profession: string;
+  profession: 'digital' | 'dietitian';
 };
 
 export interface AuthFormDocument {

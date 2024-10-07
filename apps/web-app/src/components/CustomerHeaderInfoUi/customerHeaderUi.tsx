@@ -8,11 +8,18 @@ const CustomerHeaderUi = ({
 }: {
   customer: Customer<CustomerFields>;
 }) => {
-  const rednerInfo = () => {
+  const renderPrimaryInfo = () => {
+    return (
+      <TopHeader>
+        <PrimaryLabel>{customer.name}</PrimaryLabel>
+        <Label>{customer.email}</Label>
+        <Label>{customer.phone}</Label>
+      </TopHeader>
+    );
+  };
+
+  const renderSecondaryInfo = () => {
     const labelsToRender = [
-      'name',
-      'email',
-      'phone',
       'activityLevel',
       'age',
       'gender',
@@ -28,21 +35,19 @@ const CustomerHeaderUi = ({
               labelsToRender.indexOf(nameA) - labelsToRender.indexOf(nameB),
           )
           .map(([name, value]) => (
-            <Label key={customer.id + name}>{`${name}: ${value}`}</Label>
+            <Label key={customer.id + name}>{value.toString()}</Label>
           ))}
       </>
     );
   };
 
   return (
-    <>
-      <Container>
-        <Title>{customer.name}</Title>
-        <FlexContainer>
-          <InfoContainer>{rednerInfo()}</InfoContainer>
-        </FlexContainer>
-      </Container>
-    </>
+    <Container>
+      <PrimaryInfoContainer>{renderPrimaryInfo()}</PrimaryInfoContainer>
+      <FlexContainer>
+        <InfoContainer>{renderSecondaryInfo()}</InfoContainer>
+      </FlexContainer>
+    </Container>
   );
 };
 
@@ -52,29 +57,36 @@ const Container = styled.div`
   background-color: white;
   display: flex;
   flex-direction: column;
-  //place-items: center;
   margin: 20px 0 15px;
   border-radius: 15px;
   border: 1px solid rgba(221, 221, 221, 0.4);
 `;
+
 const FlexContainer = styled.div`
-  display: flex;
+  display: grid;
 `;
 
 const InfoContainer = styled.div`
   display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
-  flex-direction: column;
   width: 80%;
-  height: 10vh;
-  padding: 0 10px 8px;
+  padding: 10px;
   justify-content: space-around;
-  border-right: 1px solid rgba(221, 221, 221, 0.7);
+  gap: 10px;
+  grid-template-columns: repeat(2, 1fr);
 `;
 
-const Title = styled.label`
+const PrimaryInfoContainer = styled.div`
+  padding: 10px;
+  border-bottom: 1px solid rgba(221, 221, 221, 0.7);
+`;
+
+const TopHeader = styled.div`
+  display: grid;
+  grid-template-columns: 200px;
+`;
+const PrimaryLabel = styled.label`
   font-size: 28px;
-  margin: 10px 8px;
+  margin-bottom: 8px;
 `;
 
 const Label = styled.label`
