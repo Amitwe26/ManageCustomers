@@ -27,15 +27,15 @@ const CustomersListHeaderUi = ({
     <Header>
       <TitleContainer>
         <h2>Customers </h2>
-        <p> {customers?.length}</p>
+        <span> {customers?.length}</span>
       </TitleContainer>
       <FilterContainer>
+        <input placeholder={'Filter'} onChange={onChange} />
         <ButtonStyled
           onClick={() => setAddCustomerOpen(true)}
           label={'+'}
           variant="secondary"
         />
-        <input placeholder={'Filter'} onChange={onChange} />
       </FilterContainer>
     </Header>
   );
@@ -45,6 +45,7 @@ export default CustomersListHeaderUi;
 const Header = styled.header`
   display: flex;
   align-items: center;
+  width: 40%;
   justify-content: space-between;
 `;
 
@@ -56,7 +57,7 @@ const TitleContainer = styled.div`
 `;
 
 const FilterContainer = styled.div`
-  width: 30%;
+  width: 50%;
   display: flex;
   justify-content: space-between;
 `;

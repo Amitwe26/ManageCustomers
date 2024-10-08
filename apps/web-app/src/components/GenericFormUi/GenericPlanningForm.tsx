@@ -70,7 +70,7 @@ const GenericPlanningForm = ({
     <FormContainer onSubmit={handleSubmit(onSubmit)}>
       <HeaderContainer>
         {renderFields(
-          fields.filter((field) =>
+          fields?.filter((field) =>
             ['title', 'planningDate', 'planningNotes'].includes(field.key),
           ),
         )}
@@ -78,10 +78,10 @@ const GenericPlanningForm = ({
 
       <div>
         <h3>Options</h3>
-        {optionsFields.map((option, index) => (
+        {optionsFields?.map((option, index) => (
           <div key={option.id}>
             <h4>Option {index + 1}</h4>
-            {optionFields.map((field) => (
+            {optionFields?.map((field) => (
               <InputContainer key={field.key}>
                 <InputUi
                   label={field.label}

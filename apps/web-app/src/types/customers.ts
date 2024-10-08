@@ -25,6 +25,7 @@ export type InputField = {
   type: InputFieldType;
   key: string;
   options?: { label: string; value: string | number }[];
+  required?: boolean;
 };
 
 export type InputFieldType =
