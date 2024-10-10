@@ -30,7 +30,6 @@ const InputSelection = ({
 
 export default InputSelection;
 
-// Styled Components
 const SelectionContainer = styled.div`
   display: flex;
   flex-direction: column;

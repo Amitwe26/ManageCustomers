@@ -12,6 +12,7 @@ import {
 } from '../../types/loginTypes';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import SelectionUi from '../SelectionUi/SelectionUi';
+import { useTranslation } from 'react-i18next';
 
 const LoginForm = ({
   fields,
@@ -21,6 +22,7 @@ const LoginForm = ({
   isLoginForm: boolean;
 }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = React.useState(false);
   const {
     register,
@@ -85,6 +87,7 @@ const LoginForm = ({
             if (field?.type === 'selection') {
               return (
                 <SelectionUi
+                  key={index}
                   label={field.label}
                   name={field.key}
                   register={register}
@@ -104,8 +107,10 @@ const LoginForm = ({
               />
             );
           })}
-      <button type="submit">Login</button>
-      {isLoading && <p>Loading...</p>}
+      <button type="submit">
+        {isLoginForm ? t('loginPage.login') : t('loginPage.signup')}
+      </button>
+      {isLoading && <p>{t('loadingText')}</p>}
     </StyledForm>
   );
 };

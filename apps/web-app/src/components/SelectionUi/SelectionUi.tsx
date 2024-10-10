@@ -13,6 +13,7 @@ interface SelectionUiProps<T extends FieldValues> {
   options?: Option[];
   register: UseFormRegister<T>;
   errors?: { [key: string]: any };
+  required?: boolean;
 }
 
 const SelectionUi = <T extends FieldValues>({
@@ -20,11 +21,12 @@ const SelectionUi = <T extends FieldValues>({
   name,
   options,
   register,
+  required,
   errors,
 }: SelectionUiProps<T>) => {
   return (
     <Container>
-      <SelectionStyled id={name} {...register(name)}>
+      <SelectionStyled id={name} required={required} {...register(name)}>
         <option>{name}</option>
         {options?.map((option) => (
           <option key={option.value} value={option.value}>

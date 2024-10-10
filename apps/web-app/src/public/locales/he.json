@@ -1,0 +1,50 @@
+{
+  "loadingText":"בטעינה...",
+  "loginPage": {
+    "login": "התחברות",
+    "signup": "הרשמה"
+  },
+  "navBar": {
+    "customersList": "רשימת לקוחות",
+    "calendar": "יומן פגישות",
+    "setting": "הגדרות",
+    "logOut": "יציאה"
+  },
+  "buttons": {
+    "save": "שמור",
+    "edit": "עריכה",
+    "add": "הוספה",
+    "cancel": "ביטול",
+    "goBack": "חזרה"
+  },
+  "customersListPage": {
+  "titles": {
+    "customers": "לקוחות",
+    "filterInput": "חיפוש לקוחות"
+  },
+    "headerCustomerList": {
+      "date": "תאריך",
+      "name": "שם הלקוח",
+      "status": "סטטוס",
+      "phone": "פלאפון",
+      "email": "אימייל"
+    }
+  },
+  "customerDetails": {
+    "tabs": {
+      "summary": "סיכומים",
+      "strategy": "תוכניות",
+      "info": "פרופיל לקוח"
+    },
+    "strategy": {
+      "buildStrategy": "בניית תוכנית",
+      "addStrategy": "הוספת תוכנית",
+      "addOption": "הוספת אופציה",
+      "removeOption": "הסרת אופציה",
+      "option": "אופציה"
+    },
+    "summery": {
+    "textareaText":"הוספת סיכום שיחה חדש"
+    }
+  }
+}

@@ -1,3 +1,9 @@
+import { css } from 'styled-components';
+
+interface ThemeFunctionProps {
+  direction: boolean;
+}
+
 export const theme = {
   colors: {
     text: {
@@ -28,5 +34,10 @@ export const theme = {
     s: 8,
     m: 16,
     l: 24,
+  },
+  utils: {
+    flexDirectionRtl: (theme: ThemeFunctionProps) => css`
+      direction: ${theme.direction ? 'rtl' : 'ltr'};
+    `,
   },
 };

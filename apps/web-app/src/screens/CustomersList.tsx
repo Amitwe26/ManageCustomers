@@ -9,9 +9,11 @@ import { useQuery } from 'react-query';
 import { useAppContext } from '../context/AppContext';
 import AddCustomerForm from '../components/AddCustomerFormUi/AddCustomerForm';
 import CustomerListCardUi from '../components/CustomerListCardUi/CustomerListCardUi';
+import { useTranslation } from 'react-i18next';
 
 const CustomersList = () => {
   const { user } = useAppContext();
+  const { t } = useTranslation();
   const [filterList, setFilterList] = useState<
     Customer<CustomerFields>[] | undefined
   >([]);
@@ -52,7 +54,7 @@ const CustomersList = () => {
         {!isLoading && customers ? (
           <CustomerListCardUi renderList={renderList()} />
         ) : (
-          <p>Loading...</p>
+          <p>{t('loadingText')}</p>
         )}
       </Container>
     </>

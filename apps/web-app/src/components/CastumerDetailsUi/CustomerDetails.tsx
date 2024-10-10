@@ -11,9 +11,11 @@ import ButtonUi from '../ButtonUi/ButtonUi';
 import { db, getUserProfession } from '../../utils/firebase';
 import { useAppContext } from '../../context/AppContext';
 import { doc, onSnapshot } from 'firebase/firestore';
+import { useTranslation } from 'react-i18next';
 
 const CustomerDetails = () => {
   const { user } = useAppContext();
+  const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -69,7 +71,7 @@ const CustomerDetails = () => {
   return (
     <CustomerContainer>
       <ButtonUi
-        label={'Go Back'}
+        label={t('buttons.goBack')}
         onClick={() => navigate(-1)}
         variant="primary"
       />
@@ -81,7 +83,7 @@ const CustomerDetails = () => {
             onClick={() => setActiveTab(tabKey as CustomerTabs)}
             $isActive={activeTab === tabKey}
           >
-            {tabKey.replace(/([A-Z])/g, ' $1').trim()}{' '}
+            {t(`customerDetails.tabs.${tabKey}`)}
           </TabButton>
         ))}
       </TabContainer>

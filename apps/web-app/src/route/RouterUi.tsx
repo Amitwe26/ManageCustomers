@@ -8,6 +8,7 @@ import CustomerDetails from '../components/CastumerDetailsUi/CustomerDetails';
 import styled from 'styled-components';
 import { getUserInfo, observeAuthState } from '../utils/firebase';
 import { useAppContext } from '../context/AppContext';
+import Setting from '../screens/Setting';
 
 const RoutesComponent = () => {
   const location = useLocation();
@@ -32,7 +33,6 @@ const RoutesComponent = () => {
     });
   }, []);
   return (
-    //   <NavBar />
     <Container>
       {showSidebar && <SideNavUi />}
       <RouteContainer>
@@ -40,6 +40,7 @@ const RoutesComponent = () => {
           <Route path={'/'} element={<LoginPage />} />
           <Route path={'/customers'} element={<CustomersList />} />
           <Route path={'/calendar'} element={<Calendar />} />
+          <Route path={'/setting'} element={<Setting />} />
           <Route
             path={'/customers/customer/:id'}
             element={<CustomerDetails />}
@@ -52,6 +53,7 @@ const RoutesComponent = () => {
 
 export default RoutesComponent;
 const Container = styled.div`
+  ${({ theme }) => theme.utils.flexDirectionRtl(theme)};
   background-color: ${({ theme }) => theme.colors.backgroundColor.white};
   display: flex;
 `;

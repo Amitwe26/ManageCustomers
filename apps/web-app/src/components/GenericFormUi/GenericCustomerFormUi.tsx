@@ -8,6 +8,7 @@ import { CustomerFields, User } from '../../types/userType';
 import { Path, useForm } from 'react-hook-form';
 import { useAppContext } from '../../context/AppContext';
 import SelectionUi from '../SelectionUi/SelectionUi';
+import { useTranslation } from 'react-i18next';
 
 export const GenericCustomerFormUi = ({
   fields,
@@ -19,6 +20,7 @@ export const GenericCustomerFormUi = ({
   refetchCustomersData: () => void;
 }) => {
   const { user } = useAppContext();
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -57,6 +59,7 @@ export const GenericCustomerFormUi = ({
               label={field.label}
               name={field.key as Path<Customer<CustomerFields>>} // Ensuring type safety with Path
               options={field?.options ?? undefined}
+              required={field?.required}
               register={register}
               errors={errors}
             />
@@ -71,6 +74,7 @@ export const GenericCustomerFormUi = ({
               name={field.key as Path<Customer<CustomerFields>>} // Ensuring type safety with Path
               field={field}
               type={field.type}
+              required={field?.required}
               register={register}
               errors={errors}
             />
@@ -93,7 +97,7 @@ export const GenericCustomerFormUi = ({
     <FormContainer onSubmit={handleSubmit(onSubmit)}>
       <FormHeader>
         <CloseButton onClick={() => setAddCustomerOpen(false)}>
-          Close
+          {t('buttons.cancel')}
         </CloseButton>
       </FormHeader>
       <InputsWrapper isFirstInputs>{renderFields(true)}</InputsWrapper>
@@ -101,7 +105,7 @@ export const GenericCustomerFormUi = ({
       <ButtonUi
         type="submit"
         variant={'secondary'}
-        label="Add Customer"
+        label={t('buttons.add')}
         onClick={() => {}}
       />
     </FormContainer>

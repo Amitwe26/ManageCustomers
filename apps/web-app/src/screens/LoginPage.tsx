@@ -7,8 +7,10 @@ import {
   LoginFormFields,
   SignUpFormFields,
 } from '../types/loginTypes';
+import { useTranslation } from 'react-i18next';
 
 const LoginPage: React.FC = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = React.useState<'login' | 'signup'>('login');
   const [loginFields, setLoginFields] = useState<FormField<LoginFormFields>[]>(
     [],
@@ -39,13 +41,13 @@ const LoginPage: React.FC = () => {
             onClick={() => setActiveTab('login')}
             $isActive={isLoginForm}
           >
-            Login
+            {t('loginPage.login')}
           </TabButton>
           <TabButton
             onClick={() => setActiveTab('signup')}
             $isActive={!isLoginForm}
           >
-            Sign up
+            {t('loginPage.signup')}
           </TabButton>
         </TabContainer>
         <LoginForm

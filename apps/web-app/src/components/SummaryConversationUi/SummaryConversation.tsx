@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { Customer, CustomerHistory, PlanningType } from '../../types/customers';
+import { Customer, CustomerHistory } from '../../types/customers';
 import ButtonUi from '../ButtonUi/ButtonUi';
 import { CustomerFields } from '../../types/userType';
 import { addCustomerHistory, getHistoryUser } from '../../utils/firebase';
 import { useAppContext } from '../../context/AppContext';
+import { useTranslation } from 'react-i18next';
 
 const SummaryConversation = () => {
   const location = useLocation();
+  const { t } = useTranslation();
   const { user } = useAppContext();
   const { customer } = location.state as {
     customer: Customer<CustomerFields>;
@@ -40,9 +42,13 @@ const SummaryConversation = () => {
         <textarea
           value={newDescription}
           onChange={(e) => setNewDescription(e.target.value)}
-          placeholder="Add new summary conversation here..."
+          placeholder={t('customerDetails.summery.textareaText')}
         />
-        <ButtonUi label="Submit" variant="primary" onClick={handleAddSummary} />
+        <ButtonUi
+          label={t('buttons.add')}
+          variant="primary"
+          onClick={handleAddSummary}
+        />
       </TextBoxContainer>
 
       <SummaryList>

@@ -2,6 +2,9 @@
 apps/web-app/node_modules/
 **/node_modules/
 
+# Ignore locale JSON files in apps/web-app
+apps/web-app/public/locales/*.json
+
 # Build output
 dist/
 build/

@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { saveCustomer } from '../../utils/firebase';
 import { useAppContext } from '../../context/AppContext';
 import SelectionUi from '../SelectionUi/SelectionUi';
+import { useTranslation } from 'react-i18next';
 
 const CustomerInfoUi = ({
   customer,
@@ -15,6 +16,7 @@ const CustomerInfoUi = ({
   profession: Profession | null;
 }) => {
   const { user } = useAppContext();
+  const { t } = useTranslation();
   const [isEditMode, setIsEditMode] = useState(false);
   const {
     register,
@@ -24,7 +26,7 @@ const CustomerInfoUi = ({
   } = useForm<Customer<CustomerFields>>({
     defaultValues: customer,
   });
-  console.log(!Object.keys(errors).length, isDirty);
+
   const handleEditToggle = () => {
     if (isEditMode && isDirty) {
       handleSubmit(onSubmit)();
@@ -44,7 +46,7 @@ const CustomerInfoUi = ({
       console.error('Error saving customer data:', error);
     }
   };
-  console.log(errors);
+
   const renderFields = () => {
     if (!profession) return <p>Loading profession data...</p>;
 
@@ -60,6 +62,7 @@ const CustomerInfoUi = ({
               label={inputField.label}
               name={inputField.key as Path<Customer<CustomerFields>>}
               options={inputField.options}
+              required={Boolean(inputField?.required)}
               register={register}
               errors={errors}
             />
@@ -97,7 +100,7 @@ const CustomerInfoUi = ({
   return (
     <FlexContainer>
       <EditButton onClick={handleEditToggle}>
-        {isEditMode ? 'Save' : 'Edit'}
+        {isEditMode ? t('buttons.save') : t('buttons.edit')}
       </EditButton>
       <ContainerInfo>{renderFields()}</ContainerInfo>
     </FlexContainer>

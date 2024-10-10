@@ -3,22 +3,25 @@ import styled from 'styled-components';
 import { Customer } from '../../types/customers';
 import { CustomerFields } from '../../types/userType';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const CustomerListCardUi = ({
   renderList,
 }: {
   renderList?: Customer<CustomerFields>[];
 }) => {
-  const headers = ['Date', 'Name', 'Status', 'Phone', 'Email'];
+  const { t } = useTranslation();
+  const headers = ['date', 'name', 'status', 'phone', 'email'];
 
   return (
     <Container>
       <ListHeader>
         {headers.map((header) => (
-          <HeaderItem key={header}>{header}</HeaderItem>
+          <HeaderItem key={header}>
+            {t(`customersListPage.headerCustomerList.${header}`)}
+          </HeaderItem>
         ))}
       </ListHeader>
-
       {renderList ? (
         renderList?.map((customer: Customer<CustomerFields>) => (
           <CustomerContainer
@@ -58,6 +61,8 @@ export default CustomerListCardUi;
 
 const Container = styled.div`
   padding: 15px 5px 0;
+  //display: flex;
+  //direction: rtl;
 `;
 
 const ListHeader = styled.div`
@@ -76,7 +81,6 @@ const HeaderItem = styled.div`
   color: #495057;
   text-transform: uppercase;
   letter-spacing: 1px;
-  text-align: left;
 `;
 
 const CustomerContainer = styled(Link)`
@@ -105,7 +109,6 @@ const CustomerDetails = styled.div`
 
 const DetailItem = styled.div`
   padding: 10px 0;
-  text-align: left;
   font-size: 16px;
   font-weight: 500;
   color: #495057;

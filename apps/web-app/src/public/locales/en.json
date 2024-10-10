@@ -1,0 +1,50 @@
+{
+  "loadingText":"Loading...",
+  "loginPage": {
+    "login": "Login",
+    "signup": "Sign Up"
+  },
+  "navBar": {
+    "customersList": "Customers List",
+    "calendar": "Appointment Calendar",
+    "setting": "Settings",
+    "logOut": "Log Out"
+  },
+  "buttons": {
+    "save": "Save",
+    "edit": "Edit",
+    "add": "Add",
+    "cancel": "Cancel",
+    "goBack": "Go Back"
+  },
+  "customersListPage": {
+    "titles": {
+      "customers": "Customers",
+      "filterInput": "Search Customers"
+    },
+    "headerCustomerList": {
+      "date": "Date",
+      "name": "Customer Name",
+      "status": "Status",
+      "phone": "Phone",
+      "email": "Email"
+    }
+  },
+  "customerDetails": {
+    "tabs": {
+      "summary": "Summary",
+      "strategy": "Strategies",
+      "info": "Customer Profile"
+    },
+    "strategy": {
+      "buildStrategy": "Build Strategy",
+      "addStrategy": "Add Strategy",
+      "addOption": "Add Option",
+      "removeOption": "Remove Option",
+      "option": "Option"
+    },
+    "summery": {
+      "textareaText":"Add new summery conversation here"
+    }
+  }
+}

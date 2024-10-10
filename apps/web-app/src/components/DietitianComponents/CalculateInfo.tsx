@@ -39,7 +39,7 @@ const CalculateInfo = ({ customer }: CustomerComponentProps) => {
       <div>BMI: {bmi.toFixed(2)}</div>
       <div>RMR: {rmr.toFixed(2)}</div>
       <div>Determine: {determine}!</div>
-      <div>Protein: {Protein} gr</div>
+      <div>Protein: {Protein.toFixed(2)} gr</div>
       <div>carbohydrate: {carbohydrate.toFixed(1)} gr</div>
     </InfoContainer>
   );

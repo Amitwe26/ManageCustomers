@@ -3,9 +3,11 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { auth, getUserInfo, observeAuthState } from '../../utils/firebase';
 import { signOut } from 'firebase/auth';
+import { useTranslation } from 'react-i18next';
 
 const SideNavUi = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [isUserLogin, setIsUserLogin] = useState(true);
 
   useEffect(() => {
@@ -29,15 +31,20 @@ const SideNavUi = () => {
     <NavContainer>
       <NavList>
         <NavItem>
-          <StyledNavLink to="/customers">Customers List</StyledNavLink>
+          <StyledNavLink to="/customers">
+            {t('navBar.customersList')}
+          </StyledNavLink>
         </NavItem>
         <NavItem>
-          <StyledNavLink to="/calendar">Calendar</StyledNavLink>
+          <StyledNavLink to="/calendar">{t('navBar.calendar')}</StyledNavLink>
+        </NavItem>
+        <NavItem>
+          <StyledNavLink to="/setting">{t('navBar.setting')}</StyledNavLink>
         </NavItem>
         {isUserLogin && (
           <NavItem>
             <StyledNavLink onClick={() => handleLogout()} to="/">
-              Log out
+              {t('navBar.logOut')}
             </StyledNavLink>
           </NavItem>
         )}

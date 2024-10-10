@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import ButtonUi from '../ButtonUi/ButtonUi';
 import { Customer } from '../../types/customers';
 import { CustomerFields } from '../../types/userType';
+import { useTranslation } from 'react-i18next';
 
 interface CustomersListHeaderUiProps {
   customers?: Customer<CustomerFields>[];
@@ -16,6 +17,7 @@ const CustomersListHeaderUi = ({
   setAddCustomerOpen,
   setFilterList,
 }: CustomersListHeaderUiProps) => {
+  const { t } = useTranslation();
   const onChange = (value: any) => {
     const newList = customers?.filter((customer) =>
       customer.name.toLowerCase().includes(value.target.value.toLowerCase()),
@@ -26,11 +28,14 @@ const CustomersListHeaderUi = ({
   return (
     <Header>
       <TitleContainer>
-        <h2>Customers </h2>
+        <h2>{t('customersListPage.titles.customers')} </h2>
         <span> {customers?.length}</span>
       </TitleContainer>
       <FilterContainer>
-        <input placeholder={'Filter'} onChange={onChange} />
+        <input
+          placeholder={t('customersListPage.titles.filterInput')}
+          onChange={onChange}
+        />
         <ButtonStyled
           onClick={() => setAddCustomerOpen(true)}
           label={'+'}

@@ -8,9 +8,11 @@ import { getPlanningList, getUserProfession } from '../../utils/firebase';
 import GenericPlanningForm from '../GenericFormUi/GenericPlanningForm';
 import MealsUi from '../MealsUi/MealsUi';
 import CalculateInfo from '../DietitianComponents/CalculateInfo';
+import { useTranslation } from 'react-i18next';
 
 const StrategyUi = ({ customer }: { customer: Customer<CustomerFields> }) => {
   const { user } = useAppContext();
+  const { t } = useTranslation();
   const [addMenuIsOpen, setAddMenuIsOpen] = React.useState(false);
   const [fields, setFields] = useState<InputField[]>([]);
 
@@ -46,7 +48,7 @@ const StrategyUi = ({ customer }: { customer: Customer<CustomerFields> }) => {
         <ButtonUi
           type="button"
           onClick={() => setAddMenuIsOpen(true)}
-          label={'Add new strategy'}
+          label={t('customerDetails.strategy.buildStrategy')}
           variant={'primary'}
         />
       </MenusHeaderContainer>

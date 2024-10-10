@@ -6,6 +6,7 @@ import InputUi from '../InputUi/InputUi';
 import styled from 'styled-components';
 import { setNewPlanning } from '../../utils/firebase';
 import ButtonUi from '../ButtonUi/ButtonUi';
+import { useTranslation } from 'react-i18next';
 
 const GenericPlanningForm = ({
   fields,
@@ -19,6 +20,7 @@ const GenericPlanningForm = ({
   refetchCustomersData: VoidFunction;
 }) => {
   const { user } = useAppContext();
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -77,23 +79,25 @@ const GenericPlanningForm = ({
       </HeaderContainer>
 
       <div>
-        <h3>Options</h3>
         {optionsFields?.map((option, index) => (
           <div key={option.id}>
-            <h4>Option {index + 1}</h4>
+            <h4>
+              {t('customerDetails.strategy.option')} {index + 1}
+            </h4>
             {optionFields?.map((field) => (
               <InputContainer key={field.key}>
                 <InputUi
                   label={field.label}
                   name={`options.${index}.${field.key}` as Path<PlanningType>}
                   type={field.type}
+                  required={field.required}
                   register={register}
                   errors={errors}
                 />
               </InputContainer>
             ))}
             <RemovePlanning
-              label="Remove Option"
+              label={t('customerDetails.strategy.removeOption')}
               variant="secondary"
               onClick={() => remove(index)} // Remove option dynamically
             />
@@ -101,7 +105,7 @@ const GenericPlanningForm = ({
         ))}
 
         <AddOption
-          label="Add Option"
+          label={t('customerDetails.strategy.addOption')}
           variant="primary"
           onClick={() => {
             append(
@@ -117,7 +121,7 @@ const GenericPlanningForm = ({
       <ButtonUi
         type="submit"
         variant="primary"
-        label="Add Planning"
+        label={t('customerDetails.strategy.addStrategy')}
         onClick={() => {}}
       />
     </FormContainer>
