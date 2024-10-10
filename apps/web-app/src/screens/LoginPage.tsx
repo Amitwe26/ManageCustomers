@@ -23,7 +23,7 @@ const LoginPage: React.FC = () => {
   useEffect(() => {
     const fetchFields = async () => {
       const formFields = await getFormFields(activeTab);
-      if (isLoginForm) {
+      if (isLoginForm && formFields) {
         setLoginFields(formFields as FormField<LoginFormFields>[]);
       } else {
         setSignupFields(formFields as FormField<SignUpFormFields>[]);

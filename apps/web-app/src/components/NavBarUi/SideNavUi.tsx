@@ -4,8 +4,10 @@ import styled from 'styled-components';
 import { auth, observeAuthState } from '../../utils/firebase';
 import { signOut } from 'firebase/auth';
 import { useTranslation } from 'react-i18next';
+import { useAppContext } from '../../context/AppContext';
 
 const SideNavUi = () => {
+  const { user } = useAppContext();
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [isUserLogin, setIsUserLogin] = useState(true);
@@ -30,6 +32,9 @@ const SideNavUi = () => {
   return (
     <NavContainer>
       <NavList>
+        <NavItem>
+          <span>{user?.email}</span>
+        </NavItem>
         <NavItem>
           <StyledNavLink to="/customers">
             {t('navBar.customersList')}

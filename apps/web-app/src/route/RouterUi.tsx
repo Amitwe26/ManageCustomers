@@ -13,12 +13,10 @@ import Setting from '../screens/Setting';
 const RoutesComponent = () => {
   const location = useLocation();
   const { setUser } = useAppContext();
-
   const noSidebarRoutes = ['/', '/signup'];
-
   const showSidebar = !noSidebarRoutes.includes(location.pathname);
-
   const navigate = useNavigate();
+
   useEffect(() => {
     observeAuthState(async (user) => {
       if (user) {
@@ -31,7 +29,7 @@ const RoutesComponent = () => {
         navigate('/');
       }
     });
-  }, [navigate, setUser]);
+  }, [setUser]);
 
   return (
     <Container>

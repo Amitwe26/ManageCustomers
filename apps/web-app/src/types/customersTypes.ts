@@ -59,6 +59,9 @@ export type Customer<T> = {
   type: string;
   date: string;
   status: string;
+  tasks: string[];
+  price: number;
+  paymentType: string;
   history?: CustomerHistory[];
   planningList: PlanningType[];
 } & T;

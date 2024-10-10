@@ -35,10 +35,6 @@ const CustomersList = () => {
   return (
     <>
       <Container>
-        <div>
-          <p>{user?.email}</p>
-          <p>{user?.typeOfUser}</p>
-        </div>
         <CustomersListHeaderUi
           customers={customers}
           setAddCustomerOpen={setAddCustomerOpen}

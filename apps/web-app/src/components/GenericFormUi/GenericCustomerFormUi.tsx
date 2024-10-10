@@ -100,7 +100,7 @@ export const GenericCustomerFormUi = ({
           {t('buttons.cancel')}
         </CloseButton>
       </FormHeader>
-      <InputsWrapper isFirstInputs>{renderFields(true)}</InputsWrapper>
+      <InputsWrapper isFirstInputs={true}>{renderFields(true)}</InputsWrapper>
       <InputsWrapper>{renderFields()}</InputsWrapper>
       <ButtonUi
         type="submit"
@@ -168,5 +168,5 @@ const InputsWrapper = styled.div<{ isFirstInputs?: boolean }>`
   align-items: center;
   width: 100%;
   gap: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 `;

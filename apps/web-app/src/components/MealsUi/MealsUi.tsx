@@ -34,10 +34,12 @@ const MealsUi = ({ strategyList }: { strategyList?: PlanningType[] }) => {
                     <p>
                       <h4>{t(`dietitian.meals.notes`)}</h4> {meal.notes}
                     </p>
-                    <h4>
-                      {t(`dietitian.meals.time`)}: {meal.startTime}-{' '}
-                      {meal.endTime}
-                    </h4>
+                    <p>
+                      <h4>
+                        {t(`dietitian.meals.time`)}: {meal.startTime}-{' '}
+                        {meal.endTime}
+                      </h4>
+                    </p>
                   </MealContainer>
                 );
               })}
