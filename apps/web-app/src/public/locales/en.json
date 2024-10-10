@@ -46,5 +46,16 @@
     "summery": {
       "textareaText":"Add new summery conversation here"
     }
+  },
+  "dietitian": {
+    "meals": {
+      "buttons": {
+        "openMeals": "Close meal",
+        "closeMeals": "Open meal"
+      },
+      "ingredients":"Ingredients",
+      "notes":"Notes",
+      "time": "Time"
+    }
   }
 }

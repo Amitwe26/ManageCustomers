@@ -46,5 +46,16 @@
     "summery": {
     "textareaText":"הוספת סיכום שיחה חדש"
     }
+  },
+  "dietitian": {
+    "meals": {
+      "buttons": {
+        "openMeals": "פתיחת תפריט",
+        "closeMeals": "סגירת תפריט"
+      },
+      "ingredients":"מרכיבים",
+      "notes":"הערות:",
+      "time": "שעות"
+    }
   }
 }

@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Meal, PlanningType } from '../../types/customersTypes';
+import { useTranslation } from 'react-i18next';
 
 const MealsUi = ({ strategyList }: { strategyList?: PlanningType[] }) => {
+  const { t } = useTranslation();
   const [isMealsOpen, setIsMealsOpen] = React.useState(false);
 
   return (
@@ -14,7 +16,9 @@ const MealsUi = ({ strategyList }: { strategyList?: PlanningType[] }) => {
             <p>{item.planningNotes}</p>
             <p>{item.planningDate}</p>
             <button onClick={() => setIsMealsOpen((prev) => !prev)}>
-              {isMealsOpen ? 'close Meals' : 'open Meals'}
+              {isMealsOpen
+                ? t(`dietitian.meals.buttons.closeMeals`)
+                : t(`dietitian.meals.buttons.openMeals`)}
             </button>
           </MenuContainer>
           <Container>
@@ -23,13 +27,17 @@ const MealsUi = ({ strategyList }: { strategyList?: PlanningType[] }) => {
                 return (
                   <MealContainer key={index}>
                     <h4>{meal.optionName}</h4>
-                    <p>Ingredients: {meal.ingredients}</p>
-                    <p>Notes: {meal.notes}</p>
-                    <TimeContainer>
-                      <p>Time: </p>
-                      <p>{meal.startTime}-</p>
-                      <p>{meal.endTime}</p>
-                    </TimeContainer>
+                    <p>
+                      <h3> {t(`dietitian.meals.ingredients`)}:</h3>
+                      {meal.ingredients}
+                    </p>
+                    <p>
+                      <h4>{t(`dietitian.meals.notes`)}</h4> {meal.notes}
+                    </p>
+                    <h4>
+                      {t(`dietitian.meals.time`)}: {meal.startTime}-{' '}
+                      {meal.endTime}
+                    </h4>
                   </MealContainer>
                 );
               })}
@@ -42,13 +50,8 @@ const MealsUi = ({ strategyList }: { strategyList?: PlanningType[] }) => {
 
 export default MealsUi;
 
-const TimeContainer = styled.div`
-  display: flex;
-`;
-
 const MenuContainer = styled.div`
   display: flex;
-  //flex-direction: row;
   border: 1px solid #f3f3f3;
   background-color: white;
   justify-content: space-between;
