@@ -31,7 +31,7 @@ const LoginPage: React.FC = () => {
     };
 
     fetchFields();
-  }, [activeTab]);
+  }, [activeTab, isLoginForm]);
 
   return (
     <Main>

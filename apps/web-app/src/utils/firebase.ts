@@ -15,8 +15,12 @@ import {
   updateDoc,
   getDoc,
 } from 'firebase/firestore';
-import { Customer, CustomerHistory, PlanningType } from '../types/customers';
-import { CustomerFields, Profession, User } from '../types/userType';
+import {
+  Customer,
+  CustomerHistory,
+  PlanningType,
+} from '../types/customersTypes';
+import { CustomerFields, Profession, User } from '../types/userTypes';
 import {
   AuthFormDocument,
   FormField,

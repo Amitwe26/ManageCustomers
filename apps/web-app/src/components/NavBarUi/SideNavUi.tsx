@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { auth, getUserInfo, observeAuthState } from '../../utils/firebase';
+import { auth, observeAuthState } from '../../utils/firebase';
 import { signOut } from 'firebase/auth';
 import { useTranslation } from 'react-i18next';
 
@@ -18,7 +18,7 @@ const SideNavUi = () => {
         navigate('/');
       }
     });
-  }, []);
+  }, [navigate]);
 
   const handleLogout = async () => {
     try {

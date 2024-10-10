@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAppContext } from '../../context/AppContext';
-import { InputField, PlanningType } from '../../types/customers';
+import { InputField, PlanningType } from '../../types/customersTypes';
 import { Path, useFieldArray, useForm } from 'react-hook-form';
 import InputUi from '../InputUi/InputUi';
 import styled from 'styled-components';

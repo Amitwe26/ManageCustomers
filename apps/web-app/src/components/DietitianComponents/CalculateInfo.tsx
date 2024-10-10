@@ -1,5 +1,5 @@
-import { Customer } from '../../types/customers';
-import { DietitianFields } from '../../types/userType';
+import { Customer } from '../../types/customersTypes';
+import { DietitianFields } from '../../types/userTypes';
 import React from 'react';
 import {
   calculateBMI,

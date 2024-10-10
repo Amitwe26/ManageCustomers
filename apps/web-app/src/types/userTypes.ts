@@ -1,4 +1,21 @@
-import { Customer, InputField } from './customers';
+import { Customer, InputField } from './customersTypes';
+
+export type User = {
+  id: string;
+  email: string;
+  password: string;
+  name: string;
+  profession: 'digital' | 'dietitian';
+  typeOfUser: string;
+  customers: Customer<CustomerFields>[];
+};
+
+export interface Profession {
+  id: string;
+  professionName: string;
+  customerInputProfession: InputField[];
+  taskPlanningInputList: InputField[];
+}
 
 export type CustomerFields = DietitianFields | DigitalFields;
 
@@ -33,20 +50,3 @@ export type DigitalFields = {
   marketingBudget: string;
   // professionData: DigitalMenu[];
 };
-
-export type User = {
-  id: string;
-  email: string;
-  password: string;
-  name: string;
-  profession: 'digital' | 'dietitian';
-  typeOfUser: string;
-  customers: Customer<CustomerFields>[];
-};
-
-export interface Profession {
-  id: string;
-  professionName: string;
-  customerInputProfession: InputField[];
-  taskPlanningInputList: InputField[];
-}

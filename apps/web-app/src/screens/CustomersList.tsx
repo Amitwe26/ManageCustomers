@@ -1,8 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { CustomerFields } from '../types/userType';
-import { Customer } from '../types/customers';
+import { CustomerFields } from '../types/userTypes';
+import { Customer } from '../types/customersTypes';
 import CustomersListHeaderUi from '../components/CustomersListHeaderUi/CustomersListHeaderUi';
 import { getCustomersUser } from '../utils/firebase';
 import { useQuery } from 'react-query';

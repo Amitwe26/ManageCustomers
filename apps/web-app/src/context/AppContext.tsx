@@ -1,10 +1,11 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import { User } from '../types/userType';
+import React, { createContext, useContext, useState } from 'react';
+import { User } from '../types/userTypes';
 
 interface AppContextType {
   user: User | null;
   isLoading: boolean;
   setUser: (user: User | null) => void;
+  setIsLoading: (isLoading: boolean) => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -29,6 +30,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         user,
         isLoading,
         setUser,
+        setIsLoading,
       }}
     >
       {children}

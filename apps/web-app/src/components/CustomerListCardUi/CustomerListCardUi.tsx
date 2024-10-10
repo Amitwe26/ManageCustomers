@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Customer } from '../../types/customers';
-import { CustomerFields } from '../../types/userType';
+import { Customer } from '../../types/customersTypes';
+import { CustomerFields } from '../../types/userTypes';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -121,13 +121,4 @@ const DetailValue = styled.span`
   font-size: 16px;
   font-weight: 500;
   color: #495057;
-`;
-
-// Optional additional styles for finer details
-const CustomerName = styled.h2`
-  font-size: 20px;
-  font-weight: 600;
-  color: #343a40;
-  margin: 0;
-  line-height: 1.2;
 `;

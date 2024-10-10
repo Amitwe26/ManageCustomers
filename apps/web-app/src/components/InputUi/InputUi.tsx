@@ -6,7 +6,7 @@ import {
   Path,
   UseFormRegister,
 } from 'react-hook-form';
-import { InputField, InputFieldType } from '../../types/customers';
+import { InputField, InputFieldType } from '../../types/customersTypes';
 
 interface InputUiProps<T extends FieldValues> {
   label: string;
@@ -49,12 +49,6 @@ export default InputUi;
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const Label = styled.label`
-  font-size: 14px;
-  margin-bottom: 5px;
-  color: #333;
 `;
 
 const StyledInput = styled.input`

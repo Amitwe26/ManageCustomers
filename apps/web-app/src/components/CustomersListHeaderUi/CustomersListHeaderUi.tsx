@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import ButtonUi from '../ButtonUi/ButtonUi';
-import { Customer } from '../../types/customers';
-import { CustomerFields } from '../../types/userType';
+import { Customer } from '../../types/customersTypes';
+import { CustomerFields } from '../../types/userTypes';
 import { useTranslation } from 'react-i18next';
 
 interface CustomersListHeaderUiProps {

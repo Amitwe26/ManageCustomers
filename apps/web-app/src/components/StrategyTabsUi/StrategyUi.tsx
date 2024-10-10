@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ButtonUi from '../ButtonUi/ButtonUi';
-import { Customer, InputField, PlanningType } from '../../types/customers';
-import { CustomerFields, DietitianFields } from '../../types/userType';
+import { Customer, InputField, PlanningType } from '../../types/customersTypes';
+import { CustomerFields, DietitianFields } from '../../types/userTypes';
 import { useAppContext } from '../../context/AppContext';
 import { getPlanningList, getUserProfession } from '../../utils/firebase';
 import GenericPlanningForm from '../GenericFormUi/GenericPlanningForm';

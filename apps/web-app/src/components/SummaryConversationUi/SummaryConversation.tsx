@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import { Customer, CustomerHistory } from '../../types/customers';
+import { Customer, CustomerHistory } from '../../types/customersTypes';
 import ButtonUi from '../ButtonUi/ButtonUi';
-import { CustomerFields } from '../../types/userType';
+import { CustomerFields } from '../../types/userTypes';
 import { addCustomerHistory, getHistoryUser } from '../../utils/firebase';
 import { useAppContext } from '../../context/AppContext';
 import { useTranslation } from 'react-i18next';
@@ -115,8 +115,4 @@ const SummaryDescription = styled.p`
   margin: 0;
   font-size: 16px;
   color: #333;
-`;
-
-const MenusHeaderContainer = styled.div`
-  width: 100%;
 `;

@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import { BasePlanning, Meal } from '../../types/customers';
+import { Meal, PlanningType } from '../../types/customersTypes';
 
-const MealsUi = ({ strategyList }: { strategyList?: BasePlanning<Meal>[] }) => {
+const MealsUi = ({ strategyList }: { strategyList?: PlanningType[] }) => {
   const [isMealsOpen, setIsMealsOpen] = React.useState(false);
 
   return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Customer } from '../../types/customers';
-import { CustomerFields } from '../../types/userType';
+import { Customer } from '../../types/customersTypes';
+import { CustomerFields } from '../../types/userTypes';
 
 const CustomerHeaderUi = ({
   customer,

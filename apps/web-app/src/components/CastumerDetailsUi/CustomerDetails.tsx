@@ -2,9 +2,13 @@ import React, { HTMLAttributes } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CustomerHeaderUi from '../CustomerHeaderInfoUi/customerHeaderUi';
-import { Customer, CustomerTabs, TabComponents } from '../../types/customers';
+import {
+  Customer,
+  CustomerTabs,
+  TabComponents,
+} from '../../types/customersTypes';
 import SummaryConversation from '../SummaryConversationUi/SummaryConversation';
-import { CustomerFields, Profession } from '../../types/userType';
+import { CustomerFields, Profession } from '../../types/userTypes';
 import CustomerInfoUi from '../CustomerInfoUi/CustomerInfoUi';
 import StrategyUi from '../StrategyTabsUi/StrategyUi';
 import ButtonUi from '../ButtonUi/ButtonUi';
@@ -55,7 +59,8 @@ const CustomerDetails = () => {
     });
 
     return () => unsubscribe();
-  }, [customer.id]);
+  }, [user, customer.id]);
+
   if (!customer) {
     return <h1>Customer not found</h1>;
   }

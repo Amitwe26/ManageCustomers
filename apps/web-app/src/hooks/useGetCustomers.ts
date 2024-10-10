@@ -1,5 +1,5 @@
 import { useQueryClient } from 'react-query';
-import { User } from '../types/userType';
+import { User } from '../types/userTypes';
 
 export const useGetCustomers = (userId: string) => {
   const queryClient = useQueryClient();

@@ -8,6 +8,7 @@ export interface FormField<T> {
   type: 'text' | 'number' | 'email' | 'password' | 'selection';
   label: string;
   options?: { label: string; value: string | number }[];
+  required?: boolean;
 }
 
 export type LoginFormFields = BaseFormFields;

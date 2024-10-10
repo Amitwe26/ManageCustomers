@@ -4,7 +4,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { auth, getUserInfo, loginUser, setNewUser } from '../../utils/firebase';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { User } from '../../types/userType';
+import { User } from '../../types/userTypes';
 import {
   FormField,
   LoginFormFields,

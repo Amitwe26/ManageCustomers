@@ -31,7 +31,8 @@ const RoutesComponent = () => {
         navigate('/');
       }
     });
-  }, []);
+  }, [navigate, setUser]);
+
   return (
     <Container>
       {showSidebar && <SideNavUi />}

@@ -1,7 +1,5 @@
-import { CustomerFields, DietitianFields, DigitalFields } from './userType';
 import React from 'react';
 
-export type CustomerKeys = NestedKeys<Customer<CustomerFields>>;
 export type PlanningType = BasePlanning<Meal>;
 
 export type BasePlanning<T> = {

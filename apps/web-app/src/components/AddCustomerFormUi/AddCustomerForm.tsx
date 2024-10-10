@@ -3,7 +3,7 @@ import { GenericCustomerFormUi } from '../GenericFormUi/GenericCustomerFormUi';
 import { useAppContext } from '../../context/AppContext';
 import { useEffect, useState } from 'react';
 import { getUserProfession } from '../../utils/firebase';
-import { InputField } from '../../types/customers';
+import { InputField } from '../../types/customersTypes';
 
 const AddCustomerForm = ({
   setAddCustomerOpen,
@@ -22,7 +22,7 @@ const AddCustomerForm = ({
     };
 
     fetchFields();
-  }, []);
+  }, [user?.profession]);
 
   return (
     <GenericCustomerFormUi

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Customer } from '../../types/customers';
-import { CustomerFields, Profession } from '../../types/userType';
+import { Customer } from '../../types/customersTypes';
+import { CustomerFields, Profession } from '../../types/userTypes';
 import { Path, useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import { saveCustomer } from '../../utils/firebase';
