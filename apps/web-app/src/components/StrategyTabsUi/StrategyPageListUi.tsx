@@ -10,7 +10,11 @@ import MealsUi from '../MealsUi/MealsUi';
 import CalculateInfo from '../DietitianComponents/CalculateInfo';
 import { useTranslation } from 'react-i18next';
 
-const StrategyUi = ({ customer }: { customer: Customer<CustomerFields> }) => {
+const StrategyPageListUi = ({
+  customer,
+}: {
+  customer: Customer<CustomerFields>;
+}) => {
   const { user } = useAppContext();
   const { t } = useTranslation();
   const [addMenuIsOpen, setAddMenuIsOpen] = React.useState(false);
@@ -39,7 +43,7 @@ const StrategyUi = ({ customer }: { customer: Customer<CustomerFields> }) => {
   }, [fetchData]);
 
   return (
-    <div>
+    <ScrollContainer>
       <MenusHeaderContainer>
         {user?.profession === 'dietitian' && (
           <CalculateInfo customer={customer as Customer<DietitianFields>} />
@@ -60,12 +64,18 @@ const StrategyUi = ({ customer }: { customer: Customer<CustomerFields> }) => {
           refetchCustomersData={() => {}}
         />
       )}
-      <MealsUi strategyList={strategyList} />
-    </div>
+      <MealsUi strategyList={strategyList} fetchData={fetchData} />
+    </ScrollContainer>
   );
 };
 
-export default StrategyUi;
+export default StrategyPageListUi;
+
+const ScrollContainer = styled.div`
+  overflow-y: scroll;
+  height: 700px;
+`;
+
 const MenusHeaderContainer = styled.div`
   width: 100%;
   margin-bottom: 10px;

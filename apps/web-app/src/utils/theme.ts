@@ -16,8 +16,8 @@ export const theme = {
       deep: '#512da8',
       baseBlue: 'rgba(96, 169, 239, 0.9)',
       yellow: '#ffeb3b',
-      // softOrange: '#ffcc80',
       softOrange: '#fdc566',
+      softRed: '#fbd7d7',
       white: '#fff',
     },
     border: {
@@ -28,6 +28,7 @@ export const theme = {
     button: {
       primary: '#7e57c2',
       light: '#b39ddb',
+      delete: '#ef6a79',
     },
   },
   spacing: {

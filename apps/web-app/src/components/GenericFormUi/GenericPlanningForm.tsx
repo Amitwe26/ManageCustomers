@@ -110,7 +110,7 @@ const GenericPlanningForm = ({
           onClick={() => {
             append(
               optionFields.reduce((acc, field) => {
-                acc[field.key] = ''; // Initialize each field with an empty string
+                acc[field.key] = '';
                 return acc;
               }, {} as any),
             );

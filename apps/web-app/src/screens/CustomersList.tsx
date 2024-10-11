@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import styled from 'styled-components';
 import { CustomerFields } from '../types/userTypes';
 import { Customer } from '../types/customersTypes';
@@ -29,6 +29,10 @@ const CustomersList = () => {
   const renderList = useCallback(() => {
     return filterList?.length ? filterList : customers;
   }, [filterList, customers]);
+
+  useEffect(() => {
+    window.scrollTo(0, -10);
+  }, []);
 
   if (error) return <div>Error: {error?.toString()}</div>;
 

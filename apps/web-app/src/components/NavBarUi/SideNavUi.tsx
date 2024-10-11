@@ -65,10 +65,11 @@ const NavContainer = styled.nav`
   top: 0;
   left: 0;
   width: 200px;
-  height: 100vh;
+  //height: 100vh;
   padding-top: 20px;
   display: flex;
   justify-content: start;
+  overflow: hidden;
 `;
 
 const NavList = styled.ul`

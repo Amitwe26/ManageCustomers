@@ -234,6 +234,30 @@ export const setNewPlanning = async (
   })) as unknown as PlanningType[];
 };
 
+export const editPlanning = async (
+  userId: string,
+  customerId: string,
+  planningId: string, // Document ID of the planning entry
+  updatedData: Partial<PlanningType>, // Partial allows you to update only the changed fields
+) => {
+  try {
+    const planningDocRef = doc(
+      db,
+      'users',
+      userId,
+      'customers',
+      customerId,
+      'planning',
+      planningId,
+    );
+    await updateDoc(planningDocRef, updatedData);
+    console.log('Planning updated successfully');
+  } catch (error) {
+    console.error('Error updating planning:', error);
+    throw new Error('Could not update planning data');
+  }
+};
+
 export const getPlanningList = async (userId: string, customerId: string) => {
   const planningColRef = collection(
     db,

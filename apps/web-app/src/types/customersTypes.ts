@@ -3,10 +3,12 @@ import React from 'react';
 export type PlanningType = BasePlanning<Meal>;
 
 export type BasePlanning<T> = {
+  id: string;
   title: string;
   planningDate: string;
   planningNotes: string;
   options: T[];
+  initialData?: PlanningType;
 };
 
 export type Meal = {

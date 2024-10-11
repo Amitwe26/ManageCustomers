@@ -10,7 +10,7 @@ import {
 import SummaryConversation from '../SummaryConversationUi/SummaryConversation';
 import { CustomerFields, Profession } from '../../types/userTypes';
 import CustomerInfoUi from '../CustomerInfoUi/CustomerInfoUi';
-import StrategyUi from '../StrategyTabsUi/StrategyUi';
+import StrategyPageListUi from '../StrategyTabsUi/StrategyPageListUi';
 import ButtonUi from '../ButtonUi/ButtonUi';
 import { db, getUserProfession } from '../../utils/firebase';
 import { useAppContext } from '../../context/AppContext';
@@ -31,6 +31,7 @@ const CustomerDetails = () => {
   const [activeTab, setActiveTab] = React.useState<CustomerTabs>(
     CustomerTabs.SUMMARY,
   );
+  const [isHeaderShown, setIsHeaderShown] = React.useState(true);
   React.useEffect(() => {
     const fetchProfessionFields = async () => {
       if (user?.profession) {
@@ -46,19 +47,21 @@ const CustomerDetails = () => {
   }, [user?.profession]);
 
   React.useEffect(() => {
-    const customerRef = doc(db, 'users', user!.id, 'customers', customer?.id);
-    const unsubscribe = onSnapshot(customerRef, (doc) => {
-      if (doc.exists()) {
-        setCustomerInfo({
-          id: doc.id,
-          ...doc.data(),
-        } as Customer<CustomerFields>);
-      } else {
-        console.log('No such document!');
-      }
-    });
+    if (user) {
+      const customerRef = doc(db, 'users', user.id, 'customers', customer?.id);
+      const unsubscribe = onSnapshot(customerRef, (doc) => {
+        if (doc.exists()) {
+          setCustomerInfo({
+            id: doc.id,
+            ...doc.data(),
+          } as Customer<CustomerFields>);
+        } else {
+          console.log('No such document!');
+        }
+      });
 
-    return () => unsubscribe();
+      return () => unsubscribe();
+    }
   }, [user, customer.id]);
 
   if (!customer) {
@@ -66,7 +69,9 @@ const CustomerDetails = () => {
   }
   const CustomerTabsComponents: TabComponents = {
     [CustomerTabs.SUMMARY]: SummaryConversation,
-    [CustomerTabs.STRATEGY]: () => <StrategyUi customer={customerInfo} />,
+    [CustomerTabs.STRATEGY]: () => (
+      <StrategyPageListUi customer={customerInfo} />
+    ),
     [CustomerTabs.INFO]: () => (
       <CustomerInfoUi customer={customerInfo} profession={professionFields} />
     ),
@@ -75,12 +80,12 @@ const CustomerDetails = () => {
 
   return (
     <CustomerContainer>
+      <BackButton label={t('buttons.goBack')} onClick={() => navigate(-1)} />
       <ButtonUi
-        label={t('buttons.goBack')}
-        onClick={() => navigate(-1)}
-        variant="primary"
+        label={t(isHeaderShown ? 'buttons.close' : 'buttons.open')}
+        onClick={() => setIsHeaderShown((prevState) => !prevState)}
       />
-      <CustomerHeaderUi customer={customerInfo} />
+      {isHeaderShown && <CustomerHeaderUi customer={customerInfo} />}
       <TabContainer>
         {Object.keys(CustomerTabsComponents).map((tabKey) => (
           <TabButton
@@ -103,6 +108,16 @@ export default CustomerDetails;
 
 const CustomerContainer = styled.div`
   padding: 0 15px;
+`;
+
+const BackButton = styled(ButtonUi)`
+  background: ${({ theme }) => theme.colors.button.delete};
+  margin: ${({ theme }) => theme.spacing.s}px;
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.button.delete};
+    opacity: 0.7;
+  }
 `;
 
 const TabContainer = styled.div<HTMLAttributes<HTMLDivElement>>`
