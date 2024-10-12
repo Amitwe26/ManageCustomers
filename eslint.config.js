@@ -12,7 +12,7 @@ module.exports = defineConfig({
   },
   overrides: [
     {
-      files: ["*.js", "*.jsx", "*.ts", "*.tsx"], // Specify the extensions you want to lint
+      files: ["apps/web-app/**/*.ts", "apps/web-app/**/*.tsx"], // Specify the extensions you want to lint
       rules: {
         // any specific rules for these files
       },
