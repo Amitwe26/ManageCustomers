@@ -7,13 +7,16 @@ import { saveCustomer } from '../../utils/firebase';
 import { useAppContext } from '../../context/AppContext';
 import SelectionUi from '../SelectionUi/SelectionUi';
 import { useTranslation } from 'react-i18next';
+import ContainerUi from '../ContainerUi/ContainerUi';
 
 const CustomerInfoUi = ({
   customer,
   profession,
+  isHeaderShown,
 }: {
   customer: Customer<CustomerFields>;
   profession: Profession | null;
+  isHeaderShown: boolean;
 }) => {
   const { user } = useAppContext();
   const { t } = useTranslation();
@@ -98,12 +101,14 @@ const CustomerInfoUi = ({
   }
 
   return (
-    <FlexContainer>
-      <EditButton onClick={handleEditToggle}>
-        {isEditMode ? t('buttons.save') : t('buttons.edit')}
-      </EditButton>
-      <ContainerInfo>{renderFields()}</ContainerInfo>
-    </FlexContainer>
+    <ContainerUi headerHeight={isHeaderShown ? 4.8 : 2}>
+      <FlexContainer>
+        <EditButton onClick={handleEditToggle}>
+          {isEditMode ? t('buttons.save') : t('buttons.edit')}
+        </EditButton>
+        <ContainerInfo>{renderFields()}</ContainerInfo>
+      </FlexContainer>
+    </ContainerUi>
   );
 };
 

@@ -1,49 +1,79 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import ButtonUi from '../ButtonUi/ButtonUi';
-import { Customer, InputField, PlanningType } from '../../types/customersTypes';
+import { Customer, InputField } from '../../types/customersTypes';
 import { CustomerFields, DietitianFields } from '../../types/userTypes';
 import { useAppContext } from '../../context/AppContext';
-import { getPlanningList, getUserProfession } from '../../utils/firebase';
+import {
+  deletePlanning,
+  getPlanningList,
+  getUserProfession,
+} from '../../utils/firebase';
 import GenericPlanningForm from '../GenericFormUi/GenericPlanningForm';
 import MealsUi from '../MealsUi/MealsUi';
 import CalculateInfo from '../DietitianComponents/CalculateInfo';
 import { useTranslation } from 'react-i18next';
+import ContainerUi from '../ContainerUi/ContainerUi';
+import { useLocation } from 'react-router-dom';
+import { useQuery } from 'react-query';
 
-const StrategyPageListUi = ({
-  customer,
-}: {
-  customer: Customer<CustomerFields>;
-}) => {
+const StrategyPageListUi = ({ isHeaderShown }: { isHeaderShown: boolean }) => {
   const { user } = useAppContext();
+  const location = useLocation();
+  const { customer } = location.state as {
+    customer: Customer<CustomerFields>;
+  };
   const { t } = useTranslation();
   const [addMenuIsOpen, setAddMenuIsOpen] = React.useState(false);
   const [fields, setFields] = useState<InputField[]>([]);
 
-  const [strategyList, setStrategyList] = React.useState<PlanningType[]>();
-  const fetchData = useCallback(async () => {
-    if (user) {
-      const [data, planningList] = await Promise.all([
-        getUserProfession(),
-        getPlanningList(user.id, customer.id),
-      ]);
-      setStrategyList(planningList);
+  const { data: professionList } = useQuery(
+    ['profession', user?.id],
+    async () => {
+      const data = await getUserProfession();
+      return data;
+    },
+    { enabled: !!user },
+  );
 
-      const professionData = data.find(
-        (elem) => elem.professionName === user?.profession,
+  const {
+    data: strategyList,
+    refetch: refetchStrategyList,
+    isLoading: isLoadingPlanning,
+  } = useQuery(
+    ['planningList', user?.id, customer?.id],
+    async () => {
+      if (user && customer?.id) {
+        return await getPlanningList(user.id, customer.id);
+      }
+      return [];
+    },
+    { enabled: !!user && !!customer?.id, staleTime: 60000, cacheTime: 300000 },
+  );
+  React.useEffect(() => {
+    if (professionList && user?.profession) {
+      const professionData = professionList.find(
+        (prof) => prof.professionName === user.profession,
       );
       if (professionData) {
         setFields(professionData.taskPlanningInputList);
       }
     }
-  }, [user, customer.id]);
+  }, [professionList, user?.profession]);
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  const handleDeletePlanning = async (id: string) => {
+    if (user && customer.id && id) {
+      try {
+        await deletePlanning(user.id, customer.id, id);
+        await refetchStrategyList();
+      } catch (error) {
+        console.error('Error deleting planning:', error);
+      }
+    }
+  };
 
   return (
-    <ScrollContainer>
+    <ContainerUi headerHeight={isHeaderShown ? 4.25 : 1.8}>
       <MenusHeaderContainer>
         {user?.profession === 'dietitian' && (
           <CalculateInfo customer={customer as Customer<DietitianFields>} />
@@ -60,21 +90,24 @@ const StrategyPageListUi = ({
         <GenericPlanningForm
           customerId={customer.id}
           fields={fields}
-          setAddCustomerOpen={() => setAddMenuIsOpen(true)}
-          refetchCustomersData={() => {}}
+          setAddCustomerOpen={(key) => setAddMenuIsOpen(key)}
+          refetchCustomersData={refetchStrategyList}
         />
       )}
-      <MealsUi strategyList={strategyList} fetchData={fetchData} />
-    </ScrollContainer>
+      {!isLoadingPlanning ? (
+        <MealsUi
+          strategyList={strategyList}
+          fetchData={refetchStrategyList}
+          handleDeletePlanning={handleDeletePlanning}
+        />
+      ) : (
+        <h1>Loading...</h1>
+      )}
+    </ContainerUi>
   );
 };
 
 export default StrategyPageListUi;
-
-const ScrollContainer = styled.div`
-  overflow-y: scroll;
-  height: 700px;
-`;
 
 const MenusHeaderContainer = styled.div`
   width: 100%;

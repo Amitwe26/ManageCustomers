@@ -6,24 +6,28 @@ import styled from 'styled-components';
 const MealsUi = ({
   strategyList,
   fetchData,
+  handleDeletePlanning,
 }: {
   strategyList?: PlanningType[];
-  fetchData: () => Promise<void>;
+  fetchData: VoidFunction;
+  handleDeletePlanning: (id: string) => Promise<void>;
 }) => {
   return (
-    <ScrollContainer
-      height={strategyList?.length ? strategyList.length * 590 : undefined}
-    >
+    <Container>
       {strategyList?.map((item, index) => (
-        <PlanningUi item={item} key={index} fetchData={fetchData} />
+        <PlanningUi
+          item={item}
+          key={index}
+          fetchData={fetchData}
+          handleDeletePlanning={handleDeletePlanning}
+        />
       ))}
-    </ScrollContainer>
+    </Container>
   );
 };
 
 export default MealsUi;
 
-const ScrollContainer = styled.div<{ height?: number }>`
-  height: ${({ height }) => (height ? `${height}px` : '500px')};
-  overflow-y: scroll;
+const Container = styled.div`
+  padding-bottom: 20px;
 `;

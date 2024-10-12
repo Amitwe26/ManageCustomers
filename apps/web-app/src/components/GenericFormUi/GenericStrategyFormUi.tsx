@@ -15,7 +15,7 @@ const GenericStrategyFormUi = ({
 }: {
   initialData: PlanningType;
   onCloseEditing: () => void;
-  fetchData: () => Promise<void>;
+  fetchData: VoidFunction;
 }) => {
   const { user } = useAppContext();
   const { id: customerId } = useParams<{ id: string }>();
@@ -35,7 +35,7 @@ const GenericStrategyFormUi = ({
     if (data && user && customerId) {
       try {
         await editPlanning(user.id, customerId, data.id, data);
-        await fetchData();
+        fetchData();
         onCloseEditing();
       } catch (e) {
         console.error(e);

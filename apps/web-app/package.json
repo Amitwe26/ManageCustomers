@@ -18,6 +18,7 @@
     "eslint-plugin-prettier": "5.2.1",
     "eslint-plugin-react": "7.36.1",
     "firebase": "10.13.2",
+    "framer-motion": "^11.11.8",
     "gh-pages": "6.1.1",
     "i18next": "^23.15.2",
     "i18next-browser-languagedetector": "^8.0.0",

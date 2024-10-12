@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import GenericStrategyFormUi from '../GenericFormUi/GenericStrategyFormUi';
 import { Meal, PlanningType } from '../../types/customersTypes';
 import styled from 'styled-components';
@@ -16,15 +16,17 @@ const PlanningUi = ({
   item,
   key,
   fetchData,
+  handleDeletePlanning,
 }: {
   item: PlanningType;
   key: number;
-  fetchData: () => Promise<void>;
+  fetchData: VoidFunction;
+  handleDeletePlanning: (id: string) => Promise<void>;
 }) => {
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = React.useState(false);
   const [isMealsOpen, setIsMealsOpen] = React.useState(false);
-  const { control, handleSubmit } = useForm<FormValues>();
+  const { control } = useForm<FormValues>();
   const handleEdit = () => {
     setIsEditing((prev) => !prev);
   };
@@ -45,6 +47,9 @@ const PlanningUi = ({
             {isMealsOpen
               ? t(`dietitian.meals.buttons.closeMeals`)
               : t(`dietitian.meals.buttons.openMeals`)}
+          </button>
+          <button type="button" onClick={() => handleDeletePlanning(item.id)}>
+            {t('buttons.delete')}
           </button>
         </MenuContainer>
         {isEditing ? (

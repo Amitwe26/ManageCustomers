@@ -14,6 +14,7 @@ import {
   addDoc,
   updateDoc,
   getDoc,
+  deleteDoc,
 } from 'firebase/firestore';
 import {
   Customer,
@@ -223,7 +224,7 @@ export const setNewPlanning = async (
     userId,
     'customers',
     customerId,
-    'planning',
+    'plannings',
   );
 
   return (await addDoc(planningColRef, {
@@ -237,8 +238,8 @@ export const setNewPlanning = async (
 export const editPlanning = async (
   userId: string,
   customerId: string,
-  planningId: string, // Document ID of the planning entry
-  updatedData: Partial<PlanningType>, // Partial allows you to update only the changed fields
+  planningId: string,
+  updatedData: Partial<PlanningType>,
 ) => {
   try {
     const planningDocRef = doc(
@@ -247,7 +248,7 @@ export const editPlanning = async (
       userId,
       'customers',
       customerId,
-      'planning',
+      'plannings',
       planningId,
     );
     await updateDoc(planningDocRef, updatedData);
@@ -258,6 +259,30 @@ export const editPlanning = async (
   }
 };
 
+export const deletePlanning = async (
+  userId: string,
+  customerId: string,
+  planningId: string,
+) => {
+  try {
+    const docRef = doc(
+      db,
+      'users',
+      userId,
+      'customers',
+      customerId,
+      'plannings',
+      planningId,
+    );
+
+    await deleteDoc(docRef);
+    console.log(`Planning with id ${planningId} deleted successfully.`);
+  } catch (error) {
+    console.error('Error deleting planning:', error);
+    throw error;
+  }
+};
+
 export const getPlanningList = async (userId: string, customerId: string) => {
   const planningColRef = collection(
     db,
@@ -265,7 +290,7 @@ export const getPlanningList = async (userId: string, customerId: string) => {
     userId,
     'customers',
     customerId,
-    'planning',
+    'plannings',
   );
 
   const docRef = await getDocs(planningColRef);

@@ -16,7 +16,7 @@ const GenericPlanningForm = ({
 }: {
   customerId: string;
   fields: InputField[];
-  setAddCustomerOpen: (open: boolean) => void;
+  setAddCustomerOpen: (key: boolean) => void;
   refetchCustomersData: VoidFunction;
 }) => {
   const { user } = useAppContext();
@@ -86,14 +86,24 @@ const GenericPlanningForm = ({
             </h4>
             {optionFields?.map((field) => (
               <InputContainer key={field.key}>
-                <InputUi
-                  label={field.label}
-                  name={`options.${index}.${field.key}` as Path<PlanningType>}
-                  type={field.type}
-                  required={field.required}
-                  register={register}
-                  errors={errors}
-                />
+                {field.type === 'textarea' ? (
+                  // <InputContainer key={field.key}>
+                  <TextAreaStyled
+                    id={field.key}
+                    placeholder={field.label}
+                    {...register(field.key as Path<PlanningType>)}
+                  />
+                ) : (
+                  // </InputContainer>
+                  <InputUi
+                    label={field.label}
+                    name={`options.${index}.${field.key}` as Path<PlanningType>}
+                    type={field.type}
+                    required={field.required}
+                    register={register}
+                    errors={errors}
+                  />
+                )}
               </InputContainer>
             ))}
             <RemovePlanning
@@ -153,4 +163,20 @@ const RemovePlanning = styled(ButtonUi)`
 
 const AddOption = styled(ButtonUi)`
   margin-bottom: 20px;
+`;
+
+const TextAreaStyled = styled.textarea`
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 38px;
+  max-height: 78px;
+  resize: horizontal;
+  &:focus {
+    outline: none;
+    border-color: #1a4098;
+  }
 `;

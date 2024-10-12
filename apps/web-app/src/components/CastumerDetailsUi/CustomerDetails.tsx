@@ -1,12 +1,8 @@
-import React, { HTMLAttributes } from 'react';
+import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CustomerHeaderUi from '../CustomerHeaderInfoUi/customerHeaderUi';
-import {
-  Customer,
-  CustomerTabs,
-  TabComponents,
-} from '../../types/customersTypes';
+import { Customer } from '../../types/customersTypes';
 import SummaryConversation from '../SummaryConversationUi/SummaryConversation';
 import { CustomerFields, Profession } from '../../types/userTypes';
 import CustomerInfoUi from '../CustomerInfoUi/CustomerInfoUi';
@@ -16,6 +12,7 @@ import { db, getUserProfession } from '../../utils/firebase';
 import { useAppContext } from '../../context/AppContext';
 import { doc, onSnapshot } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
+import AnimatedTabs from '../AnimationTabsUi/AnimatedTabs';
 
 const CustomerDetails = () => {
   const { user } = useAppContext();
@@ -28,9 +25,7 @@ const CustomerDetails = () => {
     React.useState<Customer<CustomerFields>>(customer);
   const [professionFields, setProfessionFields] =
     React.useState<Profession | null>(null);
-  const [activeTab, setActiveTab] = React.useState<CustomerTabs>(
-    CustomerTabs.SUMMARY,
-  );
+
   const [isHeaderShown, setIsHeaderShown] = React.useState(true);
   React.useEffect(() => {
     const fetchProfessionFields = async () => {
@@ -67,16 +62,26 @@ const CustomerDetails = () => {
   if (!customer) {
     return <h1>Customer not found</h1>;
   }
-  const CustomerTabsComponents: TabComponents = {
-    [CustomerTabs.SUMMARY]: SummaryConversation,
-    [CustomerTabs.STRATEGY]: () => (
-      <StrategyPageListUi customer={customerInfo} />
-    ),
-    [CustomerTabs.INFO]: () => (
-      <CustomerInfoUi customer={customerInfo} profession={professionFields} />
-    ),
-  };
-  const ActiveTabComponent = CustomerTabsComponents[activeTab];
+  const customerTabs = [
+    {
+      label: 'summary',
+      component: () => <SummaryConversation isHeaderShown={isHeaderShown} />,
+    },
+    {
+      label: 'strategy',
+      component: () => <StrategyPageListUi isHeaderShown={isHeaderShown} />,
+    },
+    {
+      label: 'info',
+      component: () => (
+        <CustomerInfoUi
+          customer={customerInfo}
+          profession={professionFields}
+          isHeaderShown={isHeaderShown}
+        />
+      ),
+    },
+  ];
 
   return (
     <CustomerContainer>
@@ -85,21 +90,8 @@ const CustomerDetails = () => {
         label={t(isHeaderShown ? 'buttons.close' : 'buttons.open')}
         onClick={() => setIsHeaderShown((prevState) => !prevState)}
       />
-      {isHeaderShown && <CustomerHeaderUi customer={customerInfo} />}
-      <TabContainer>
-        {Object.keys(CustomerTabsComponents).map((tabKey) => (
-          <TabButton
-            key={tabKey}
-            onClick={() => setActiveTab(tabKey as CustomerTabs)}
-            $isActive={activeTab === tabKey}
-          >
-            {t(`customerDetails.tabs.${tabKey}`)}
-          </TabButton>
-        ))}
-      </TabContainer>
-      <TabContent>
-        <ActiveTabComponent />
-      </TabContent>
+      <CustomerHeaderUi customer={customerInfo} isHeaderShown={isHeaderShown} />
+      <AnimatedTabs tabs={customerTabs} initialTabIndex={0} />
     </CustomerContainer>
   );
 };
@@ -118,28 +110,4 @@ const BackButton = styled(ButtonUi)`
     background: ${({ theme }) => theme.colors.button.delete};
     opacity: 0.7;
   }
-`;
-
-const TabContainer = styled.div<HTMLAttributes<HTMLDivElement>>`
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border.gray};
-  display: flex;
-  margin: 0 20px 20px 15px;
-`;
-
-const TabButton = styled.button<{ $isActive?: boolean }>`
-  background-color: ${({ $isActive, theme }) =>
-    $isActive ? theme.colors.button.light : '#ddd'};
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  font-size: 16px;
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.button.light};
-    opacity: 0.5;
-  }
-`;
-
-const TabContent = styled.div`
-  margin-top: 20px;
 `;

@@ -7,8 +7,9 @@ import { CustomerFields } from '../../types/userTypes';
 import { addCustomerHistory, getHistoryUser } from '../../utils/firebase';
 import { useAppContext } from '../../context/AppContext';
 import { useTranslation } from 'react-i18next';
+import ContainerUi from '../ContainerUi/ContainerUi';
 
-const SummaryConversation = () => {
+const SummaryConversation = ({ isHeaderShown }: { isHeaderShown: boolean }) => {
   const location = useLocation();
   const { t } = useTranslation();
   const { user } = useAppContext();
@@ -51,7 +52,7 @@ const SummaryConversation = () => {
         />
       </TextBoxContainer>
 
-      <SummaryList>
+      <ContainerUi headerHeight={isHeaderShown ? 4.8 : 2}>
         {summaryConversation
           ?.map((conversation, index) => (
             <SummaryItem key={index}>
@@ -63,7 +64,7 @@ const SummaryConversation = () => {
             </SummaryItem>
           ))
           .reverse()}
-      </SummaryList>
+      </ContainerUi>
     </CustomerContainer>
   );
 };
@@ -89,10 +90,6 @@ const TextBoxContainer = styled.div`
     resize: none;
     margin-bottom: 10px;
   }
-`;
-
-const SummaryList = styled.div`
-  margin-top: 20px;
 `;
 
 const SummaryItem = styled.div`
