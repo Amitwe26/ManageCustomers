@@ -27,13 +27,13 @@ const ContainerUi: React.FC<ContainerUiProps> = ({
     };
   }, [headerHeight, extraHeight]);
 
-  return <StyledContainer maxHeight={maxHeight}>{children}</StyledContainer>;
+  return <StyledContainer $maxHeight={maxHeight}>{children}</StyledContainer>;
 };
 
 export default ContainerUi;
 
-const StyledContainer = styled.div<{ maxHeight: number }>`
-  max-height: ${({ maxHeight }) => maxHeight}px;
+const StyledContainer = styled.div<{ $maxHeight: number }>`
+  max-height: ${({ $maxHeight }) => $maxHeight}px;
   flex-grow: 1;
   overflow-y: auto;
   padding: 10px;

@@ -7,6 +7,7 @@ import { useAppContext } from '../../context/AppContext';
 import { editPlanning } from '../../utils/firebase';
 import { useParams } from 'react-router-dom';
 import ButtonUi from '../ButtonUi/ButtonUi';
+import { useTranslation } from 'react-i18next';
 
 const GenericStrategyFormUi = ({
   initialData,
@@ -18,6 +19,7 @@ const GenericStrategyFormUi = ({
   fetchData: VoidFunction;
 }) => {
   const { user } = useAppContext();
+  const { t } = useTranslation();
   const { id: customerId } = useParams<{ id: string }>();
   const {
     handleSubmit,
@@ -48,13 +50,17 @@ const GenericStrategyFormUi = ({
       <Container>
         <StrategyContainer>
           <HeaderButtons>
+            <SaveButton
+              type="submit"
+              label={t('buttons.save')}
+              onClick={() => {}}
+            />
             <CloseButton
               type="button"
               onClick={onCloseEditing}
-              label={'close'}
-              variant={'primary'}
+              label={t('buttons.close')}
+              variant="delete"
             />
-            <SaveButton type="submit" label={'Save'} onClick={() => {}} />
           </HeaderButtons>
           <InputUi
             label="Title"
@@ -221,7 +227,8 @@ const CloseButton = styled(ButtonUi)`
 
 const SaveButton = styled(ButtonUi)`
   background-color: ${({ theme }) => theme.colors.button.light};
-  margin-bottom: ${({ theme }) => theme.spacing.m}px;
+  margin: 0 0 ${({ theme }) => theme.spacing.m}px
+    ${({ theme }) => theme.spacing.m}px;
 `;
 
 const AddButton = styled(ButtonUi)`

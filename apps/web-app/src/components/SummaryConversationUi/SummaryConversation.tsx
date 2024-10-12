@@ -47,7 +47,7 @@ const SummaryConversation = ({ isHeaderShown }: { isHeaderShown: boolean }) => {
         />
         <ButtonUi
           label={t('buttons.add')}
-          variant="primary"
+          variant="softOrange"
           onClick={handleAddSummary}
         />
       </TextBoxContainer>

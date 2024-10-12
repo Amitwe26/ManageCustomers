@@ -4,6 +4,7 @@ import { Meal, PlanningType } from '../../types/customersTypes';
 import styled from 'styled-components';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import ButtonUi from '../ButtonUi/ButtonUi';
 
 type FormValues = {
   [key: string]: {
@@ -14,12 +15,10 @@ type FormValues = {
 
 const PlanningUi = ({
   item,
-  key,
   fetchData,
   handleDeletePlanning,
 }: {
   item: PlanningType;
-  key: number;
   fetchData: VoidFunction;
   handleDeletePlanning: (id: string) => Promise<void>;
 }) => {
@@ -33,88 +32,94 @@ const PlanningUi = ({
 
   return (
     <ScrollContainer>
-      <div key={key}>
-        <MenuContainer>
-          <Title>{item.title}</Title>
-          <p>{item.planningNotes}</p>
-          <p>{item.planningDate}</p>
-          {!isEditing && (
-            <button type="button" onClick={handleEdit}>
-              {t('buttons.edit')}
-            </button>
-          )}
-          <button onClick={() => setIsMealsOpen((prev) => !prev)}>
-            {isMealsOpen
+      <MenuContainer>
+        <Title>{item.title}</Title>
+        <label>{item.planningNotes}</label>
+        <label>{item.planningDate}</label>
+        <ButtonUi
+          type="button"
+          variant="softOrange"
+          onClick={handleEdit}
+          label={t('buttons.edit')}
+          disabled={isEditing}
+        />
+        <ButtonUi
+          onClick={() => setIsMealsOpen((prev) => !prev)}
+          label={
+            isMealsOpen
               ? t(`dietitian.meals.buttons.closeMeals`)
-              : t(`dietitian.meals.buttons.openMeals`)}
-          </button>
-          <button type="button" onClick={() => handleDeletePlanning(item.id)}>
-            {t('buttons.delete')}
-          </button>
-        </MenuContainer>
-        {isEditing ? (
-          <GenericStrategyFormUi
-            initialData={item}
-            onCloseEditing={handleEdit}
-            fetchData={fetchData}
-          />
-        ) : (
-          <Container>
-            {isMealsOpen &&
-              item?.options?.map((meal: Meal, index) => {
-                return (
-                  <MealContainer key={index}>
-                    <h3>{meal.optionName}</h3>
-                    <div>
-                      <h4>{t(`dietitian.meals.ingredients`)}</h4>
-                      {isEditing ? (
-                        <Controller
-                          name={`meal-${index}.ingredients`}
-                          control={control}
-                          defaultValue={meal.ingredients}
-                          render={({ field }) => (
-                            <TextArea
-                              {...field}
-                              placeholder={t('dietitian.meals.ingredients')}
-                            />
-                          )}
-                        />
-                      ) : (
-                        <StyledPre>{meal.ingredients}</StyledPre>
-                      )}
-                    </div>
-                    <div>
-                      <h4>{t(`dietitian.meals.notes`)}</h4>
-                      {isEditing ? (
-                        <Controller
-                          name={`meal-${index}.notes`}
-                          control={control}
-                          defaultValue={meal.notes}
-                          render={({ field }) => (
-                            <TextArea
-                              {...field}
-                              placeholder={t('dietitian.meals.notes')}
-                            />
-                          )}
-                        />
-                      ) : (
-                        <StyledPre>{meal.notes}</StyledPre>
-                      )}
-                    </div>
+              : t(`dietitian.meals.buttons.openMeals`)
+          }
+          variant={isMealsOpen ? 'light' : 'primary'}
+        />
 
-                    {/* Time */}
-                    <div>
-                      <h4>
-                        {t(`dietitian.meals.time`)}: {meal.startTime} -{' '}
-                        {meal.endTime}
-                      </h4>
-                    </div>
-                  </MealContainer>
-                );
-              })}
-          </Container>
-        )}
-      </div>
+        <ButtonUi
+          type="button"
+          variant="delete"
+          onClick={() => handleDeletePlanning(item.id)}
+          label={t('buttons.delete')}
+        />
+      </MenuContainer>
+      {isEditing ? (
+        <GenericStrategyFormUi
+          initialData={item}
+          onCloseEditing={handleEdit}
+          fetchData={fetchData}
+        />
+      ) : (
+        <Container>
+          {isMealsOpen &&
+            item?.options?.map((meal: Meal, index) => {
+              return (
+                <MealContainer key={index}>
+                  <h3>{meal.optionName}</h3>
+                  <div>
+                    <h4>{t(`dietitian.meals.ingredients`)}</h4>
+                    {isEditing ? (
+                      <Controller
+                        name={`meal-${index}.ingredients`}
+                        control={control}
+                        defaultValue={meal.ingredients}
+                        render={({ field }) => (
+                          <TextArea
+                            {...field}
+                            placeholder={t('dietitian.meals.ingredients')}
+                          />
+                        )}
+                      />
+                    ) : (
+                      <StyledPre>{meal.ingredients}</StyledPre>
+                    )}
+                  </div>
+                  <div>
+                    <h4>{t(`dietitian.meals.notes`)}</h4>
+                    {isEditing ? (
+                      <Controller
+                        name={`meal-${index}.notes`}
+                        control={control}
+                        defaultValue={meal.notes}
+                        render={({ field }) => (
+                          <TextArea
+                            {...field}
+                            placeholder={t('dietitian.meals.notes')}
+                          />
+                        )}
+                      />
+                    ) : (
+                      <StyledPre>{meal.notes}</StyledPre>
+                    )}
+                  </div>
+                  <div>
+                    <h4>
+                      {t(`dietitian.meals.time`)}: {meal.startTime} -{' '}
+                      {meal.endTime}
+                    </h4>
+                  </div>
+                </MealContainer>
+              );
+            })}
+        </Container>
+      )}
     </ScrollContainer>
   );
 };
@@ -122,16 +127,21 @@ const PlanningUi = ({
 export default PlanningUi;
 
 const ScrollContainer = styled.div`
+  padding: 0 0 0 ${({ theme }) => theme.spacing.s}px;
   overflow-y: scroll;
 `;
 
 const MenuContainer = styled.div`
-  display: flex;
+  margin-bottom: ${({ theme }) => theme.spacing.m}px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 0.3fr 0.45fr 0.3fr;
+  gap: 6px;
   border: 1px solid #f3f3f3;
+  border-radius: 10px;
   background-color: white;
   justify-content: space-between;
   align-items: center;
-  padding: 0 15px;
+  padding: 6px 15px;
 `;
 
 const Title = styled.h1`

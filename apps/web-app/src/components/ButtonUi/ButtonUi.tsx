@@ -5,7 +5,7 @@ interface ButtonUiProps {
   label: string;
   onClick: () => void;
   type?: 'button' | 'submit';
-  variant?: 'primary' | 'secondary'; // Optional, to switch between button styles
+  variant?: 'primary' | 'secondary' | 'delete' | 'softOrange' | 'light';
   disabled?: boolean;
   className?: string;
 }
@@ -32,7 +32,7 @@ const ButtonUi = ({
 export default ButtonUi;
 
 interface ButtonProps {
-  $variant: 'primary' | 'secondary';
+  $variant: 'primary' | 'secondary' | 'delete' | 'softOrange' | 'light';
 }
 
 const StyledButton = styled.button<ButtonProps>`
@@ -42,19 +42,13 @@ const StyledButton = styled.button<ButtonProps>`
   font-size: 16px;
   cursor: pointer;
   color: white;
-  background-color: ${({ $variant, theme }) =>
-    $variant === 'primary'
-      ? theme.colors.backgroundColor.softOrange
-      : 'rgb(96,169,239,.9)'};
+  background-color: ${({ $variant, theme }) => theme.colors.button[$variant]};
   transition:
     background-color 0.3s ease,
     transform 0.2s ease;
 
   &:hover {
-    background-color: ${({ $variant }) =>
-      $variant === 'primary'
-        ? 'rgba(103,230,119,0.76)'
-        : 'rgba(96,169,239, 0.9)'};
+    opacity: 0.7;
   }
 
   &:active {

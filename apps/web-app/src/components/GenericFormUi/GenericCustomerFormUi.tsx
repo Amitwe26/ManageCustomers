@@ -71,7 +71,7 @@ export const GenericCustomerFormUi = ({
             <StyledInput
               fullWidth={specificKeys?.includes(field.key) ?? false}
               label={field.label}
-              name={field.key as Path<Customer<CustomerFields>>} // Ensuring type safety with Path
+              name={field.key as Path<Customer<CustomerFields>>}
               field={field}
               type={field.type}
               required={field?.required}
@@ -100,7 +100,7 @@ export const GenericCustomerFormUi = ({
           {t('buttons.cancel')}
         </CloseButton>
       </FormHeader>
-      <InputsWrapper isFirstInputs={true}>{renderFields(true)}</InputsWrapper>
+      <InputsWrapper $isFirstInputs={true}>{renderFields(true)}</InputsWrapper>
       <InputsWrapper>{renderFields()}</InputsWrapper>
       <ButtonUi
         type="submit"
@@ -160,10 +160,10 @@ const CloseButton = styled.button`
   color: #666;
 `;
 
-const InputsWrapper = styled.div<{ isFirstInputs?: boolean }>`
+const InputsWrapper = styled.div<{ $isFirstInputs?: boolean }>`
   display: grid;
-  grid-template-columns: ${({ isFirstInputs }) =>
-    isFirstInputs ? '2fr 2fr 2fr' : '.5fr .5fr .5fr'};
+  grid-template-columns: ${({ $isFirstInputs }) =>
+    $isFirstInputs ? '2fr 2fr 2fr' : '.5fr .5fr .5fr'};
   grid-template-rows: 1fr;
   align-items: center;
   width: 100%;

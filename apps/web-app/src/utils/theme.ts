@@ -26,7 +26,9 @@ export const theme = {
       darkGray: '#424242',
     },
     button: {
-      primary: '#7e57c2',
+      primary: '#aa89ea',
+      gray: '#E1E0E066',
+      softOrange: '#fdc566',
       light: '#b39ddb',
       delete: '#ef6a79',
     },

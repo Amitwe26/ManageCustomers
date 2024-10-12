@@ -44,6 +44,8 @@
     "strategy": {
       "buildStrategy": "בניית תוכנית",
       "addStrategy": "הוספת תוכנית",
+      "saveStrategy": "שמירת התוכנית",
+      "closeStrategy": "סגירת תוכנית",
       "addOption": "הוספת אופציה",
       "removeOption": "הסרת אופציה",
       "option": "אופציה"

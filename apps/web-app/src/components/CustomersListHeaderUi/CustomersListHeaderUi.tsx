@@ -39,7 +39,7 @@ const CustomersListHeaderUi = ({
         <ButtonStyled
           onClick={() => setAddCustomerOpen(true)}
           label={'+'}
-          variant="secondary"
+          variant="primary"
         />
       </FilterContainer>
     </Header>
@@ -67,6 +67,6 @@ const FilterContainer = styled.div`
   justify-content: space-between;
 `;
 
-const ButtonStyled = styled(ButtonUi)<{ variant: string }>`
+const ButtonStyled = styled(ButtonUi)`
   border-radius: 50px;
 `;

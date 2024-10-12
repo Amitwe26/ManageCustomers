@@ -44,7 +44,7 @@ const CustomerHeaderUi = ({
   };
 
   return (
-    <Container isShown={isHeaderShown}>
+    <Container $isShown={isHeaderShown}>
       <PrimaryInfoContainer>{renderPrimaryInfo()}</PrimaryInfoContainer>
       <FlexContainer>
         <InfoContainer>{renderSecondaryInfo()}</InfoContainer>
@@ -55,12 +55,13 @@ const CustomerHeaderUi = ({
 
 export default CustomerHeaderUi;
 
-const Container = styled.div<{ isShown: boolean }>`
-  max-height: ${({ isShown }) => (isShown ? '400px' : '0')}; // Adjust as needed
+const Container = styled.div<{ $isShown: boolean }>`
+  max-height: ${({ $isShown }) =>
+    $isShown ? '400px' : '0'}; // Adjust as needed
   overflow: hidden;
-  opacity: ${({ isShown }) => (isShown ? 1 : 0)};
-  transform: ${({ isShown }) =>
-    isShown ? 'translateY(0)' : 'translateY(-20px)'}; // Sliding animation
+  opacity: ${({ $isShown }) => ($isShown ? 1 : 0)};
+  transform: ${({ $isShown }) =>
+    $isShown ? 'translateY(0)' : 'translateY(-20px)'}; // Sliding animation
   transition:
     opacity 0.4s ease-in-out,
     transform 0.4s ease-in-out,

@@ -47,7 +47,7 @@ const CustomersList = () => {
         {user?.profession && addCustomerOpen ? (
           <AddCustomerForm
             setAddCustomerOpen={setAddCustomerOpen}
-            refechCustomersData={() => refechCustomersData()}
+            refetchCustomersData={() => refechCustomersData()}
           />
         ) : null}
         {!isLoading && customers ? (

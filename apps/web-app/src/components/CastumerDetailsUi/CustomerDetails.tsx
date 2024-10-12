@@ -85,7 +85,11 @@ const CustomerDetails = () => {
 
   return (
     <CustomerContainer>
-      <BackButton label={t('buttons.goBack')} onClick={() => navigate(-1)} />
+      <BackButton
+        label={t('buttons.goBack')}
+        onClick={() => navigate(-1)}
+        variant="delete"
+      />
       <ButtonUi
         label={t(isHeaderShown ? 'buttons.close' : 'buttons.open')}
         onClick={() => setIsHeaderShown((prevState) => !prevState)}
@@ -103,7 +107,7 @@ const CustomerContainer = styled.div`
 `;
 
 const BackButton = styled(ButtonUi)`
-  background: ${({ theme }) => theme.colors.button.delete};
+  // background: ${({ theme }) => theme.colors.button.delete};
   margin: ${({ theme }) => theme.spacing.s}px;
 
   &:hover {

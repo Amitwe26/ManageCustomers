@@ -10,13 +10,13 @@ import { useTranslation } from 'react-i18next';
 
 const GenericPlanningForm = ({
   fields,
-  setAddCustomerOpen,
+  setAddPlanningIsOpen,
   customerId,
   refetchCustomersData,
 }: {
   customerId: string;
   fields: InputField[];
-  setAddCustomerOpen: (key: boolean) => void;
+  setAddPlanningIsOpen: (key: boolean) => void;
   refetchCustomersData: VoidFunction;
 }) => {
   const { user } = useAppContext();
@@ -41,7 +41,7 @@ const GenericPlanningForm = ({
     if (user?.id) {
       await setNewPlanning(user.id, customerId, data);
       refetchCustomersData();
-      setAddCustomerOpen(false);
+      setAddPlanningIsOpen(false);
       reset();
     }
   };
@@ -70,6 +70,19 @@ const GenericPlanningForm = ({
   );
   return (
     <FormContainer onSubmit={handleSubmit(onSubmit)}>
+      <ButtonsContainer>
+        <CloseButton
+          label={t('customerDetails.strategy.closeStrategy')}
+          onClick={() => setAddPlanningIsOpen(false)}
+          variant="delete"
+        />
+        <SaveButton
+          type="submit"
+          variant="primary"
+          label={t('customerDetails.strategy.saveStrategy')}
+          onClick={() => {}}
+        />
+      </ButtonsContainer>
       <HeaderContainer>
         {renderFields(
           fields?.filter((field) =>
@@ -87,14 +100,12 @@ const GenericPlanningForm = ({
             {optionFields?.map((field) => (
               <InputContainer key={field.key}>
                 {field.type === 'textarea' ? (
-                  // <InputContainer key={field.key}>
                   <TextAreaStyled
                     id={field.key}
                     placeholder={field.label}
                     {...register(field.key as Path<PlanningType>)}
                   />
                 ) : (
-                  // </InputContainer>
                   <InputUi
                     label={field.label}
                     name={`options.${index}.${field.key}` as Path<PlanningType>}
@@ -108,7 +119,7 @@ const GenericPlanningForm = ({
             ))}
             <RemovePlanning
               label={t('customerDetails.strategy.removeOption')}
-              variant="secondary"
+              variant="delete"
               onClick={() => remove(index)} // Remove option dynamically
             />
           </div>
@@ -127,13 +138,6 @@ const GenericPlanningForm = ({
           }}
         />
       </div>
-
-      <ButtonUi
-        type="submit"
-        variant="primary"
-        label={t('customerDetails.strategy.addStrategy')}
-        onClick={() => {}}
-      />
     </FormContainer>
   );
 };
@@ -146,6 +150,20 @@ const FormContainer = styled.form`
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+`;
+
+const ButtonsContainer = styled.div`
+  display: flex;
+`;
+
+const CloseButton = styled(ButtonUi)`
+  margin-inline-end: 5px;
+  margin-block-end: 10px;
+`;
+
+const SaveButton = styled(ButtonUi)`
+  background-color: ${({ theme }) => theme.colors.button.primary};
+  margin-block-end: 10px;
 `;
 
 const InputContainer = styled.div`

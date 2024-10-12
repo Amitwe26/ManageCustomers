@@ -8,6 +8,7 @@ import { useAppContext } from '../../context/AppContext';
 import SelectionUi from '../SelectionUi/SelectionUi';
 import { useTranslation } from 'react-i18next';
 import ContainerUi from '../ContainerUi/ContainerUi';
+import ButtonUi from '../ButtonUi/ButtonUi';
 
 const CustomerInfoUi = ({
   customer,
@@ -103,9 +104,12 @@ const CustomerInfoUi = ({
   return (
     <ContainerUi headerHeight={isHeaderShown ? 4.8 : 2}>
       <FlexContainer>
-        <EditButton onClick={handleEditToggle}>
-          {isEditMode ? t('buttons.save') : t('buttons.edit')}
-        </EditButton>
+        <EditButton
+          onClick={handleEditToggle}
+          label={isEditMode ? t('buttons.save') : t('buttons.edit')}
+          variant="softOrange"
+        />
+
         <ContainerInfo>{renderFields()}</ContainerInfo>
       </FlexContainer>
     </ContainerUi>
@@ -156,7 +160,7 @@ const ErrorText = styled.p`
   font-size: 12px;
 `;
 
-const EditButton = styled.button`
+const EditButton = styled(ButtonUi)`
   width: 70px;
   margin-bottom: 20px;
   padding: 5px 15px;
@@ -164,10 +168,5 @@ const EditButton = styled.button`
   border: none;
   border-radius: 10px;
   cursor: pointer;
-  background-color: #007bff;
   color: white;
-
-  &:hover {
-    background-color: #0056b3;
-  }
 `;

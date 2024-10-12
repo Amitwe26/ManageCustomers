@@ -24,7 +24,7 @@ const StrategyPageListUi = ({ isHeaderShown }: { isHeaderShown: boolean }) => {
     customer: Customer<CustomerFields>;
   };
   const { t } = useTranslation();
-  const [addMenuIsOpen, setAddMenuIsOpen] = React.useState(false);
+  const [addPlanningIsOpen, setAddPlanningIsOpen] = React.useState(false);
   const [fields, setFields] = useState<InputField[]>([]);
 
   const { data: professionList } = useQuery(
@@ -50,6 +50,7 @@ const StrategyPageListUi = ({ isHeaderShown }: { isHeaderShown: boolean }) => {
     },
     { enabled: !!user && !!customer?.id, staleTime: 60000, cacheTime: 300000 },
   );
+
   React.useEffect(() => {
     if (professionList && user?.profession) {
       const professionData = professionList.find(
@@ -73,37 +74,38 @@ const StrategyPageListUi = ({ isHeaderShown }: { isHeaderShown: boolean }) => {
   };
 
   return (
-    <ContainerUi headerHeight={isHeaderShown ? 4.25 : 1.8}>
-      <MenusHeaderContainer>
-        {user?.profession === 'dietitian' && (
-          <CalculateInfo customer={customer as Customer<DietitianFields>} />
+    <>
+      {user?.profession === 'dietitian' && (
+        <CalculateInfo customer={customer as Customer<DietitianFields>} />
+      )}
+      <ContainerUi headerHeight={isHeaderShown ? 4.25 : 1.8}>
+        <MenusHeaderContainer>
+          <ButtonUi
+            type="button"
+            onClick={() => setAddPlanningIsOpen(true)}
+            label={t('customerDetails.strategy.buildStrategy')}
+            variant={'primary'}
+          />
+        </MenusHeaderContainer>
+        {addPlanningIsOpen && (
+          <GenericPlanningForm
+            customerId={customer.id}
+            fields={fields}
+            setAddPlanningIsOpen={(key) => setAddPlanningIsOpen(key)}
+            refetchCustomersData={refetchStrategyList}
+          />
         )}
-
-        <ButtonUi
-          type="button"
-          onClick={() => setAddMenuIsOpen(true)}
-          label={t('customerDetails.strategy.buildStrategy')}
-          variant={'primary'}
-        />
-      </MenusHeaderContainer>
-      {addMenuIsOpen && (
-        <GenericPlanningForm
-          customerId={customer.id}
-          fields={fields}
-          setAddCustomerOpen={(key) => setAddMenuIsOpen(key)}
-          refetchCustomersData={refetchStrategyList}
-        />
-      )}
-      {!isLoadingPlanning ? (
-        <MealsUi
-          strategyList={strategyList}
-          fetchData={refetchStrategyList}
-          handleDeletePlanning={handleDeletePlanning}
-        />
-      ) : (
-        <h1>Loading...</h1>
-      )}
-    </ContainerUi>
+        {!isLoadingPlanning ? (
+          <MealsUi
+            strategyList={strategyList}
+            fetchData={refetchStrategyList}
+            handleDeletePlanning={handleDeletePlanning}
+          />
+        ) : (
+          <h1>Loading...</h1>
+        )}
+      </ContainerUi>
+    </>
   );
 };
 
