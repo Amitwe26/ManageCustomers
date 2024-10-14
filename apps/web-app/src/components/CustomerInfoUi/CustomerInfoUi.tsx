@@ -8,6 +8,7 @@ import SelectionUi from '../SelectionUi/SelectionUi';
 import { useTranslation } from 'react-i18next';
 import ContainerUi from '../ContainerUi/ContainerUi';
 import ButtonUi from '../ButtonUi/ButtonUi';
+import InputUi from '../InputUi/InputUi';
 
 const CustomerInfoUi = ({
   customer,
@@ -22,7 +23,6 @@ const CustomerInfoUi = ({
 }) => {
   const { user } = useAppContext();
   const { t } = useTranslation();
-  // const { mutate } = useUpdateCustomer();
 
   const [isEditMode, setIsEditMode] = useState(false);
   const {
@@ -74,13 +74,12 @@ const CustomerInfoUi = ({
               errors={errors}
             />
           ) : (
-            <InputStyled
+            <InputUi
+              label={inputField.label}
+              name={inputField.key as Path<Customer<CustomerFields>>}
               type={inputField.type}
-              id={inputField.key}
-              {...register(inputField.key as keyof Customer<CustomerFields>, {
-                required: `${inputField.label} is required`,
-              })}
-              defaultValue={value?.toString()}
+              register={register}
+              errors={errors}
             />
           )}
           {errors[inputField.key as keyof Customer<CustomerFields>] && (
@@ -133,14 +132,6 @@ const ContainerInfo = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
-`;
-
-const InputStyled = styled.input`
-  padding: 10px;
-  gap: 5px;
-  margin-top: 5px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
 `;
 
 const Label = styled.span`

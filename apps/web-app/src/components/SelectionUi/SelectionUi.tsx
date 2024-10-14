@@ -27,7 +27,6 @@ const SelectionUi = <T extends FieldValues>({
   return (
     <Container>
       <SelectionStyled id={name} required={required} {...register(name)}>
-        <option>{name}</option>
         {options?.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
