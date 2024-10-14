@@ -4,9 +4,9 @@ import { InputField, PlanningType } from '../../types/customersTypes';
 import { Path, useFieldArray, useForm } from 'react-hook-form';
 import InputUi from '../InputUi/InputUi';
 import styled from 'styled-components';
-import { setNewPlanning } from '../../utils/firebase';
 import ButtonUi from '../ButtonUi/ButtonUi';
 import { useTranslation } from 'react-i18next';
+import { addNewPlanning } from '../../service/planningService';
 
 const GenericPlanningForm = ({
   fields,
@@ -39,7 +39,7 @@ const GenericPlanningForm = ({
 
   const onSubmit = async (data: PlanningType) => {
     if (user?.id) {
-      await setNewPlanning(user.id, customerId, data);
+      await addNewPlanning(user.id, customerId, data);
       refetchCustomersData();
       setAddPlanningIsOpen(false);
       reset();

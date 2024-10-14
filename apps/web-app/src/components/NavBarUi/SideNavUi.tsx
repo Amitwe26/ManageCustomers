@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { auth, observeAuthState } from '../../utils/firebase';
 import { signOut } from 'firebase/auth';
 import { useTranslation } from 'react-i18next';
 import { useAppContext } from '../../context/AppContext';
+import { auth, observeAuthState } from '../../service/loginService';
 
 const SideNavUi = () => {
   const { user } = useAppContext();

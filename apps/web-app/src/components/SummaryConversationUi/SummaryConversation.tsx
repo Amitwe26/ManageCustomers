@@ -4,7 +4,10 @@ import styled from 'styled-components';
 import { Customer, CustomerHistory } from '../../types/customersTypes';
 import ButtonUi from '../ButtonUi/ButtonUi';
 import { CustomerFields } from '../../types/userTypes';
-import { addCustomerHistory, getHistoryUser } from '../../utils/firebase';
+import {
+  addCustomerHistory,
+  getHistoryUser,
+} from '../../service/customerService';
 import { useAppContext } from '../../context/AppContext';
 import { useTranslation } from 'react-i18next';
 import ContainerUi from '../ContainerUi/ContainerUi';

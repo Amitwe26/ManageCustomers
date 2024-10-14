@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import LoginForm from '../components/LoginForm/LoginForm';
-import { getFormFields } from '../utils/firebase';
+import { getFormFields } from '../service/customerService';
 import {
   FormField,
   LoginFormFields,

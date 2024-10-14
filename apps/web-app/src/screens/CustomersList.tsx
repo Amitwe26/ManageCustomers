@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { CustomerFields } from '../types/userTypes';
 import { Customer } from '../types/customersTypes';
 import CustomersListHeaderUi from '../components/CustomersListHeaderUi/CustomersListHeaderUi';
-import { getCustomersUser } from '../utils/firebase';
+import { getCustomersUser } from '../service/customerService';
 import { useQuery } from 'react-query';
 import { useAppContext } from '../context/AppContext';
 import AddCustomerForm from '../components/AddCustomerFormUi/AddCustomerForm';

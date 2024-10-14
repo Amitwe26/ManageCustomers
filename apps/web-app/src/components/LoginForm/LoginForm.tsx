@@ -1,18 +1,17 @@
 import InputUi from '../InputUi/InputUi';
 import React from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { auth, getUserInfo, loginUser, setNewUser } from '../../utils/firebase';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { User } from '../../types/userTypes';
 import {
   FormField,
   LoginFormFields,
   SignUpFormFields,
 } from '../../types/loginTypes';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
 import SelectionUi from '../SelectionUi/SelectionUi';
 import { useTranslation } from 'react-i18next';
+import { getUserInfo, setNewUser } from '../../service/userService';
+import { CreateNewUser, loginUser } from '../../service/loginService';
 
 const LoginForm = ({
   fields,
@@ -39,19 +38,13 @@ const LoginForm = ({
         if (isLoginForm) {
           const user = await loginUser(data);
           if (user) {
-            const getUser = await getUserInfo().then((users) =>
-              users.find((userInfo: User) => userInfo?.email === data?.email),
-            );
+            const getUser = await getUserInfo(user.uid);
             if (getUser) navigate('/customers');
           } else {
             console.log('No user logged in');
           }
         } else {
-          const userCredential = await createUserWithEmailAndPassword(
-            auth,
-            data.email,
-            data.password,
-          );
+          const userCredential = await CreateNewUser(data);
           const user = userCredential.user;
           const createdUser = await setNewUser(
             data as SignUpFormFields,

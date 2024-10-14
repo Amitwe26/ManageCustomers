@@ -4,10 +4,10 @@ import InputUi from '../InputUi/InputUi';
 import { PlanningType } from '../../types/customersTypes';
 import styled from 'styled-components';
 import { useAppContext } from '../../context/AppContext';
-import { editPlanning } from '../../utils/firebase';
 import { useParams } from 'react-router-dom';
 import ButtonUi from '../ButtonUi/ButtonUi';
 import { useTranslation } from 'react-i18next';
+import { updatePlanning } from '../../service/planningService';
 
 const GenericStrategyFormUi = ({
   initialData,
@@ -36,7 +36,7 @@ const GenericStrategyFormUi = ({
   const onSubmit = async (data: any) => {
     if (data && user && customerId) {
       try {
-        await editPlanning(user.id, customerId, data.id, data);
+        await updatePlanning(user.id, customerId, data.id, data);
         fetchData();
         onCloseEditing();
       } catch (e) {

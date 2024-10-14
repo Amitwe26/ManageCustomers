@@ -4,11 +4,6 @@ import ButtonUi from '../ButtonUi/ButtonUi';
 import { Customer, InputField } from '../../types/customersTypes';
 import { CustomerFields, DietitianFields } from '../../types/userTypes';
 import { useAppContext } from '../../context/AppContext';
-import {
-  deletePlanning,
-  getPlanningList,
-  getUserProfession,
-} from '../../utils/firebase';
 import GenericPlanningForm from '../GenericFormUi/GenericPlanningForm';
 import MealsUi from '../MealsUi/MealsUi';
 import CalculateInfo from '../DietitianComponents/CalculateInfo';
@@ -16,6 +11,11 @@ import { useTranslation } from 'react-i18next';
 import ContainerUi from '../ContainerUi/ContainerUi';
 import { useLocation } from 'react-router-dom';
 import { useQuery } from 'react-query';
+import {
+  deletePlanning,
+  getPlanningsForCustomer,
+} from '../../service/planningService';
+import { getUserProfession } from '../../service/userService';
 
 const StrategyPageListUi = ({ isHeaderShown }: { isHeaderShown: boolean }) => {
   const { user } = useAppContext();
@@ -44,7 +44,7 @@ const StrategyPageListUi = ({ isHeaderShown }: { isHeaderShown: boolean }) => {
     ['planningList', user?.id, customer?.id],
     async () => {
       if (user && customer?.id) {
-        return await getPlanningList(user.id, customer.id);
+        return await getPlanningsForCustomer(user.id, customer.id);
       }
       return [];
     },

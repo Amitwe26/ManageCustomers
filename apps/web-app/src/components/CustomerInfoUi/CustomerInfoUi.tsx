@@ -3,7 +3,6 @@ import { Customer } from '../../types/customersTypes';
 import { CustomerFields, Profession } from '../../types/userTypes';
 import { Path, useForm } from 'react-hook-form';
 import styled from 'styled-components';
-import { saveCustomer } from '../../utils/firebase';
 import { useAppContext } from '../../context/AppContext';
 import SelectionUi from '../SelectionUi/SelectionUi';
 import { useTranslation } from 'react-i18next';
@@ -14,13 +13,17 @@ const CustomerInfoUi = ({
   customer,
   profession,
   isHeaderShown,
+  onUpdateCustomer,
 }: {
   customer: Customer<CustomerFields>;
   profession: Profession | null;
   isHeaderShown: boolean;
+  onUpdateCustomer: (updatedCustomer: Customer<CustomerFields>) => void;
 }) => {
   const { user } = useAppContext();
   const { t } = useTranslation();
+  // const { mutate } = useUpdateCustomer();
+
   const [isEditMode, setIsEditMode] = useState(false);
   const {
     register,
@@ -42,7 +45,7 @@ const CustomerInfoUi = ({
   const onSubmit = async (data: Customer<CustomerFields>) => {
     try {
       if (user?.id) {
-        await saveCustomer(user.id, data, customer.id);
+        onUpdateCustomer(data);
         setIsEditMode(false);
         reset(data);
       }

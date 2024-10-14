@@ -1,5 +1,5 @@
 import React from 'react';
-import { saveCustomer } from '../../utils/firebase';
+import { updateCustomer } from '../../service/customerService';
 import styled from 'styled-components';
 import InputUi from '../InputUi/InputUi';
 import ButtonUi from '../ButtonUi/ButtonUi';
@@ -86,7 +86,7 @@ export const GenericCustomerFormUi = ({
 
   const onSubmit = async (data: Customer<CustomerFields>) => {
     if (user?.id) {
-      await saveCustomer(user.id, data);
+      await updateCustomer(user.id, data);
       refetchCustomersData();
       setAddCustomerOpen(false);
       reset();

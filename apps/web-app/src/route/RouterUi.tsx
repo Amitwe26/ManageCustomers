@@ -6,9 +6,10 @@ import CustomersList from '../screens/CustomersList';
 import Calendar from '../screens/Calendar';
 import CustomerDetails from '../components/CastumerDetailsUi/CustomerDetails';
 import styled from 'styled-components';
-import { getUserInfo, observeAuthState } from '../utils/firebase';
 import { useAppContext } from '../context/AppContext';
 import Setting from '../screens/Setting';
+import { getUserInfo } from '../service/userService';
+import { observeAuthState } from '../service/loginService';
 
 const RoutesComponent = () => {
   const location = useLocation();
@@ -20,9 +21,7 @@ const RoutesComponent = () => {
   useEffect(() => {
     observeAuthState(async (user) => {
       if (user) {
-        const getUser = await getUserInfo().then((res) =>
-          res.find((userInfo: { id: any }) => userInfo.id === user.uid),
-        );
+        const getUser = await getUserInfo(user.uid);
         if (getUser) setUser(getUser);
       } else {
         console.log('No user logged in');

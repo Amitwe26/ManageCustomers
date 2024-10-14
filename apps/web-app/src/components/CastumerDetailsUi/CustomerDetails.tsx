@@ -8,21 +8,49 @@ import { CustomerFields, Profession } from '../../types/userTypes';
 import CustomerInfoUi from '../CustomerInfoUi/CustomerInfoUi';
 import StrategyPageListUi from '../StrategyTabsUi/StrategyPageListUi';
 import ButtonUi from '../ButtonUi/ButtonUi';
-import { db, getUserProfession } from '../../utils/firebase';
 import { useAppContext } from '../../context/AppContext';
-import { doc, onSnapshot } from 'firebase/firestore';
 import { useTranslation } from 'react-i18next';
 import AnimatedTabs from '../AnimationTabsUi/AnimatedTabs';
+import { getUserProfession } from '../../service/userService';
+import { useQuery } from 'react-query';
+import { getCustomerById } from '../../service/customerService';
+import { useUpdateCustomer } from '../../hooks/useUpdateCustomer';
 
 const CustomerDetails = () => {
   const { user } = useAppContext();
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
+  const {
+    customer: { id },
+  } = location.state as { customer: Customer<CustomerFields> };
 
-  const { customer } = location.state as { customer: Customer<CustomerFields> };
-  const [customerInfo, setCustomerInfo] =
-    React.useState<Customer<CustomerFields>>(customer);
+  const {
+    data: customer,
+    // isLoading: customerLoading,
+    // error: customerError,
+    refetch: refetchCustomerData,
+  } = useQuery(['customer', id], () => getCustomerById(user!.id, id), {
+    enabled: !!id, // Only fetch if customerId exists
+  });
+  const { mutate: updateCustomer } = useUpdateCustomer();
+
+  const handleUpdateCustomer = (updatedData: Customer<CustomerFields>) => {
+    if (user && customer) {
+      updateCustomer(
+        {
+          userId: user.id,
+          customerId: customer.id,
+          updatedData,
+        },
+        {
+          onSuccess: () => {
+            refetchCustomerData();
+          },
+        },
+      );
+    }
+  };
   const [professionFields, setProfessionFields] =
     React.useState<Profession | null>(null);
 
@@ -30,7 +58,7 @@ const CustomerDetails = () => {
   React.useEffect(() => {
     const fetchProfessionFields = async () => {
       if (user?.profession) {
-        const professionList = await getUserProfession(); // Assuming this fetches the profession list from the database
+        const professionList = await getUserProfession();
         const profession = professionList.find(
           (prof: Profession) => prof.professionName === user.profession,
         );
@@ -40,24 +68,6 @@ const CustomerDetails = () => {
 
     fetchProfessionFields();
   }, [user?.profession]);
-
-  React.useEffect(() => {
-    if (user) {
-      const customerRef = doc(db, 'users', user.id, 'customers', customer?.id);
-      const unsubscribe = onSnapshot(customerRef, (doc) => {
-        if (doc.exists()) {
-          setCustomerInfo({
-            id: doc.id,
-            ...doc.data(),
-          } as Customer<CustomerFields>);
-        } else {
-          console.log('No such document!');
-        }
-      });
-
-      return () => unsubscribe();
-    }
-  }, [user, customer.id]);
 
   if (!customer) {
     return <h1>Customer not found</h1>;
@@ -75,9 +85,10 @@ const CustomerDetails = () => {
       label: 'info',
       component: () => (
         <CustomerInfoUi
-          customer={customerInfo}
+          customer={customer}
           profession={professionFields}
           isHeaderShown={isHeaderShown}
+          onUpdateCustomer={handleUpdateCustomer}
         />
       ),
     },
@@ -94,7 +105,7 @@ const CustomerDetails = () => {
         label={t(isHeaderShown ? 'buttons.close' : 'buttons.open')}
         onClick={() => setIsHeaderShown((prevState) => !prevState)}
       />
-      <CustomerHeaderUi customer={customerInfo} isHeaderShown={isHeaderShown} />
+      <CustomerHeaderUi customer={customer} isHeaderShown={isHeaderShown} />
       <AnimatedTabs tabs={customerTabs} initialTabIndex={0} />
     </CustomerContainer>
   );
