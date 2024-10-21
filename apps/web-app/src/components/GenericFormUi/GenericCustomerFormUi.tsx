@@ -45,7 +45,7 @@ export const GenericCustomerFormUi = ({
             <InputContainer key={field.key}>
               <TextAreaStyled
                 id={field.key}
-                placeholder={field.label}
+                placeholder={t(`customerProfile.${field.key}`)}
                 {...register(field.key as Path<Customer<CustomerFields>>)}
               />
             </InputContainer>
@@ -56,8 +56,8 @@ export const GenericCustomerFormUi = ({
           return (
             <SelectionUi<Customer<CustomerFields>>
               key={field.key}
-              label={field.label}
-              name={field.key as Path<Customer<CustomerFields>>} // Ensuring type safety with Path
+              label={field.key}
+              name={field.key as Path<Customer<CustomerFields>>}
               options={field?.options ?? undefined}
               required={field?.required}
               register={register}
@@ -70,7 +70,7 @@ export const GenericCustomerFormUi = ({
           <InputContainer key={field.key}>
             <StyledInput
               fullWidth={specificKeys?.includes(field.key) ?? false}
-              label={field.label}
+              label={t(`customerProfile.${field.key}`)}
               name={field.key as Path<Customer<CustomerFields>>}
               field={field}
               type={field.type}
@@ -128,7 +128,7 @@ const InputContainer = styled.div`
 const StyledInput = styled(InputUi<Customer<CustomerFields>>)<{
   fullWidth: boolean;
 }>`
-  width: ${({ fullWidth }) => (fullWidth ? '100%' : '50%')};
+  width: ${({ fullWidth }) => (fullWidth ? '100%' : '60%')};
 `;
 
 const TextAreaStyled = styled.textarea`

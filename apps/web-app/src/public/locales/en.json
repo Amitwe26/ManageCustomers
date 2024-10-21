@@ -1,12 +1,14 @@
 {
-  "loadingText":"Loading...",
+  "loadingText": "Loading...",
+  "emptyList": "The list is empty",
+  "emptyPlanningList": "No plans currently exist",
   "loginPage": {
     "login": "Login",
     "signup": "Sign Up"
   },
   "navBar": {
-    "customersList": "Customers List",
-    "calendar": "Appointment Calendar",
+    "customersList": "Customer List",
+    "calendar": "Appointments Calendar",
     "setting": "Settings",
     "logOut": "Log Out"
   },
@@ -14,7 +16,10 @@
     "save": "Save",
     "edit": "Edit",
     "add": "Add",
+    "close": "Close",
+    "open": "Open",
     "cancel": "Cancel",
+    "delete": "Delete",
     "goBack": "Go Back"
   },
   "customersListPage": {
@@ -27,34 +32,80 @@
       "name": "Customer Name",
       "status": "Status",
       "phone": "Phone",
+      "price": "Price",
+      "paymentType": "Payment Type",
       "email": "Email"
     }
   },
   "customerDetails": {
     "tabs": {
       "summary": "Summary",
-      "strategy": "Strategies",
+      "strategy": "Plans",
       "info": "Customer Profile"
     },
     "strategy": {
-      "buildStrategy": "Build Strategy",
-      "addStrategy": "Add Strategy",
+      "buildStrategy": "Build Follow-up Plan",
+      "addStrategy": "Add Plan",
+      "saveStrategy": "Save Plan",
+      "closeStrategy": "Close Plan",
       "addOption": "Add Option",
       "removeOption": "Remove Option",
-      "option": "Option"
+      "option": "Option",
+      "strategyInputs": {
+        "title": "Title",
+        "planningNotes": "Additional Notes",
+        "planningDate": "Date",
+        "optionName": "Plan Title",
+        "ingredients": "Options",
+        "startTime": "Start Time",
+        "endTime": "End Time",
+        "notes": "Additional Plan Notes"
+      }
     },
     "summery": {
-      "textareaText":"Add new summery conversation here"
+      "textareaText": "Add New Conversation Summary"
     }
+  },
+  "customerProfile": {
+    "customer": "Customer",
+    "name": "Customer Name",
+    "email": "Email",
+    "phone": "Phone",
+    "gender": "Gender",
+    "age": "Age",
+    "notes": "Additional Notes",
+    "price": "Price",
+    "paymentType": "Payment Method",
+    "status": "Status",
+    "height": "Height",
+    "startWeight": "Start Weight",
+    "endWeight": "End Weight",
+    "activityLevel": "Activity Level",
+    "startDate": "Start Date",
+    "endDate": "End Date"
+  },
+  "selectionInputs": {
+    "male": "Male",
+    "female": "Female",
+    "creditCard": "Credit Card",
+    "cash": "Cash",
+    "basic": "Basic",
+    "noActivity": "No Activity",
+    "littleActivity": "Little Activity",
+    "intensive": "Intensive",
+    "veryIntensive": "Very Intensive + Work",
+    "think": "Initial Process",
+    "work": "Active",
+    "stop": "Paused"
   },
   "dietitian": {
     "meals": {
       "buttons": {
-        "openMeals": "Close meal",
-        "closeMeals": "Open meal"
+        "openMeals": "Open Menu",
+        "closeMeals": "Close Menu"
       },
-      "ingredients":"Ingredients",
-      "notes":"Notes",
+      "ingredients": "Ingredients",
+      "notes": "Notes:",
       "time": "Time"
     }
   }

@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import ButtonUi from '../ButtonUi/ButtonUi';
 import { useTranslation } from 'react-i18next';
 import { updatePlanning } from '../../service/planningService';
+import { useStrategyTranslation } from '../../hooks/useStrategyTranslation';
 
 const GenericStrategyFormUi = ({
   initialData,
@@ -19,6 +20,8 @@ const GenericStrategyFormUi = ({
   fetchData: VoidFunction;
 }) => {
   const { user } = useAppContext();
+  const { getStrategyInputsTranslation, strategyTranslation } =
+    useStrategyTranslation();
   const { t } = useTranslation();
   const { id: customerId } = useParams<{ id: string }>();
   const {
@@ -76,18 +79,17 @@ const GenericStrategyFormUi = ({
             register={register}
             errors={errors}
           />
-          <label>Planning Notes</label>
-          <TextAreaStyled
-            placeholder="Planning Notes"
-            {...register('planningNotes')}
-          />
+          <label>{getStrategyInputsTranslation('planningNotes')}</label>
+          <TextAreaStyled {...register('planningNotes')} />
         </StrategyContainer>
         <TemplateOptions>
           {fields.map((meal, index) => {
             return (
               <OptionContainer key={index}>
                 <HeaderOptions>
-                  <h3>Option {index + 1}</h3>
+                  <h3>
+                    {strategyTranslation('option')} {index + 1}
+                  </h3>
                   {index !== 0 && (
                     <DeleteButton
                       type="button"
@@ -97,24 +99,18 @@ const GenericStrategyFormUi = ({
                   )}
                 </HeaderOptions>
                 <InputUi
-                  label="Option Name"
+                  label={getStrategyInputsTranslation('optionName')}
                   name={`options.${index}.optionName` as Path<PlanningType>}
                   type="text"
                   register={register}
                   errors={errors}
                 />
-                <label>Ingredients</label>
-                <TextAreaStyled
-                  placeholder="Ingredients"
-                  {...register(`options.${index}.ingredients`)}
-                />
-                <label>Notes</label>
-                <TextAreaStyled
-                  placeholder="Notes"
-                  {...register(`options.${index}.notes`)}
-                />
+                <label>{getStrategyInputsTranslation('ingredients')}</label>
+                <TextAreaStyled {...register(`options.${index}.ingredients`)} />
+                <label>{getStrategyInputsTranslation('planningNotes')}</label>
+                <TextAreaStyled {...register(`options.${index}.notes`)} />
                 <TimeContainer>
-                  <label>From:</label>
+                  <label>{getStrategyInputsTranslation('startTime')}:</label>
                   <InputUi
                     label="start Date"
                     name={`options.${index}.startTime` as Path<PlanningType>}
@@ -122,7 +118,7 @@ const GenericStrategyFormUi = ({
                     register={register}
                     errors={errors}
                   />
-                  <label>To:</label>
+                  <label>{getStrategyInputsTranslation('endTime')}:</label>
                   <InputUi
                     label="start Date"
                     name={`options.${index}.endTime` as Path<PlanningType>}

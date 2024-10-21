@@ -22,7 +22,7 @@ export type CustomerFields = DietitianFields | DigitalFields;
 export type DietitianFields = {
   id: string;
   name: string;
-  phone: string;
+  phone: number;
   email: string;
   gender: 'male' | 'female';
   age: number;

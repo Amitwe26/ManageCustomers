@@ -24,7 +24,9 @@ const CustomerDetails = () => {
   const {
     customer: { id },
   } = location.state as { customer: Customer<CustomerFields> };
-
+  const [professionFields, setProfessionFields] =
+    React.useState<Profession | null>(null);
+  const [isHeaderShown, setIsHeaderShown] = React.useState(true);
   const {
     data: customer,
     // isLoading: customerLoading,
@@ -51,10 +53,7 @@ const CustomerDetails = () => {
       );
     }
   };
-  const [professionFields, setProfessionFields] =
-    React.useState<Profession | null>(null);
 
-  const [isHeaderShown, setIsHeaderShown] = React.useState(true);
   React.useEffect(() => {
     const fetchProfessionFields = async () => {
       if (user?.profession) {
@@ -69,30 +68,30 @@ const CustomerDetails = () => {
     fetchProfessionFields();
   }, [user?.profession]);
 
-  if (!customer) {
-    return <h1>Customer not found</h1>;
-  }
-  const customerTabs = [
-    {
-      label: 'summary',
-      component: () => <SummaryConversation isHeaderShown={isHeaderShown} />,
-    },
-    {
-      label: 'strategy',
-      component: () => <StrategyPageListUi isHeaderShown={isHeaderShown} />,
-    },
-    {
-      label: 'info',
-      component: () => (
-        <CustomerInfoUi
-          customer={customer}
-          profession={professionFields}
-          isHeaderShown={isHeaderShown}
-          onUpdateCustomer={handleUpdateCustomer}
-        />
-      ),
-    },
-  ];
+  const customerTabs = React.useMemo(
+    () => [
+      {
+        label: 'summary',
+        component: () => <SummaryConversation isHeaderShown={isHeaderShown} />,
+      },
+      {
+        label: 'strategy',
+        component: () => <StrategyPageListUi isHeaderShown={isHeaderShown} />,
+      },
+      {
+        label: 'info',
+        component: () => (
+          <CustomerInfoUi
+            customer={customer}
+            profession={professionFields}
+            isHeaderShown={isHeaderShown}
+            onUpdateCustomer={handleUpdateCustomer}
+          />
+        ),
+      },
+    ],
+    [isHeaderShown, customer, professionFields, handleUpdateCustomer],
+  );
 
   return (
     <CustomerContainer>
@@ -118,11 +117,9 @@ const CustomerContainer = styled.div`
 `;
 
 const BackButton = styled(ButtonUi)`
-  // background: ${({ theme }) => theme.colors.button.delete};
   margin: ${({ theme }) => theme.spacing.s}px;
 
   &:hover {
-    background: ${({ theme }) => theme.colors.button.delete};
     opacity: 0.7;
   }
 `;

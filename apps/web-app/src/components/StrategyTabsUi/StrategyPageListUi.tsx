@@ -78,7 +78,7 @@ const StrategyPageListUi = ({ isHeaderShown }: { isHeaderShown: boolean }) => {
       {user?.profession === 'dietitian' && (
         <CalculateInfo customer={customer as Customer<DietitianFields>} />
       )}
-      <ContainerUi headerHeight={isHeaderShown ? 4.25 : 1.8}>
+      <ContainerUi isHeaderVisible={isHeaderShown}>
         <MenusHeaderContainer>
           <ButtonUi
             type="button"
@@ -102,7 +102,7 @@ const StrategyPageListUi = ({ isHeaderShown }: { isHeaderShown: boolean }) => {
             handleDeletePlanning={handleDeletePlanning}
           />
         ) : (
-          <h1>Loading...</h1>
+          <h1>{t('loadingText')}</h1>
         )}
       </ContainerUi>
     </>

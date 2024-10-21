@@ -7,7 +7,7 @@ export interface FormField<T> {
   key: keyof T;
   type: 'text' | 'number' | 'email' | 'password' | 'selection';
   label: string;
-  options?: { label: string; value: string | number }[];
+  options?: { key: string; label: string; value?: string | number }[];
   required?: boolean;
 }
 

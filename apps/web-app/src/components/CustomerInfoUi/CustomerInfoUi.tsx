@@ -16,14 +16,14 @@ const CustomerInfoUi = ({
   isHeaderShown,
   onUpdateCustomer,
 }: {
-  customer: Customer<CustomerFields>;
+  customer?: Customer<CustomerFields>;
   profession: Profession | null;
   isHeaderShown: boolean;
   onUpdateCustomer: (updatedCustomer: Customer<CustomerFields>) => void;
 }) => {
   const { user } = useAppContext();
   const { t } = useTranslation();
-
+  const arraySelectionKeys = ['status', 'paymentType', 'gender'];
   const [isEditMode, setIsEditMode] = useState(false);
   const {
     register,
@@ -31,7 +31,7 @@ const CustomerInfoUi = ({
     reset,
     formState: { errors, isDirty },
   } = useForm<Customer<CustomerFields>>({
-    defaultValues: customer,
+    defaultValues: customer ?? {},
   });
 
   const handleEditToggle = () => {
@@ -59,11 +59,13 @@ const CustomerInfoUi = ({
 
     return profession.customerInputProfession.map((inputField) => {
       const value =
-        customer[inputField.key as keyof Customer<CustomerFields>] || '';
+        customer?.[inputField.key as keyof Customer<CustomerFields>] || '';
 
       return isEditMode ? (
         <InputContainer key={inputField.key}>
-          <LabelStyled htmlFor={inputField.key}>{inputField.label}</LabelStyled>
+          <LabelStyled htmlFor={inputField.key}>
+            {t(`customerProfile.${inputField.key}`)}
+          </LabelStyled>
           {inputField.type === 'selection' && inputField.options ? (
             <SelectionUi
               label={inputField.label}
@@ -93,18 +95,18 @@ const CustomerInfoUi = ({
         </InputContainer>
       ) : (
         <Label key={inputField.key}>
-          {`${inputField.label}: ${value?.toString() || 'N/A'}`}
+          {`${t(`customerProfile.${inputField.key}`)}: ${arraySelectionKeys.find((key) => inputField.key === key) ? t(`selectionInputs.${value}`) : (value?.toString() ?? 'N/A')}`}
         </Label>
       );
     });
   };
 
   if (!customer) {
-    return <p>Loading...</p>;
+    return <p>{t('loadingText')}</p>;
   }
 
   return (
-    <ContainerUi headerHeight={isHeaderShown ? 4.8 : 2}>
+    <ContainerUi isHeaderVisible={isHeaderShown}>
       <FlexContainer>
         <EditButton
           onClick={handleEditToggle}

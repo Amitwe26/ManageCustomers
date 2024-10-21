@@ -22,9 +22,8 @@ export const getCustomersUser: (
 export const getCustomerById = async (
   userId: string,
   customerId: string,
-): Promise<Customer<CustomerFields> | null> => {
+): Promise<Customer<CustomerFields> | undefined> => {
   try {
-    // Reuse your getDocumentById utility
     const customerDocPath = `users/${userId}/customers`;
     const customer = await getDocumentById<Customer<CustomerFields>>(
       customerDocPath,
@@ -35,7 +34,6 @@ export const getCustomerById = async (
       return customer;
     } else {
       console.error('Customer does not exist');
-      return null;
     }
   } catch (error) {
     console.error('Error fetching customer by ID:', error);
@@ -99,7 +97,6 @@ export const updateCustomer = async (
         ...data,
         type: 'user',
         date: new Date().toLocaleString(),
-        status: 'Thinking',
       };
       const docRef = await addDocument(customerColPath, data);
       await updateDocument(customerColPath, docRef.id, { id: docRef.id });

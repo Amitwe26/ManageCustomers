@@ -1,10 +1,12 @@
 import React from 'react';
 import { FieldValues, Path, UseFormRegister } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 
 type Option = {
+  key: string;
   label: string;
-  value: string | number;
+  value?: string | number;
 };
 
 interface SelectionUiProps<T extends FieldValues> {
@@ -24,12 +26,13 @@ const SelectionUi = <T extends FieldValues>({
   required,
   errors,
 }: SelectionUiProps<T>) => {
+  const { t } = useTranslation();
   return (
     <Container>
       <SelectionStyled id={name} required={required} {...register(name)}>
         {options?.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
+          <option key={option.key} value={option.value ?? option.key}>
+            {t(`selectionInputs.${option.key}`)}
           </option>
         ))}
       </SelectionStyled>

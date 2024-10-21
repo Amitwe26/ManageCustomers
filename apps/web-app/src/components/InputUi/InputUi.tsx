@@ -10,13 +10,14 @@ import { InputField, InputFieldType } from '../../types/customersTypes';
 
 interface InputUiProps<T extends FieldValues> {
   label: string;
-  name: Path<T>; // Ensure `name` matches one of the form data keys
+  name: Path<T>;
   type: InputFieldType;
   required?: boolean;
-  register: UseFormRegister<T>; // `register` should match the form data type
-  errors: FieldErrors<T>; // Errors should match the form data type
+  register: UseFormRegister<T>;
+  errors: FieldErrors<T>;
   field?: InputField;
   className?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const InputUi = <T extends FieldValues>(props: InputUiProps<T>) => {
@@ -28,6 +29,7 @@ const InputUi = <T extends FieldValues>(props: InputUiProps<T>) => {
     type,
     register,
     errors,
+    onChange,
   } = props;
 
   return (
@@ -37,6 +39,7 @@ const InputUi = <T extends FieldValues>(props: InputUiProps<T>) => {
         {...register(name)}
         placeholder={label}
         required={required}
+        onChange={onChange}
       />
       {errors[name] && (
         <ErrorText className="error-massage">This field is required</ErrorText>

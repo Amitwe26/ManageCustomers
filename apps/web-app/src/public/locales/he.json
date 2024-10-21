@@ -1,5 +1,7 @@
 {
-  "loadingText":"בטעינה...",
+  "loadingText": "בטעינה...",
+  "emptyList": "הרשימה ריקה",
+  "emptyPlanningList": "לא קיימות תוכניות כרגע",
   "loginPage": {
     "login": "התחברות",
     "signup": "הרשמה"
@@ -42,17 +44,67 @@
       "info": "פרופיל לקוח"
     },
     "strategy": {
-      "buildStrategy": "בניית תוכנית",
+      "buildStrategy": "בניית תוכנית להמשך",
       "addStrategy": "הוספת תוכנית",
       "saveStrategy": "שמירת התוכנית",
       "closeStrategy": "סגירת תוכנית",
       "addOption": "הוספת אופציה",
       "removeOption": "הסרת אופציה",
-      "option": "אופציה"
+      "option": "אופציה",
+      "strategyInputs": {
+        "title": "כותרת",
+        "planningNotes": "הערות נוספות",
+        "planningDate": "הערות נוספות",
+        "optionName": "כותרת לתוכנית",
+        "ingredients": "אפשרויות",
+        "startTime": "בין השעות",
+        "endTime": "עד",
+        "notes": "הערות נוספות לתוכנית"
+      }
     },
     "summery": {
     "textareaText":"הוספת סיכום שיחה חדש"
     }
+  },
+  "customerProfile": {
+    "customer": "לקוח",
+    "name": "שם לקוח",
+    "email": "אימייל",
+    "phone": "טלפון",
+    "gender": "מין",
+    "age": "גיל",
+    "months": "חודש",
+    "years": "שנה",
+    "facebookUrl": "פייסבוק",
+    "instagram": "אינסטגרם",
+    "website": "דף עסק",
+    "authLogin": "פרטי התחברות",
+    "driveLink": "קישורים לקבצים משותתפים",
+    "cardNumber": "מספר כרטיס",
+    "notes": "הערות נוספות",
+    "price": "מחיר",
+    "paymentType": "אמצעי תשלום",
+    "status": "סטטוס",
+    "height": "גובה",
+    "startWeight": "משקל התחלתי",
+    "endWeight": "משקל סופי",
+    "activityLevel": "רמת פעילות",
+    "startDate": "תאריך התחלה",
+    "endDate": "תאריך סיום"
+  },
+  "selectionInputs": {
+    "male": "זכר",
+    "female": "נקבה",
+    "creditCard": "כרטיס אשראי",
+    "cash": "מזומן",
+    "basic": "בסיסי",
+    "noActivity": "ללא פעילות",
+    "littleActivity": "פעילות מועטה",
+    "intensive": "אינטנסיבית",
+    "veryIntensive": "אינטנסיבית + בעבודה",
+    "think": "תהליך ראשוני",
+    "work": "פעיל",
+    "stop": "מושהה"
   },
   "dietitian": {
     "meals": {

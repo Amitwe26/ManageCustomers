@@ -24,7 +24,7 @@ export type InputField = {
   label: string;
   type: InputFieldType;
   key: string;
-  options?: { label: string; value: string | number }[];
+  options?: { key: string; label: string; value?: string | number }[];
   required?: boolean;
 };
 
@@ -56,7 +56,7 @@ type NestedKeys<T> = T extends object
 export type Customer<T> = {
   id: string;
   name: string;
-  phone: string;
+  phone: number;
   email: string;
   type: string;
   date: string;

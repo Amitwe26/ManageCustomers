@@ -7,15 +7,15 @@ const CustomerHeaderUi = ({
   customer,
   isHeaderShown,
 }: {
-  customer: Customer<CustomerFields>;
+  customer?: Customer<CustomerFields>;
   isHeaderShown: boolean;
 }) => {
   const renderPrimaryInfo = () => {
     return (
       <TopHeader>
-        <PrimaryLabel>{customer.name}</PrimaryLabel>
-        <Label>{customer.email}</Label>
-        <Label>{customer.phone}</Label>
+        <PrimaryLabel>{customer?.name}</PrimaryLabel>
+        <Label>{customer?.email}</Label>
+        <Label>{customer?.phone}</Label>
       </TopHeader>
     );
   };
@@ -30,15 +30,16 @@ const CustomerHeaderUi = ({
     ];
     return (
       <>
-        {Object.entries(customer)
-          .filter(([name]) => labelsToRender.includes(name))
-          .sort(
-            ([nameA], [nameB]) =>
-              labelsToRender.indexOf(nameA) - labelsToRender.indexOf(nameB),
-          )
-          .map(([name, value]) => (
-            <Label key={customer.id + name}>{value.toString()}</Label>
-          ))}
+        {customer &&
+          Object.entries(customer)
+            .filter(([name]) => labelsToRender.includes(name))
+            .sort(
+              ([nameA], [nameB]) =>
+                labelsToRender.indexOf(nameA) - labelsToRender.indexOf(nameB),
+            )
+            .map(([name, value]) => (
+              <Label key={customer.id + name}>{value.toString()}</Label>
+            ))}
       </>
     );
   };
@@ -46,9 +47,7 @@ const CustomerHeaderUi = ({
   return (
     <Container $isShown={isHeaderShown}>
       <PrimaryInfoContainer>{renderPrimaryInfo()}</PrimaryInfoContainer>
-      <FlexContainer>
-        <InfoContainer>{renderSecondaryInfo()}</InfoContainer>
-      </FlexContainer>
+      <InfoContainer>{renderSecondaryInfo()}</InfoContainer>
     </Container>
   );
 };
@@ -68,14 +67,10 @@ const Container = styled.div<{ $isShown: boolean }>`
     max-height 0.4s ease-in-out;
   background-color: white;
   display: flex;
-  flex-direction: column;
+  //flex-direction: column;
   margin: 20px 0 15px;
   border-radius: 15px;
   border: 1px solid rgba(221, 221, 221, 0.4);
-`;
-
-const FlexContainer = styled.div`
-  display: grid;
 `;
 
 const InfoContainer = styled.div`
@@ -89,7 +84,6 @@ const InfoContainer = styled.div`
 
 const PrimaryInfoContainer = styled.div`
   padding: 10px;
-  border-bottom: 1px solid rgba(221, 221, 221, 0.7);
 `;
 
 const TopHeader = styled.div`

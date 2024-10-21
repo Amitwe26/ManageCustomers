@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAppContext } from '../../context/AppContext';
 import { InputField, PlanningType } from '../../types/customersTypes';
 import { Path, useFieldArray, useForm } from 'react-hook-form';
@@ -21,6 +21,7 @@ const GenericPlanningForm = ({
 }) => {
   const { user } = useAppContext();
   const { t } = useTranslation();
+  const basePathTranslation = 'customerDetails.strategy';
   const {
     register,
     handleSubmit,
@@ -37,6 +38,12 @@ const GenericPlanningForm = ({
     name: 'options',
   });
 
+  const [titles, setTitles] = useState(
+    optionsFields.map(
+      (_, index) => `${t('customerDetails.strategy.option')} ${index + 1}`,
+    ),
+  );
+
   const onSubmit = async (data: PlanningType) => {
     if (user?.id) {
       await addNewPlanning(user.id, customerId, data);
@@ -46,20 +53,25 @@ const GenericPlanningForm = ({
     }
   };
   const renderFields = (headerInputs: InputField[]) => {
-    return headerInputs?.map((field, index) => {
-      return (
-        <InputContainer key={field.key + index}>
-          <InputUi<PlanningType>
-            label={field.label}
-            name={field.key as Path<PlanningType>}
-            type={field.type}
-            field={field}
-            register={register}
-            errors={errors}
-          />
-        </InputContainer>
-      );
-    });
+    return headerInputs?.map((field, index) => (
+      <InputContainer key={field.key + index}>
+        <InputUi<PlanningType>
+          label={t(`${basePathTranslation}.strategyInputs.${field.key}`)}
+          name={field.key as Path<PlanningType>}
+          type={field.type}
+          field={field}
+          register={register}
+          errors={errors}
+        />
+      </InputContainer>
+    ));
+  };
+
+  const handleTitleChange = (value: string, index: number) => {
+    const updatedTitles = [...titles];
+    updatedTitles[index] =
+      `${t('customerDetails.strategy.option')} ${index + 1}: ${value}`;
+    setTitles(updatedTitles);
   };
 
   const optionFields = fields.filter(
@@ -94,9 +106,7 @@ const GenericPlanningForm = ({
       <div>
         {optionsFields?.map((option, index) => (
           <div key={option.id}>
-            <h4>
-              {t('customerDetails.strategy.option')} {index + 1}
-            </h4>
+            <h4>{titles[index]}</h4>
             {optionFields?.map((field) => (
               <InputContainer key={field.key}>
                 {field.type === 'textarea' ? (
@@ -107,12 +117,19 @@ const GenericPlanningForm = ({
                   />
                 ) : (
                   <InputUi
-                    label={field.label}
+                    label={t(
+                      `${basePathTranslation}.strategyInputs.${field.key}`,
+                    )}
                     name={`options.${index}.${field.key}` as Path<PlanningType>}
                     type={field.type}
                     required={field.required}
                     register={register}
                     errors={errors}
+                    onChange={(e) => {
+                      if (field.key === 'optionName') {
+                        handleTitleChange(e.target.value, index);
+                      }
+                    }}
                   />
                 )}
               </InputContainer>

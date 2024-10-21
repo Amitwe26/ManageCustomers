@@ -55,7 +55,10 @@ const SummaryConversation = ({ isHeaderShown }: { isHeaderShown: boolean }) => {
         />
       </TextBoxContainer>
 
-      <ContainerUi headerHeight={isHeaderShown ? 4.8 : 2}>
+      <ContainerUi
+        isHeaderVisible={isHeaderShown}
+        extraHeight={isHeaderShown ? 50 : 30}
+      >
         {summaryConversation
           ?.map((conversation, index) => (
             <SummaryItem key={index}>
@@ -111,7 +114,7 @@ const SummaryHeader = styled.div`
   color: #7a7a7a;
 `;
 
-const SummaryDescription = styled.p`
+const SummaryDescription = styled.pre`
   margin: 0;
   font-size: 16px;
   color: #333;

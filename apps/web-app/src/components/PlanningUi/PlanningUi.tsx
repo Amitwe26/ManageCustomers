@@ -151,6 +151,7 @@ const Title = styled.h1`
 const Container = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 30%);
+  padding-bottom: 20px;
   justify-content: space-around;
 `;
 
