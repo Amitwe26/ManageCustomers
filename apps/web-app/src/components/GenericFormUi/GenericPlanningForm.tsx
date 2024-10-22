@@ -6,20 +6,23 @@ import InputUi from '../InputUi/InputUi';
 import styled from 'styled-components';
 import ButtonUi from '../ButtonUi/ButtonUi';
 import { useTranslation } from 'react-i18next';
-import { addNewPlanning } from '../../service/planningService';
+import { addNewPlanning, updatePlanning } from '../../service/planningService';
+import TextareaUi from '../TextAreaUi/TextAreaUi';
+import { useParams } from 'react-router-dom';
 
 const GenericPlanningForm = ({
   fields,
   setAddPlanningIsOpen,
-  customerId,
-  refetchCustomersData,
+  fetchData,
+  initialData,
 }: {
-  customerId: string;
   fields: InputField[];
   setAddPlanningIsOpen: (key: boolean) => void;
-  refetchCustomersData: VoidFunction;
+  fetchData: VoidFunction;
+  initialData?: PlanningType;
 }) => {
   const { user } = useAppContext();
+  const { id: customerId } = useParams<{ id: string }>();
   const { t } = useTranslation();
   const basePathTranslation = 'customerDetails.strategy';
   const {
@@ -28,7 +31,22 @@ const GenericPlanningForm = ({
     control,
     reset,
     formState: { errors },
-  } = useForm<PlanningType>();
+  } = useForm<PlanningType>({
+    defaultValues: initialData ?? {
+      title: '',
+      planningDate: '',
+      planningNotes: '',
+      options: [
+        {
+          optionName: '',
+          ingredients: '',
+          notes: '',
+          startTime: '',
+          endTime: '',
+        },
+      ],
+    },
+  });
   const {
     fields: optionsFields,
     append,
@@ -45,9 +63,10 @@ const GenericPlanningForm = ({
   );
 
   const onSubmit = async (data: PlanningType) => {
-    if (user?.id) {
-      await addNewPlanning(user.id, customerId, data);
-      refetchCustomersData();
+    if (user?.id && customerId) {
+      if (initialData) await updatePlanning(user.id, customerId, data.id, data);
+      else await addNewPlanning(user.id, customerId, data);
+      fetchData();
       setAddPlanningIsOpen(false);
       reset();
     }
@@ -102,18 +121,27 @@ const GenericPlanningForm = ({
           ),
         )}
       </HeaderContainer>
-
-      <div>
+      <GridOptions>
         {optionsFields?.map((option, index) => (
-          <div key={option.id}>
+          <OptionsContainer key={option.id}>
+            <RemovePlanning
+              label={t('customerDetails.strategy.removeOption')}
+              variant="delete"
+              disabled={index === 0}
+              onClick={() => remove(index)} // Remove option dynamically
+            />
             <h4>{titles[index]}</h4>
             {optionFields?.map((field) => (
               <InputContainer key={field.key}>
                 {field.type === 'textarea' ? (
-                  <TextAreaStyled
-                    id={field.key}
-                    placeholder={field.label}
-                    {...register(field.key as Path<PlanningType>)}
+                  <TextareaUi
+                    placeholder={t(
+                      `${basePathTranslation}.strategyInputs.${field.key}`,
+                    )}
+                    defaultValue={initialData?.options.toString()}
+                    register={register(
+                      `options.${index}.${field.key}` as Path<PlanningType>,
+                    )}
                   />
                 ) : (
                   <InputUi
@@ -134,39 +162,38 @@ const GenericPlanningForm = ({
                 )}
               </InputContainer>
             ))}
-            <RemovePlanning
-              label={t('customerDetails.strategy.removeOption')}
-              variant="delete"
-              onClick={() => remove(index)} // Remove option dynamically
-            />
-          </div>
+          </OptionsContainer>
         ))}
-
-        <AddOption
-          label={t('customerDetails.strategy.addOption')}
-          variant="primary"
-          onClick={() => {
-            append(
-              optionFields.reduce((acc, field) => {
-                acc[field.key] = '';
-                return acc;
-              }, {} as any),
-            );
-          }}
-        />
-      </div>
+        <>
+          <AddOption
+            label={t('customerDetails.strategy.addOption')}
+            variant="primary"
+            onClick={() => {
+              append(
+                optionFields.reduce((acc, field) => {
+                  acc[field.key] = '';
+                  return acc;
+                }, {} as any),
+              );
+            }}
+          />
+        </>
+      </GridOptions>
     </FormContainer>
   );
 };
 
 export default GenericPlanningForm;
+
 const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
-  background-color: white;
   padding: 20px;
+  width: 100%;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  background-color: #faf8e8;
 `;
 
 const ButtonsContainer = styled.div`
@@ -189,15 +216,35 @@ const InputContainer = styled.div`
 
 const HeaderContainer = styled.div`
   display: flex;
+  width: 40%;
   gap: 10px;
 `;
 
-const RemovePlanning = styled(ButtonUi)`
-  margin-bottom: 20px;
+const GridOptions = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 30%);
+  padding-bottom: 20px;
+  justify-content: space-around;
 `;
 
+const OptionsContainer = styled.div`
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 15px 0;
+  padding: 20px 5px 0;
+  //width: 30%;
+`;
+
+const RemovePlanning = styled(ButtonUi)``;
+
 const AddOption = styled(ButtonUi)`
-  margin-bottom: 20px;
+  background-color: ${({ theme }) => theme.colors.button.light};
+  opacity: 0.5;
+  margin-inline-start: ${({ theme }) => theme.spacing.l}px;
+  font-size: 16px;
+  align-self: center;
+  max-width: 20%;
 `;
 
 const TextAreaStyled = styled.textarea`

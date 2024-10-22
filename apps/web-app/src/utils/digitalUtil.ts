@@ -1,68 +1,54 @@
 import { getFirestore, doc, setDoc, updateDoc } from 'firebase/firestore';
 
-// Initialize Firestore
 const db = getFirestore();
 
-// The updated taskPlanningInputList
-const taskPlanningInputList = [
+const planningInputFields = [
   {
-    label: 'Name',
+    label: 'Title',
     type: 'text',
-    key: 'name',
+    key: 'title',
     required: true,
   },
   {
-    label: 'Email',
-    type: 'email',
-    key: 'email',
+    label: 'Planning Date',
+    type: 'date',
+    key: 'planningDate',
     required: true,
   },
   {
-    label: 'Phone',
-    type: 'number',
-    key: 'phone',
-    required: true,
-  },
-  {
-    label: 'Card Number',
-    type: 'number',
-    key: 'cardNumber',
-    required: true,
-  },
-  {
-    label: 'Months',
-    type: 'number',
-    key: 'months',
+    label: 'Planning Notes',
+    type: 'textarea',
+    key: 'planningNotes',
     required: false,
   },
   {
-    label: 'Years',
-    type: 'number',
-    key: 'years',
-    required: false,
-  },
-  {
-    label: 'Facebook URL',
-    type: 'url',
-    key: 'facebookUrl',
-    required: false,
-  },
-  {
-    label: 'Instagram URL',
-    type: 'url',
-    key: 'instagram',
-    required: false,
-  },
-  {
-    label: 'Website',
-    type: 'url',
-    key: 'website',
-    required: false,
-  },
-  {
-    label: 'Marketing Budget',
+    label: 'Option Name',
     type: 'text',
-    key: 'marketingBudget',
+    key: 'optionName',
+    required: true,
+  },
+  {
+    label: 'ingredients',
+    type: 'textarea',
+    key: 'ingredients',
+    required: true,
+  },
+  {
+    label: 'Notes',
+    type: 'textarea',
+    key: 'notes',
+    required: false,
+  },
+  {
+    label: 'Start Time',
+    type: 'time',
+    key: 'startTime',
+    required: false,
+  },
+  {
+    label: 'End Time',
+    type: 'time',
+    key: 'endTime',
     required: false,
   },
 ];
@@ -76,7 +62,7 @@ export const updateProfessionTaskPlanning = async () => {
 
     // Update only the taskPlanningInputList field in the document
     await updateDoc(professionDocRef, {
-      taskPlanningInputList: taskPlanningInputList,
+      taskPlanningInputList: planningInputFields,
     });
 
     console.log('taskPlanningInputList successfully updated!');

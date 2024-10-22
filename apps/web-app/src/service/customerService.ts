@@ -77,10 +77,7 @@ export const updateCustomer = async (
       );
 
       if (customerDoc) {
-        await updateDocument(customerColPath, customerId, {
-          ...data,
-          date: new Date().toLocaleString(),
-        });
+        await updateDocument(customerColPath, customerId, data);
       } else {
         throw new Error('Customer does not exist');
       }

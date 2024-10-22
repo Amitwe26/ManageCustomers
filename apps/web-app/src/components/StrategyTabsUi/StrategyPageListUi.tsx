@@ -5,7 +5,7 @@ import { Customer, InputField } from '../../types/customersTypes';
 import { CustomerFields, DietitianFields } from '../../types/userTypes';
 import { useAppContext } from '../../context/AppContext';
 import GenericPlanningForm from '../GenericFormUi/GenericPlanningForm';
-import MealsUi from '../MealsUi/MealsUi';
+import PlanningListUi from '../PlanningListUi/PlanningListUi';
 import CalculateInfo from '../DietitianComponents/CalculateInfo';
 import { useTranslation } from 'react-i18next';
 import ContainerUi from '../ContainerUi/ContainerUi';
@@ -89,15 +89,15 @@ const StrategyPageListUi = ({ isHeaderShown }: { isHeaderShown: boolean }) => {
         </MenusHeaderContainer>
         {addPlanningIsOpen && (
           <GenericPlanningForm
-            customerId={customer.id}
             fields={fields}
             setAddPlanningIsOpen={(key) => setAddPlanningIsOpen(key)}
-            refetchCustomersData={refetchStrategyList}
+            fetchData={refetchStrategyList}
           />
         )}
         {!isLoadingPlanning ? (
-          <MealsUi
+          <PlanningListUi
             strategyList={strategyList}
+            fields={fields}
             fetchData={refetchStrategyList}
             handleDeletePlanning={handleDeletePlanning}
           />

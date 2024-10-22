@@ -4,6 +4,7 @@ import { Customer } from '../../types/customersTypes';
 import { CustomerFields } from '../../types/userTypes';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { formatDate } from '../../utils/dateUtils';
 
 const CustomerListCardUi = ({
   renderList,
@@ -40,9 +41,7 @@ const CustomerListCardUi = ({
           >
             <CustomerDetails>
               <DetailItem>
-                <DetailValue>
-                  {new Date(customer.date).toLocaleDateString()}
-                </DetailValue>
+                <DetailValue>{formatDate(customer.date)}</DetailValue>
               </DetailItem>
               <DetailItem>
                 <DetailValue>{customer.name}</DetailValue>

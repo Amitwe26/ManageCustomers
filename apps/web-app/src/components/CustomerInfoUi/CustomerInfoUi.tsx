@@ -29,17 +29,16 @@ const CustomerInfoUi = ({
     register,
     handleSubmit,
     reset,
-    formState: { errors, isDirty },
+    formState: { errors },
   } = useForm<Customer<CustomerFields>>({
     defaultValues: customer ?? {},
   });
 
   const handleEditToggle = () => {
-    if (isEditMode && isDirty) {
+    if (isEditMode) {
       handleSubmit(onSubmit)();
       setIsEditMode(!isEditMode);
-    }
-    if (!isDirty) setIsEditMode(!isEditMode);
+    } else setIsEditMode(!isEditMode);
   };
 
   const onSubmit = async (data: Customer<CustomerFields>) => {

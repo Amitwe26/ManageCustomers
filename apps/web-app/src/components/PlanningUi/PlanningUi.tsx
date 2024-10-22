@@ -1,10 +1,10 @@
 import React from 'react';
-import GenericStrategyFormUi from '../GenericFormUi/GenericStrategyFormUi';
-import { Meal, PlanningType } from '../../types/customersTypes';
+import { InputField, Meal, PlanningType } from '../../types/customersTypes';
 import styled from 'styled-components';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import ButtonUi from '../ButtonUi/ButtonUi';
+import GenericPlanningForm from '../GenericFormUi/GenericPlanningForm';
 
 type FormValues = {
   [key: string]: {
@@ -17,10 +17,12 @@ const PlanningUi = ({
   item,
   fetchData,
   handleDeletePlanning,
+  fields,
 }: {
   item: PlanningType;
   fetchData: VoidFunction;
   handleDeletePlanning: (id: string) => Promise<void>;
+  fields: InputField[];
 }) => {
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = React.useState(false);
@@ -61,9 +63,10 @@ const PlanningUi = ({
         />
       </MenuContainer>
       {isEditing ? (
-        <GenericStrategyFormUi
+        <GenericPlanningForm
           initialData={item}
-          onCloseEditing={handleEdit}
+          fields={fields}
+          setAddPlanningIsOpen={handleEdit}
           fetchData={fetchData}
         />
       ) : (

@@ -1,17 +1,19 @@
 import React from 'react';
-import { PlanningType } from '../../types/customersTypes';
+import { InputField, PlanningType } from '../../types/customersTypes';
 import PlanningUi from '../PlanningUi/PlanningUi';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 
-const MealsUi = ({
+const PlanningListUi = ({
   strategyList,
   fetchData,
   handleDeletePlanning,
+  fields,
 }: {
   strategyList?: PlanningType[];
   fetchData: VoidFunction;
   handleDeletePlanning: (id: string) => Promise<void>;
+  fields: InputField[];
 }) => {
   const { t } = useTranslation();
 
@@ -24,6 +26,7 @@ const MealsUi = ({
             key={index}
             fetchData={fetchData}
             handleDeletePlanning={handleDeletePlanning}
+            fields={fields}
           />
         ))
       ) : (
@@ -37,7 +40,7 @@ const MealsUi = ({
   );
 };
 
-export default MealsUi;
+export default PlanningListUi;
 
 const Container = styled.div`
   padding-bottom: 20px;
