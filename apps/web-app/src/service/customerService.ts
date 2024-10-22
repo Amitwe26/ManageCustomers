@@ -8,6 +8,7 @@ import {
 } from '../types/loginTypes';
 import {
   addDocument,
+  deleteDocument,
   getCollection,
   getDocumentById,
   getDocuments,
@@ -143,5 +144,19 @@ export const getFormFields = async (
   } catch (error) {
     console.error('Error fetching form fields:', error);
     return [];
+  }
+};
+
+export const deleteCustomer = async (
+  userId: string,
+  customerId: string,
+): Promise<void> => {
+  try {
+    const customerDocPath = `users/${userId}/customers`;
+    await deleteDocument(customerDocPath, customerId); // Utilize your delete utility
+    console.log(`Customer with ID ${customerId} has been deleted.`);
+  } catch (error) {
+    console.error('Error deleting customer: ', error);
+    throw new Error('Could not delete customer.');
   }
 };

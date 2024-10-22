@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next';
 import ContainerUi from '../ContainerUi/ContainerUi';
 import ButtonUi from '../ButtonUi/ButtonUi';
 import InputUi from '../InputUi/InputUi';
+import { deleteCustomer } from '../../service/customerService';
+import { useNavigate } from 'react-router-dom';
 
 const CustomerInfoUi = ({
   customer,
@@ -22,6 +24,7 @@ const CustomerInfoUi = ({
   onUpdateCustomer: (updatedCustomer: Customer<CustomerFields>) => void;
 }) => {
   const { user } = useAppContext();
+  const navigate = useNavigate();
   const { t } = useTranslation();
   const arraySelectionKeys = ['status', 'paymentType', 'gender'];
   const [isEditMode, setIsEditMode] = useState(false);
@@ -39,6 +42,13 @@ const CustomerInfoUi = ({
       handleSubmit(onSubmit)();
       setIsEditMode(!isEditMode);
     } else setIsEditMode(!isEditMode);
+  };
+
+  const handleDeleteCustomer = async () => {
+    if (user?.id && customer?.id) {
+      await deleteCustomer(user.id, customer.id);
+      navigate('/customers');
+    }
   };
 
   const onSubmit = async (data: Customer<CustomerFields>) => {
@@ -112,9 +122,13 @@ const CustomerInfoUi = ({
           label={isEditMode ? t('buttons.save') : t('buttons.edit')}
           variant="softOrange"
         />
-
-        <ContainerInfo>{renderFields()}</ContainerInfo>
+        <DeleteButton
+          onClick={handleDeleteCustomer}
+          label={t('buttons.delete')}
+          variant="delete"
+        />
       </FlexContainer>
+      <ContainerInfo>{renderFields()}</ContainerInfo>
     </ContainerUi>
   );
 };
@@ -123,16 +137,17 @@ export default CustomerInfoUi;
 
 const FlexContainer = styled.div`
   display: flex;
-  flex-direction: column;
-  padding: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  border-radius: 10px;
+  justify-content: space-between;
+  width: 55%;
 `;
 
 const ContainerInfo = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
 `;
 
 const Label = styled.span`
@@ -165,3 +180,5 @@ const EditButton = styled(ButtonUi)`
   cursor: pointer;
   color: white;
 `;
+
+const DeleteButton = styled(EditButton)``;
