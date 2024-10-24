@@ -101,8 +101,8 @@
     "noActivity": "ללא פעילות",
     "littleActivity": "פעילות מועטה",
     "intensive": "אינטנסיבית",
-    "veryIntensive": "אינטנסיבית + בעבודה",
     "think": "תהליך ראשוני",
+    "oneTime": "חד-פעמי",
     "work": "פעיל",
     "stop": "מושהה"
   },

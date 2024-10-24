@@ -5,6 +5,7 @@ import { CustomerFields } from '../../types/userTypes';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { formatDate } from '../../utils/dateUtils';
+import ContainerUi from '../ContainerUi/ContainerUi';
 
 const CustomerListCardUi = ({
   renderList,
@@ -21,6 +22,7 @@ const CustomerListCardUi = ({
     'status',
     'email',
   ];
+  const statusArray = ['think', 'work', 'stop', 'oneTime'];
   const renderFilteredList = (
     customers: Customer<CustomerFields>[],
     statusKey: string,
@@ -81,14 +83,22 @@ const CustomerListCardUi = ({
     <>
       <Container>
         <ListHeader>
-          {headers.map((header) => (
-            <HeaderItem key={header}>
+          {headers.map((header, index) => (
+            <HeaderItem key={index}>
               {t(`customersListPage.headerCustomerList.${header}`)}
             </HeaderItem>
           ))}
         </ListHeader>
         {renderList ? (
-          renderFilteredList(renderList, '')
+          <ContainerUi isHeaderVisible={false}>
+            {statusArray.map((key, index) => {
+              return (
+                <ListContainer key={index}>
+                  {renderFilteredList(renderList, key)}
+                </ListContainer>
+              );
+            })}
+          </ContainerUi>
         ) : (
           <span>Dont have customers list :(</span>
         )}
@@ -110,6 +120,11 @@ const ListHeader = styled.div`
   background-color: rgba(209, 209, 209, 0.76);
   border-radius: 8px;
   margin-bottom: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+`;
+
+const ListContainer = styled.div`
+  margin-bottom: 30px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 `;
 

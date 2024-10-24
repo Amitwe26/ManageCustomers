@@ -37,26 +37,24 @@ const CustomersList = () => {
   if (error) return <div>Error: {error?.toString()}</div>;
 
   return (
-    <>
-      <Container>
-        <CustomersListHeaderUi
-          customers={customers}
+    <Container>
+      <CustomersListHeaderUi
+        customers={customers}
+        setAddCustomerOpen={setAddCustomerOpen}
+        setFilterList={setFilterList}
+      />
+      {user?.profession && addCustomerOpen ? (
+        <AddCustomerForm
           setAddCustomerOpen={setAddCustomerOpen}
-          setFilterList={setFilterList}
+          refetchCustomersData={() => refechCustomersData()}
         />
-        {user?.profession && addCustomerOpen ? (
-          <AddCustomerForm
-            setAddCustomerOpen={setAddCustomerOpen}
-            refetchCustomersData={() => refechCustomersData()}
-          />
-        ) : null}
-        {!isLoading && customers ? (
-          <CustomerListCardUi renderList={renderList()} />
-        ) : (
-          <p>{t('loadingText')}</p>
-        )}
-      </Container>
-    </>
+      ) : null}
+      {!isLoading && customers ? (
+        <CustomerListCardUi renderList={renderList()} />
+      ) : (
+        <p>{t('loadingText')}</p>
+      )}
+    </Container>
   );
 };
 

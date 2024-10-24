@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 interface TextareaUiProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
-  register: UseFormRegisterReturn;
+  register?: UseFormRegisterReturn;
   placeholder?: string;
   rows?: number;
   maxLength?: number;

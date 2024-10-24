@@ -94,7 +94,7 @@ export const updateCustomer = async (
       data = {
         ...data,
         type: 'user',
-        date: new Date().toLocaleString(),
+        date: new Date().toISOString(),
       };
       const docRef = await addDocument(customerColPath, data);
       await updateDocument(customerColPath, docRef.id, { id: docRef.id });

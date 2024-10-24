@@ -8,7 +8,6 @@ export type BasePlanning<T> = {
   planningDate: string;
   planningNotes: string;
   options: T[];
-  initialData?: PlanningType;
 };
 
 export type Meal = {
@@ -60,7 +59,7 @@ export type Customer<T> = {
   email: string;
   type: string;
   date: string;
-  status: string;
+  status: 'think' | 'stop' | 'work' | 'oneTime';
   tasks: string[];
   price: number;
   paymentType: string;

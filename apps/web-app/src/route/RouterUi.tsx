@@ -50,6 +50,7 @@ const RoutesComponent = () => {
 };
 
 export default RoutesComponent;
+
 const Container = styled.div`
   ${({ theme }) => theme.utils.flexDirectionRtl(theme)};
   background-color: ${({ theme }) => theme.colors.backgroundColor.white};

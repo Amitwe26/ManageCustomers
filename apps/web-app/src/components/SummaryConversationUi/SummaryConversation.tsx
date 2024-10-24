@@ -11,6 +11,7 @@ import {
 import { useAppContext } from '../../context/AppContext';
 import { useTranslation } from 'react-i18next';
 import ContainerUi from '../ContainerUi/ContainerUi';
+import TextAreaUi from '../TextAreaUi/TextAreaUi';
 
 const SummaryConversation = ({ isHeaderShown }: { isHeaderShown: boolean }) => {
   const location = useLocation();
@@ -43,18 +44,17 @@ const SummaryConversation = ({ isHeaderShown }: { isHeaderShown: boolean }) => {
   return (
     <CustomerContainer>
       <TextBoxContainer>
-        <textarea
+        <TextAreaUi
           value={newDescription}
           onChange={(e) => setNewDescription(e.target.value)}
           placeholder={t('customerDetails.summery.textareaText')}
         />
-        <ButtonUi
+        <AddButtonUi
           label={t('buttons.add')}
           variant="softOrange"
           onClick={handleAddSummary}
         />
       </TextBoxContainer>
-
       <ContainerUi
         isHeaderVisible={isHeaderShown}
         extraHeight={isHeaderShown ? 50 : 30}
@@ -88,7 +88,6 @@ const TextBoxContainer = styled.div`
 
   textarea {
     width: 98%;
-    height: 150px;
     padding: 10px;
     font-size: 16px;
     border-radius: 5px;
@@ -96,6 +95,10 @@ const TextBoxContainer = styled.div`
     resize: none;
     margin-bottom: 10px;
   }
+`;
+
+const AddButtonUi = styled(ButtonUi)`
+  width: 10%;
 `;
 
 const SummaryItem = styled.div`
