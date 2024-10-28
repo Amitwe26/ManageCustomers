@@ -65,6 +65,7 @@ export type Customer<T> = {
   paymentType: string;
   history?: CustomerHistory[];
   planningList: PlanningType[];
+  events?: Event[];
 } & T;
 
 export interface CustomerHistory {

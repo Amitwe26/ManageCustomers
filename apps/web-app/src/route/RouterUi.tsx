@@ -3,13 +3,13 @@ import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import LoginPage from '../screens/LoginPage';
 import SideNavUi from '../components/NavBarUi/SideNavUi';
 import CustomersList from '../screens/CustomersList';
-import Calendar from '../screens/Calendar';
 import CustomerDetails from '../components/CastumerDetailsUi/CustomerDetails';
 import styled from 'styled-components';
 import { useAppContext } from '../context/AppContext';
 import Setting from '../screens/Setting';
 import { getUserInfo } from '../service/userService';
 import { observeAuthState } from '../service/loginService';
+import CalendarUiScreen from '../screens/CalendarUiScreen';
 
 const RoutesComponent = () => {
   const location = useLocation();
@@ -37,7 +37,7 @@ const RoutesComponent = () => {
         <Routes>
           <Route path={'/'} element={<LoginPage />} />
           <Route path={'/customers'} element={<CustomersList />} />
-          <Route path={'/calendar'} element={<Calendar />} />
+          <Route path={'/calendar'} element={<CalendarUiScreen />} />
           <Route path={'/setting'} element={<Setting />} />
           <Route
             path={'/customers/customer/:id'}

@@ -30,7 +30,6 @@ export const getDocumentById = async <T>(
 };
 
 export const addDocument = async <T extends WithFieldValue<DocumentData>>(
-  // db: Firestore,
   collectionName: string,
   data: T,
 ) => {

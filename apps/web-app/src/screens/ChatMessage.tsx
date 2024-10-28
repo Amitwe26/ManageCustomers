@@ -1,7 +1,7 @@
 import OpenAI from 'openai';
 import React, { useState } from 'react';
 
-const Calendar: React.FC = () => {
+const ChatMessage: React.FC = () => {
   const [input, setInput] = useState('');
   const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -85,4 +85,4 @@ const Calendar: React.FC = () => {
   );
 };
 
-export default Calendar;
+export default ChatMessage;

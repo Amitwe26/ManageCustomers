@@ -8,6 +8,7 @@ export type User = {
   profession: 'digital' | 'dietitian';
   typeOfUser: string;
   customers: Customer<CustomerFields>[];
+  events?: Event[];
 };
 
 export interface Profession {
