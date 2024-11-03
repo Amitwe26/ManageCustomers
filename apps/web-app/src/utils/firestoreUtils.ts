@@ -9,15 +9,33 @@ import {
   setDoc,
   WithFieldValue,
   DocumentData,
+  query,
+  where,
 } from 'firebase/firestore';
 import { db } from '../service/loginService';
 
 export const getCollection = async <T>(
   collectionPath: string,
+  filters?: { customerId: string },
 ): Promise<T[]> => {
-  const collectionRef = collection(db, collectionPath);
-  const snapshot = await getDocs(collectionRef);
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as T);
+  try {
+    const collectionRef = collection(db, collectionPath);
+
+    const q = filters
+      ? query(
+          collectionRef,
+          ...Object.entries(filters).map(([key, value]) =>
+            where(key, '==', value),
+          ),
+        )
+      : collectionRef;
+
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as T);
+  } catch (error) {
+    console.error('Error fetching collection:', error);
+    return [];
+  }
 };
 
 export const getDocumentById = async <T>(

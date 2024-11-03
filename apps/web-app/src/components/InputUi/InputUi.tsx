@@ -55,6 +55,7 @@ const InputContainer = styled.div`
 `;
 
 const StyledInput = styled.input`
+  color: ${({ theme }) => theme.colors.text.gray};
   padding: 10px;
   border-radius: 8px;
   border: 1px solid #ccc;

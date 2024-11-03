@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
+import ButtonUi from '../ButtonUi/ButtonUi';
 
 type TabConfig = {
   label: string;
@@ -57,11 +58,11 @@ const AnimatedTabs: React.FC<AnimatedTabsProps> = ({
         {tabs.map((tab, index) => (
           <TabButton
             key={index}
+            label={t(`customerDetails.tabs.${tab.label}`)}
             onClick={() => handleTabChange(index)}
+            isTransparent={activeTabIndex !== index}
             $isActive={activeTabIndex === index}
-          >
-            {t(`customerDetails.tabs.${tab.label}`)}
-          </TabButton>
+          />
         ))}
       </TabContainer>
       <TabContentContainer>
@@ -90,16 +91,25 @@ const TabContainer = styled.div`
   margin-bottom: 20px;
 `;
 
-const TabButton = styled.button<{ $isActive?: boolean }>`
-  background-color: ${({ $isActive, theme }) =>
-    $isActive ? theme.colors.button.light : '#ddd'};
-  color: white;
-  border: none;
+const TabButton = styled(ButtonUi)<{
+  $isActive?: boolean;
+}>`
+  border: 2px solid
+    ${({ $isActive, theme }) =>
+      $isActive ? theme.colors.button.primary : '#ddd'};
+  color:;
+  color: ${({ $isActive, theme }) =>
+    $isActive ? theme.colors.text.base : '#9e9e9e'};
+  //border: none;
   padding: 5px 10px;
   cursor: pointer;
   font-size: 16px;
+  border-radius: 10px;
+  margin-inline-end: 5px;
+
   &:hover {
-    background-color: ${({ theme }) => theme.colors.button.light};
+    background-color: ${({ theme }) => theme.colors.button.primary};
+    color: ${({ theme }) => theme.colors.text.base};
     opacity: 0.5;
   }
 `;

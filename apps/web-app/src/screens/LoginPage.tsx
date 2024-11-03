@@ -1,37 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import LoginForm from '../components/LoginForm/LoginForm';
 import { getFormFields } from '../service/customerService';
-import {
-  FormField,
-  LoginFormFields,
-  SignUpFormFields,
-} from '../types/loginTypes';
 import { useTranslation } from 'react-i18next';
+import { useQuery } from 'react-query';
 
 const LoginPage: React.FC = () => {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = React.useState<'login' | 'signup'>('login');
-  const [loginFields, setLoginFields] = useState<FormField<LoginFormFields>[]>(
-    [],
+
+  const { data, isLoading } = useQuery(['loginInputs', activeTab], () =>
+    getFormFields(activeTab),
   );
-  const [signupFields, setSignupFields] = useState<
-    FormField<SignUpFormFields>[]
-  >([]);
   const isLoginForm = activeTab === 'login';
-
-  useEffect(() => {
-    const fetchFields = async () => {
-      const formFields = await getFormFields(activeTab);
-      if (isLoginForm && formFields) {
-        setLoginFields(formFields as FormField<LoginFormFields>[]);
-      } else {
-        setSignupFields(formFields as FormField<SignUpFormFields>[]);
-      }
-    };
-
-    fetchFields();
-  }, [activeTab, isLoginForm]);
 
   return (
     <Main>
@@ -50,10 +31,7 @@ const LoginPage: React.FC = () => {
             {t('loginPage.signup')}
           </TabButton>
         </TabContainer>
-        <LoginForm
-          fields={isLoginForm ? loginFields : signupFields}
-          isLoginForm={isLoginForm}
-        />
+        <LoginForm fields={data} isLoginForm={isLoginForm} />
       </Container>
     </Main>
   );
@@ -73,6 +51,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 35%;
+  border-radius: 10px;
   max-height: 400px;
   align-content: center;
   box-shadow: 0 4px 7px rgba(128, 0, 128, 0.1);
@@ -82,6 +61,7 @@ const Container = styled.div`
 const TabContainer = styled.div`
   display: flex;
   width: 100%;
+  gap: 10px;
   justify-content: center;
 `;
 
@@ -90,10 +70,11 @@ const TabButton = styled.button<{ $isActive?: boolean }>`
     $isActive ? 'rgba(175, 148, 232, 0.76)' : '#ddd'};
   color: white;
   border: none;
+  border-radius: 10px;
   padding: 6px 20px;
   cursor: pointer;
   font-size: 16px;
-  width: 50%;
+  width: 49%;
 
   &:hover {
     ${({ $isActive }) =>

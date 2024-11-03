@@ -67,7 +67,6 @@ const Container = styled.div<{ $isShown: boolean }>`
     max-height 0.4s ease-in-out;
   background-color: white;
   display: flex;
-  //flex-direction: column;
   margin: 20px 0 15px;
   border-radius: 15px;
   border: 1px solid rgba(221, 221, 221, 0.4);
@@ -75,7 +74,6 @@ const Container = styled.div<{ $isShown: boolean }>`
 
 const InfoContainer = styled.div`
   display: grid;
-  width: 80%;
   padding: 10px;
   justify-content: space-around;
   gap: 10px;

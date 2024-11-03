@@ -15,6 +15,7 @@ import { getUserProfession } from '../../service/userService';
 import { useQuery } from 'react-query';
 import { getCustomerById } from '../../service/customerService';
 import { useUpdateCustomer } from '../../hooks/useUpdateCustomer';
+import CustomerEventsUi from '../CustomerEventsUi/CustomerEventsUi';
 
 const CustomerDetails = () => {
   const { user } = useAppContext();
@@ -27,14 +28,14 @@ const CustomerDetails = () => {
   const [professionFields, setProfessionFields] =
     React.useState<Profession | null>(null);
   const [isHeaderShown, setIsHeaderShown] = React.useState(true);
-  const {
-    data: customer,
-    // isLoading: customerLoading,
-    // error: customerError,
-    refetch: refetchCustomerData,
-  } = useQuery(['customer', id], () => getCustomerById(user!.id, id), {
-    enabled: !!id, // Only fetch if customerId exists
-  });
+
+  const { data: customer, refetch: refetchCustomerData } = useQuery(
+    ['customer', id],
+    () => getCustomerById(user!.id, id),
+    {
+      enabled: !!id,
+    },
+  );
   const { mutate: updateCustomer } = useUpdateCustomer();
 
   const handleUpdateCustomer = (updatedData: Customer<CustomerFields>) => {
@@ -79,6 +80,16 @@ const CustomerDetails = () => {
         component: () => <StrategyPageListUi isHeaderShown={isHeaderShown} />,
       },
       {
+        label: 'events',
+        component: () => (
+          <CustomerEventsUi
+            userId={user?.id}
+            customerId={customer?.id ?? ''}
+            isHeaderShown={isHeaderShown}
+          />
+        ),
+      },
+      {
         label: 'info',
         component: () => (
           <CustomerInfoUi
@@ -99,10 +110,12 @@ const CustomerDetails = () => {
         label={t('buttons.goBack')}
         onClick={() => navigate(-1)}
         variant="delete"
+        isTransparent
       />
       <ButtonUi
         label={t(isHeaderShown ? 'buttons.close' : 'buttons.open')}
         onClick={() => setIsHeaderShown((prevState) => !prevState)}
+        isTransparent={isHeaderShown}
       />
       <CustomerHeaderUi customer={customer} isHeaderShown={isHeaderShown} />
       <AnimatedTabs tabs={customerTabs} initialTabIndex={0} />

@@ -80,6 +80,7 @@ const CustomerInfoUi = ({
               label={inputField.label}
               name={inputField.key as Path<Customer<CustomerFields>>}
               options={inputField.options}
+              pathTranslation="selectionInputs"
               required={Boolean(inputField?.required)}
               register={register}
               errors={errors}

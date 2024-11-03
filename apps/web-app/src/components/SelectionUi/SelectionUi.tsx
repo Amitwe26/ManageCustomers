@@ -16,6 +16,8 @@ interface SelectionUiProps<T extends FieldValues> {
   register: UseFormRegister<T>;
   errors?: { [key: string]: any };
   required?: boolean;
+  pathTranslation: string;
+  className?: string;
 }
 
 const SelectionUi = <T extends FieldValues>({
@@ -25,14 +27,16 @@ const SelectionUi = <T extends FieldValues>({
   register,
   required,
   errors,
+  pathTranslation,
+  className,
 }: SelectionUiProps<T>) => {
   const { t } = useTranslation();
   return (
-    <Container>
+    <Container className={className}>
       <SelectionStyled id={name} required={required} {...register(name)}>
         {options?.map((option) => (
           <option key={option.key} value={option.value ?? option.key}>
-            {t(`selectionInputs.${option.key}`)}
+            {t(`${pathTranslation}.${option.key}`)}
           </option>
         ))}
       </SelectionStyled>
@@ -53,6 +57,7 @@ const Container = styled.div`
 `;
 
 const SelectionStyled = styled.select`
+  color: ${({ theme }) => theme.colors.text.gray};
   padding: 9px;
   width: 100%;
   border-radius: 8px;

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import ButtonUi from '../ButtonUi/ButtonUi';
 import { Customer } from '../../types/customersTypes';
 import { CustomerFields } from '../../types/userTypes';
 import { EventCalendar } from '../../types/calendarTypes';
 import { formatDateForInput } from '../../utils/dateUtils';
+import { useTranslation } from 'react-i18next';
 
 const TaskPopup: React.FC<{
   initialData: EventCalendar | null;
@@ -14,7 +15,7 @@ const TaskPopup: React.FC<{
   onDelete: () => void;
   customers?: Customer<CustomerFields>[];
 }> = ({ initialData, onSubmit, onClose, onDelete, customers }) => {
-  const [isEditable, setIsEditable] = useState(!initialData);
+  const { t } = useTranslation();
   const [selectedCustomer, setSelectedCustomer] = useState<string | undefined>(
     initialData?.customerId || undefined,
   );
@@ -59,7 +60,11 @@ const TaskPopup: React.FC<{
     <BackgroundWhite>
       <PopupWrapper>
         <form onSubmit={handleSubmit(handleFormSubmit)}>
-          <FormTitle>{initialData ? 'Edit Event' : 'Add New Task'}</FormTitle>
+          <FormTitle>
+            {t(
+              `customerDetails.events.${initialData?.title ? 'editEvent' : 'createEvent'}`,
+            )}
+          </FormTitle>
 
           {formFields.map(({ label, type, name, placeholder }, index) => (
             <div key={index}>
@@ -92,14 +97,14 @@ const TaskPopup: React.FC<{
               />
               All Day
             </label>
-            <label>
-              <input type="radio" value="task" {...register('type')} />
+            <Label>
+              <RadioInput value="task" {...register('type')} />
               Task
-            </label>
-            <label>
-              <input type="radio" value="meeting" {...register('type')} />
+            </Label>
+            <Label>
+              <RadioInput value="meeting" {...register('type')} />
               Meeting
-            </label>
+            </Label>
           </CheckBoxsContainer>
 
           {!isAllDay && (
@@ -217,6 +222,40 @@ const Textarea = styled.textarea`
   &:focus {
     outline: none;
     border-color: #3f51b5;
+  }
+`;
+
+const Label = styled.label`
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  margin-right: 20px;
+  cursor: pointer;
+`;
+
+const RadioInput = styled.input.attrs({ type: 'radio' })`
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  margin-right: 8px;
+  cursor: pointer;
+  border: 1px solid transparent;
+
+  ${({ value }) =>
+    value === 'meeting' &&
+    css`
+      border-color: #1e90ff;
+    `}
+  ${({ value }) =>
+    value === 'task' &&
+    css`
+      border-color: #f11e5d;
+    `}
+
+  &:checked {
+    background-color: ${({ value }) =>
+      value === 'meeting' ? '#1e90ff' : '#f11e5d'};
   }
 `;
 

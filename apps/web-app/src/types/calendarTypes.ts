@@ -10,5 +10,4 @@ export type EventCalendar = {
   createdBy: string;
   customerId?: string;
   status: 'scheduled' | 'completed' | 'cancelled';
-  idForUpdate?: string;
 };

@@ -32,7 +32,7 @@ const ContainerUi: React.FC<ContainerUiProps> = ({
     return () => {
       window.removeEventListener('resize', calculateHeight);
     };
-  }, [isHeaderVisible, extraHeight]);
+  }, [isHeaderVisible, extraHeight, calculateHeight]);
 
   return (
     <StyledContainer

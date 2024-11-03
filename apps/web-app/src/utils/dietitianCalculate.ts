@@ -43,11 +43,11 @@ export const determineWeightChange = (
   endWeight: number,
 ): string => {
   if (startWeight > endWeight) {
-    return 'Weight is going down';
+    return 'goingDown';
   } else if (startWeight < endWeight) {
-    return 'Weight is going up';
+    return 'goingUp';
   } else {
-    return 'Weight remains the same';
+    return 'theSame';
   }
 };
 

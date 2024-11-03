@@ -9,7 +9,7 @@ import {
   EventClickArg,
   EventContentArg,
   EventInput,
-  formatDate,
+  EventDropArg,
 } from '@fullcalendar/core';
 import styled from 'styled-components';
 import TaskPopup from '../components/TaskPopupUi/TaskPopup';
@@ -27,6 +27,8 @@ import {
   getUserEvents,
   updateEvent,
 } from '../service/calendarService';
+import EventSidebar from '../components/EventsCalendarList/EventSidebar';
+import CalendarHeaderUi from '../components/EventsCalendarList/CalendarHeaderUi';
 
 const FullCalendarApp: React.FC = () => {
   const { user } = useAppContext();
@@ -115,20 +117,14 @@ const FullCalendarApp: React.FC = () => {
       eventToDelete.setAllDay(allDay);
       eventToDelete.setStart(eventStart);
       eventToDelete.setEnd(eventEnd);
-      await updateEvent(
-        data.createdBy,
-        eventToDelete.id,
-        {
-          ...data,
-          customerId: data.customerId ?? '',
-          start: eventStart.toISOString(),
-          end: eventEnd?.toISOString() ?? '',
-        },
-        data?.customerId,
-      );
+      await updateEvent(data.createdBy, eventToDelete.id, {
+        ...data,
+        customerId: data.customerId ?? '',
+        start: eventStart.toISOString(),
+        end: eventEnd?.toISOString() ?? '',
+      });
     } else {
       calendarApi.addEvent({
-        // id,
         title,
         date: eventStart,
         start: eventStart,
@@ -140,17 +136,13 @@ const FullCalendarApp: React.FC = () => {
           customerId: customerId ?? '',
         },
       });
-      await createEvent(
-        data.createdBy,
-        {
-          ...data,
-          customerId: customerId ?? '',
-          date: new Date(eventStart).toISOString(),
-          start: new Date(eventStart)?.toISOString(),
-          end: eventEnd?.toISOString() ?? '',
-        },
-        data?.customerId,
-      );
+      await createEvent(data.createdBy, {
+        ...data,
+        customerId: customerId ?? '',
+        date: eventStart.toISOString(),
+        start: eventStart?.toISOString(),
+        end: eventEnd?.toISOString() ?? '',
+      });
     }
 
     closeModal();
@@ -174,7 +166,7 @@ const FullCalendarApp: React.FC = () => {
     setCurrentEvents(events);
   };
 
-  const handleEventDrop = async (dropInfo: any) => {
+  const handleEventDrop = async (dropInfo: EventDropArg) => {
     const { event } = dropInfo;
     const updatedEvent = {
       id: event.id,
@@ -185,131 +177,120 @@ const FullCalendarApp: React.FC = () => {
       description: event.extendedProps.description,
       type: event.extendedProps.type,
       date: event.start,
-      status: event.status,
+      status: event.extendedProps.status,
       createdBy: event.extendedProps.createdBy,
       customerId: event.extendedProps.customerId,
     };
-
-    await updateEvent(
-      dropInfo.createdBy,
-      event.id,
-      updatedEvent,
-      updatedEvent.customerId,
-    );
+    await updateEvent(updatedEvent.createdBy, event.id, {
+      ...updatedEvent,
+      customerId: updatedEvent.customerId ?? '',
+      date: updatedEvent.start?.toISOString() ?? '',
+      start: updatedEvent.start?.toISOString() ?? '',
+      end: updatedEvent.end?.toISOString() ?? '',
+    });
     refechEventsData();
   };
 
   return (
-    <ContainerUi isHeaderVisible={false}>
-      <Sidebar
-        currentEvents={currentEvents}
-        setWeekendsVisible={setWeekendsVisible}
-        weekendsVisible={weekendsVisible}
-      />
-      <div className="demo-app-main">
-        {isModalOpen && (
-          <TaskPopup
-            initialData={taskData}
-            onSubmit={handleSubmit}
-            onClose={closeModal}
-            onDelete={handleDeleteEvent}
-            customers={customers}
-          />
-        )}
-        {!isLoading && (
-          <FullCalendar
-            ref={calendarRef}
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            headerToolbar={{
-              right: 'prev,next today',
-              center: 'title',
-              left: 'timeGridDay,timeGridWeek,dayGridMonth',
-            }}
-            initialView="dayGridMonth"
-            editable
-            selectable
-            selectMirror
-            dayMaxEvents
-            locale="he"
-            locales={[heLocale]}
-            direction="rtl"
-            firstDay={0}
-            hiddenDays={weekendsVisible ? [] : [5, 6]}
-            events={events}
-            select={handleDateSelect}
-            eventClick={handleEventClick}
-            eventsSet={handleEvents}
-            eventContent={renderEventContent}
-            eventDrop={handleEventDrop}
-          />
-        )}
-      </div>
-    </ContainerUi>
+    <>
+      <Container>
+        <EventSidebar
+          currentEvents={currentEvents}
+          setWeekendsVisible={setWeekendsVisible}
+          weekendsVisible={weekendsVisible}
+        />
+        <div>
+          {isModalOpen && (
+            <TaskPopup
+              initialData={taskData}
+              onSubmit={handleSubmit}
+              onClose={closeModal}
+              onDelete={handleDeleteEvent}
+              customers={customers}
+            />
+          )}
+          {!isLoading && (
+            <>
+              <CalendarHeaderUi
+                calendarRef={calendarRef}
+                current={calendarRef.current}
+              />
+              <ContainerUi isHeaderVisible={false}>
+                <FullCalendar
+                  ref={calendarRef}
+                  plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+                  headerToolbar={{
+                    right: '',
+                    center: 'title',
+                    left: '',
+                  }}
+                  initialView="timeGridWeek"
+                  editable
+                  weekNumbers
+                  stickyHeaderDates
+                  selectable
+                  selectMirror
+                  dayMaxEvents
+                  locale="he"
+                  locales={[heLocale]}
+                  direction="rtl"
+                  firstDay={0}
+                  hiddenDays={weekendsVisible ? [] : [5, 6]}
+                  events={events}
+                  slotMinTime="05:00:00"
+                  slotLabelFormat={{
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  }}
+                  height="auto"
+                  select={handleDateSelect}
+                  eventClick={handleEventClick}
+                  eventsSet={handleEvents}
+                  eventContent={renderEventContent}
+                  eventDrop={handleEventDrop}
+                  eventColor="transparent"
+                  navLinks
+                  nowIndicator
+                />
+              </ContainerUi>
+            </>
+          )}
+        </div>
+      </Container>
+    </>
   );
 };
 
 export default FullCalendarApp;
-const Sidebar: React.FC<{
-  currentEvents: EventApi[];
-  setWeekendsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  weekendsVisible: boolean;
-}> = ({ currentEvents, setWeekendsVisible, weekendsVisible }) => {
-  return (
-    <div className="demo-app-sidebar">
-      <div className="demo-app-sidebar-section">
-        <h2>All Events ({currentEvents.length})</h2>
-        <ul>{currentEvents.map(renderSidebarEvent)}</ul>
-      </div>
-      <div className="demo-app-sidebar-section">
-        <label>
-          <input
-            type="checkbox"
-            checked={weekendsVisible}
-            onChange={() => setWeekendsVisible(!weekendsVisible)}
-          />
-          toggle weekends
-        </label>
-      </div>
-    </div>
-  );
-};
 
 const renderEventContent = (eventContent: EventContentArg) => {
-  const { type } = eventContent.event.extendedProps;
-  const eventColor = type === 'meeting' ? 'blue' : 'red';
+  const { extendedProps, start, title } = eventContent.event ?? {};
+  const isFutureEvent = start ? start > new Date() : undefined;
+  const eventColor = extendedProps.type === 'meeting' ? '#f11e5d' : '#1e90ff';
+
   return (
     <EventContent
       style={{
         backgroundColor: eventColor,
-        color: 'white',
+        opacity: isFutureEvent ? 1 : 0.4,
+        color: 'rgba(249, 251, 253)',
       }}
     >
-      <Tooltip className="tooltip">{eventContent.event.title}</Tooltip>
-      <EventTitle>{eventContent.event.title}</EventTitle>
+      <Tooltip className="tooltip">{title}</Tooltip>
+      <EventTitle>{title}</EventTitle>
       <EventTime>{eventContent.timeText}</EventTime>
     </EventContent>
   );
 };
 
-const renderSidebarEvent = (event: EventApi) => (
-  <li key={event.id}>
-    <b>
-      {formatDate(event.start!, {
-        year: 'numeric',
-        month: 'short',
-        day: '2-digit',
-      })}
-    </b>
-    <i>{event.title}</i>
-  </li>
-);
-
+const Container = styled.div``;
 const EventContent = styled.div`
   ${({ theme }) => theme.utils.flexDirectionRtl(theme)};
   display: flex;
   padding: 2px 4px;
   height: 100%;
   width: 100%;
+  border-radius: 6px;
   justify-content: space-between;
   &:hover {
     opacity: 0.7;

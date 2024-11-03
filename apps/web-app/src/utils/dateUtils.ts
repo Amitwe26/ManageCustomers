@@ -17,6 +17,7 @@ export const formatTime = (date?: Date) => {
       })
     : '';
 };
+
 export const formatDateForInput = (isoString: string): string => {
   return isoString.split('T')[0];
 };

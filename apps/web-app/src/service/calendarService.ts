@@ -1,7 +1,9 @@
 import {
   addDocument,
-  getCollection,
   updateDocument,
+  getDocumentById,
+  deleteDocument,
+  getCollection,
 } from '../utils/firestoreUtils';
 import { EventCalendar } from '../types/calendarTypes';
 
@@ -10,46 +12,30 @@ export const getUserEvents = async (
   customerId?: string,
 ): Promise<EventCalendar[]> => {
   try {
-    const collectionPath = customerId
-      ? `users/${userId}/customers/${customerId}/events`
-      : `users/${userId}/events`;
-    const col = await getCollection<EventCalendar>(collectionPath);
-    console.log(col);
-    return col;
+    if (userId) {
+      const collectionPath = `users/${userId}/events`;
+      const filters = customerId ? { customerId } : undefined;
+      return await getCollection<EventCalendar>(collectionPath, filters);
+    }
+    return [];
   } catch (error) {
-    console.error('Error fetching events:', error);
+    console.error('Error fetching user events:', error);
     return [];
   }
 };
 
-export const createEvent = async (
-  userId: string,
-  event: EventCalendar,
-  customerId?: string,
-) => {
+export const createEvent = async (userId: string, event: EventCalendar) => {
   try {
     const eventData = {
       ...event,
       createdBy: userId,
-      customerId: customerId ?? '',
+      customerId: event.customerId,
     };
+
     const collectionPath = `users/${userId}/events`;
     const docRef = await addDocument<EventCalendar>(collectionPath, eventData);
     await updateDocument(collectionPath, docRef.id, { id: docRef.id });
-    console.log('successfully created event');
-
-    if (customerId) {
-      const collectionPath = `users/${userId}/customers/${customerId}/events`;
-      const docCustomerRef = await addDocument<EventCalendar>(
-        collectionPath,
-        eventData,
-      );
-      await updateDocument(collectionPath, docCustomerRef.id, {
-        id: docCustomerRef.id,
-        idForUpdate: docRef.id,
-      });
-      console.log('successfully created event in customer');
-    }
+    console.log('Successfully created event:', docRef.id);
   } catch (error) {
     console.error('Error creating event:', error);
   }
@@ -58,27 +44,41 @@ export const createEvent = async (
 export const updateEvent = async (
   userId: string,
   eventId: string,
-  eventData: Partial<EventCalendar>,
-  customerId?: string,
+  updatedEventData: EventCalendar,
 ) => {
   try {
     const collectionPath = `users/${userId}/events`;
-    console.log(collectionPath, eventId, eventData, customerId);
-    await updateDocument<EventCalendar>(collectionPath, eventId, eventData);
-    console.log('Event successfully updated');
-    if (customerId) {
-      const customerCollectionPath = `users/${userId}/customers/${customerId}/events`;
-      const col: EventCalendar[] = await getCollection(customerCollectionPath);
-      const find = col.find((event) => event.idForUpdate === eventId);
-      if (find?.idForUpdate === eventId) {
-        await updateDocument<EventCalendar>(customerCollectionPath, find.id, {
-          ...eventData,
-          id: find.id,
-        });
-        console.log('Event successfully updated customer:', customerId);
-      }
+
+    const existingEvent = await getDocumentById<EventCalendar>(
+      collectionPath,
+      eventId,
+    );
+    if (!existingEvent) {
+      return console.error(`Event with ID ${eventId} not found`);
+    }
+
+    const existingCustomerId = existingEvent.customerId;
+    const newCustomerId = updatedEventData.customerId;
+
+    if (existingCustomerId !== newCustomerId) {
+      await deleteDocument(collectionPath, eventId);
+      await createEvent(userId, updatedEventData); // Re-create under new customer association
+      console.log('Event reassigned to new customer:', newCustomerId);
+    } else {
+      await updateDocument(collectionPath, eventId, updatedEventData);
+      console.log('Event successfully updated:', eventId);
     }
   } catch (error) {
     console.error('Error updating event:', error);
+  }
+};
+
+export const deleteEvent = async (userId: string, eventId: string) => {
+  try {
+    const collectionPath = `users/${userId}/events`;
+    await deleteDocument(collectionPath, eventId);
+    console.log('Event successfully deleted:', eventId);
+  } catch (error) {
+    console.error('Error deleting event:', error);
   }
 };

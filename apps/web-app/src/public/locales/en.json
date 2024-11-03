@@ -4,7 +4,15 @@
   "emptyPlanningList": "No plans currently exist",
   "loginPage": {
     "login": "Login",
-    "signup": "Sign Up"
+    "signup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "name": "Full Name",
+    "profession": "Profession",
+    "phone": "Phone Number",
+    "digital": "Digital Marketing",
+    "dietitian": "Dietitian"
   },
   "navBar": {
     "customersList": "Customer List",
@@ -41,10 +49,20 @@
     "tabs": {
       "summary": "Summary",
       "strategy": "Plans",
+      "events": "Events",
       "info": "Customer Profile"
     },
     "strategy": {
-      "buildStrategy": "Build Follow-up Plan",
+      "protein": "Proteins",
+      "carbohydrate": "Carbohydrates",
+      "determine": "Menu Purpose",
+      "bmi": "Body Mass Index (BMI)",
+      "rmr": "Metabolism (RMR)",
+      "gr": "Gram",
+      "goingDown": "Weight Loss",
+      "goingUp": "Weight Gain",
+      "theSame": "Maintain Weight",
+      "buildStrategy": "Build a New Plan",
       "addStrategy": "Add Plan",
       "saveStrategy": "Save Plan",
       "closeStrategy": "Close Plan",
@@ -54,16 +72,34 @@
       "strategyInputs": {
         "title": "Title",
         "planningNotes": "Additional Notes",
-        "planningDate": "Date",
+        "planningDate": "Planning Date",
         "optionName": "Plan Title",
         "ingredients": "Options",
-        "startTime": "Start Time",
-        "endTime": "End Time",
+        "startTime": "From Time",
+        "endTime": "To Time",
         "notes": "Additional Plan Notes"
       }
     },
     "summery": {
       "textareaText": "Add New Conversation Summary"
+    },
+    "events": {
+      "prev": "<",
+      "next": ">",
+      "today": "Today",
+      "timeGridDay": "Day",
+      "timeGridWeek": "Week",
+      "dayGridMonth": "Month",
+      "toggleWeekends": "Weekends",
+      "editEvent": "Edit Event",
+      "createEvent": "Create Event",
+      "title": "Title",
+      "description": "Add Description",
+      "customerEvents": "Customer Events",
+      "dontHaveCustomerEvents": "No events for the customer",
+      "eventsForWeek": "Events for the Upcoming Week",
+      "hideWeekend": "Hide Weekend",
+      "showWeekend": "Show Weekend"
     }
   },
   "customerProfile": {
@@ -73,13 +109,21 @@
     "phone": "Phone",
     "gender": "Gender",
     "age": "Age",
+    "months": "Month",
+    "years": "Year",
+    "facebookUrl": "Facebook",
+    "instagram": "Instagram",
+    "website": "Business Page",
+    "authLogin": "Login Details",
+    "driveLink": "Shared Files Links",
+    "cardNumber": "Card Number",
     "notes": "Additional Notes",
     "price": "Price",
     "paymentType": "Payment Method",
     "status": "Status",
     "height": "Height",
-    "startWeight": "Start Weight",
-    "endWeight": "End Weight",
+    "startWeight": "Starting Weight",
+    "endWeight": "Ending Weight",
     "activityLevel": "Activity Level",
     "startDate": "Start Date",
     "endDate": "End Date"
@@ -93,8 +137,8 @@
     "noActivity": "No Activity",
     "littleActivity": "Little Activity",
     "intensive": "Intensive",
-    "veryIntensive": "Very Intensive + Work",
     "think": "Initial Process",
+    "oneTime": "One-Time",
     "work": "Active",
     "stop": "Paused"
   },
@@ -106,7 +150,7 @@
       },
       "ingredients": "Ingredients",
       "notes": "Notes:",
-      "time": "Time"
+      "time": "Hours"
     }
   }
 }

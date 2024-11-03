@@ -1,6 +1,6 @@
 import InputUi from '../InputUi/InputUi';
 import React from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, UseFormRegister, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import {
@@ -57,18 +57,19 @@ const LoginForm = ({
         }
         setIsLoading(false);
       } catch (error) {
+        setIsLoading(false);
         console.error('Error signing up:', error);
       }
     }
   };
-
+  console.log(fields);
   return (
     <StyledForm onSubmit={handleSubmit(onSubmit)}>
       {isLoginForm
         ? fields?.map((field, index) => (
             <StyledInput
               key={index}
-              label={field.label}
+              label={t(`loginPage.${field.key}`)}
               name={field.key as keyof LoginFormFields}
               type={field.type}
               required
@@ -79,10 +80,11 @@ const LoginForm = ({
         : fields?.map((field, index) => {
             if (field?.type === 'selection') {
               return (
-                <SelectionUi
+                <SelectionStyled
                   key={index}
-                  label={field.label}
+                  label={t(`loginPage.${field.key}`)}
                   name={field.key}
+                  pathTranslation="loginPage"
                   register={register}
                   options={field?.options}
                 />
@@ -91,7 +93,7 @@ const LoginForm = ({
             return (
               <StyledInput
                 key={index}
-                label={field.label}
+                label={t(`loginPage.${field.key}`)}
                 name={field.key as keyof SignUpFormFields}
                 type={field.type}
                 required
@@ -113,10 +115,23 @@ const StyledForm = styled.form`
   display: flex;
   margin-top: 30px;
   height: 200px;
+  width: 50%;
+  align-self: center;
   flex-direction: column;
   place-items: center;
 `;
 
 const StyledInput = styled(InputUi<LoginFormFields | SignUpFormFields>)`
   margin-bottom: 10px;
+  width: 100%;
+`;
+
+const SelectionStyled = styled(SelectionUi)<{
+  register?: UseFormRegister<LoginFormFields | SignUpFormFields>;
+}>`
+  align-self: center;
+  width: 100%;
+  margin-bottom: 10px;
+
+  //margin-right: 10px;
 `;

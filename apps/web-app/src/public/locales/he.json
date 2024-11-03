@@ -4,7 +4,15 @@
   "emptyPlanningList": "לא קיימות תוכניות כרגע",
   "loginPage": {
     "login": "התחברות",
-    "signup": "הרשמה"
+    "signup": "הרשמה",
+    "email": "אימייל",
+    "password": "סיסמה",
+    "confirmPassword": "אימות סיסמה",
+    "name": "שם מלא",
+    "profession": "מקצוע",
+    "phone": "מספר פלאפון",
+    "digital": "שיווק דיגיטלי",
+    "dietitian": "תזונאי"
   },
   "navBar": {
     "customersList": "רשימת לקוחות",
@@ -41,9 +49,19 @@
     "tabs": {
       "summary": "סיכומים",
       "strategy": "תוכניות",
+      "events": "אירועים",
       "info": "פרופיל לקוח"
     },
     "strategy": {
+      "protein": "חלבונים",
+      "carbohydrate": "פחמימות",
+      "determine": "מטרת התפריט",
+      "bmi": "מדד מסת גוף (BMI)",
+      "rmr": "מטבוליזם (RMR)",
+      "gr": "גרם",
+      "goingDown": "ירדיה במשקל",
+      "goingUp": "עלייה במשקל",
+      "theSame": "שמירת משקל קבוע",
       "buildStrategy": "בניית תוכנית להמשך",
       "addStrategy": "הוספת תוכנית",
       "saveStrategy": "שמירת התוכנית",
@@ -64,6 +82,24 @@
     },
     "summery": {
     "textareaText":"הוספת סיכום שיחה חדש"
+    },
+    "events": {
+      "prev": "<",
+      "next": ">",
+      "today": "היום",
+      "timeGridDay": "יום",
+      "timeGridWeek": "שבוע",
+      "dayGridMonth": "חודש",
+      "toggleWeekends": "סופ״ש",
+      "editEvent": "עריכת אירוע",
+      "createEvent": "יצירת אירוע",
+      "title": "כותרת",
+      "description": "הוספת פירוט",
+      "customerEvents": "אירועי לקוח",
+      "dontHaveCustomerEvents": "אין אירועים ללקוח",
+      "eventsForWeek": "אירועים לשבוע הקרוב",
+      "hideWeekend": "הסתר סופ״ש",
+      "showWeekend": "הצג סופ״ש"
     }
   },
   "customerProfile": {

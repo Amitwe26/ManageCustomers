@@ -60,6 +60,7 @@ export const GenericCustomerFormUi = ({
               name={field.key as Path<Customer<CustomerFields>>}
               options={field?.options ?? undefined}
               required={field?.required}
+              pathTranslation="selectionInputs"
               register={register}
               errors={errors}
             />
@@ -104,8 +105,8 @@ export const GenericCustomerFormUi = ({
       <InputsWrapper>{renderFields()}</InputsWrapper>
       <ButtonUi
         type="submit"
-        variant={'secondary'}
         label={t('buttons.add')}
+        variant="primary"
         onClick={() => {}}
       />
     </FormContainer>
@@ -146,6 +147,7 @@ const TextAreaStyled = styled.textarea`
     border-color: #1a4098;
   }
 `;
+
 const FormHeader = styled.div`
   display: flex;
   justify-content: flex-end;
