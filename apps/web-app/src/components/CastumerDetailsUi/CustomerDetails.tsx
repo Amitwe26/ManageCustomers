@@ -130,8 +130,6 @@ const CustomerContainer = styled.div`
 `;
 
 const BackButton = styled(ButtonUi)`
-  margin: ${({ theme }) => theme.spacing.s}px;
-
   &:hover {
     opacity: 0.7;
   }

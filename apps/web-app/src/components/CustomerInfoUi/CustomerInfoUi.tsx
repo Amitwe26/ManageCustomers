@@ -133,8 +133,8 @@ export default CustomerInfoUi;
 
 const FlexContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  width: 55%;
+  justify-content: flex-end;
+  gap: 10px;
 `;
 
 const ContainerInfo = styled.div`
@@ -159,11 +159,6 @@ const LabelStyled = styled.label`
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const ErrorText = styled.p`
-  color: red;
-  font-size: 12px;
 `;
 
 const EditButton = styled(ButtonUi)`

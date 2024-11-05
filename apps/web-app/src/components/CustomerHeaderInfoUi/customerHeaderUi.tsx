@@ -60,14 +60,14 @@ const Container = styled.div<{ $isShown: boolean }>`
   overflow: hidden;
   opacity: ${({ $isShown }) => ($isShown ? 1 : 0)};
   transform: ${({ $isShown }) =>
-    $isShown ? 'translateY(0)' : 'translateY(-20px)'}; // Sliding animation
+    $isShown ? 'translateY(0)' : 'translateY(-20px)'};
   transition:
     opacity 0.4s ease-in-out,
     transform 0.4s ease-in-out,
     max-height 0.4s ease-in-out;
   background-color: white;
   display: flex;
-  margin: 20px 0 15px;
+  margin: 15px 0 15px;
   border-radius: 15px;
   border: 1px solid rgba(221, 221, 221, 0.4);
 `;

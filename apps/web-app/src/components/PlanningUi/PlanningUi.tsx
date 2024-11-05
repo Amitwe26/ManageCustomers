@@ -52,7 +52,8 @@ const PlanningUi = ({
               ? t(`dietitian.meals.buttons.closeMeals`)
               : t(`dietitian.meals.buttons.openMeals`)
           }
-          variant={isMealsOpen ? 'light' : 'primary'}
+          variant="primary"
+          isTransparent={isMealsOpen}
         />
 
         <ButtonUi

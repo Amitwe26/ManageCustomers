@@ -22,7 +22,7 @@ const CustomerListCardUi = ({
     'status',
     'email',
   ];
-  const statusArray = ['think', 'work', 'stop', 'oneTime'];
+  const statusArray = ['think', 'work', 'oneTime', 'stop'];
   const renderFilteredList = (
     customers: Customer<CustomerFields>[],
     statusKey: string,
@@ -61,10 +61,8 @@ const CustomerListCardUi = ({
               </DetailItem>
               <DetailItem>
                 <DetailValue
-                  $backgroundColor={
-                    customer.status === 'stop'
-                      ? '#ef6a79'
-                      : 'rgba(221, 221, 221, 0.7)'
+                  $color={
+                    customer.status === 'stop' ? '#ef6a79' : 'rgb(143,143,143)'
                   }
                 >
                   {t(`selectionInputs.${customer.status}`)}
@@ -174,16 +172,12 @@ const DetailItem = styled.div`
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 90%;
-  //&:last-child {
-  //  background-color: #dd5151;
-  //  //text-align: left;
-  //}
 `;
-const DetailValue = styled.span<{ $backgroundColor?: string }>`
+
+const DetailValue = styled.span<{ $color?: string }>`
   font-size: 16px;
   font-weight: 500;
   color: #495057;
   padding: 5px 2px;
-  ${({ $backgroundColor }) =>
-    $backgroundColor && `background-color:${$backgroundColor}`};
+  ${({ $color }) => $color && `color:${$color}`};
 `;

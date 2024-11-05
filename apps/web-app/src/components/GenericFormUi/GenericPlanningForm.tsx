@@ -189,7 +189,6 @@ const FormContainer = styled.form`
   display: flex;
   flex-direction: column;
   padding: 20px;
-  width: 100%;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
