@@ -77,7 +77,9 @@ export const GenericCustomerFormUi = ({
               type={field.type}
               required={field?.required}
               register={register}
-              errors={errors}
+              error={
+                errors[field.key as keyof Customer<CustomerFields>]?.message
+              }
             />
           </InputContainer>
         );

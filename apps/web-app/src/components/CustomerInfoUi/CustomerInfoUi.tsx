@@ -91,16 +91,11 @@ const CustomerInfoUi = ({
               name={inputField.key as Path<Customer<CustomerFields>>}
               type={inputField.type}
               register={register}
-              errors={errors}
-            />
-          )}
-          {errors[inputField.key as keyof Customer<CustomerFields>] && (
-            <ErrorText>
-              {
+              error={
                 errors[inputField.key as keyof Customer<CustomerFields>]
                   ?.message
               }
-            </ErrorText>
+            />
           )}
         </InputContainer>
       ) : (

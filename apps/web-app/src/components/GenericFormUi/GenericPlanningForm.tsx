@@ -80,7 +80,7 @@ const GenericPlanningForm = ({
           type={field.type}
           field={field}
           register={register}
-          errors={errors}
+          error={errors[field.key as keyof PlanningType]?.message}
         />
       </InputContainer>
     ));
@@ -152,7 +152,7 @@ const GenericPlanningForm = ({
                     type={field.type}
                     required={field.required}
                     register={register}
-                    errors={errors}
+                    error={errors[field.key as keyof PlanningType]?.message}
                     onChange={(e) => {
                       if (field.key === 'optionName') {
                         handleTitleChange(e.target.value, index);
@@ -233,7 +233,6 @@ const OptionsContainer = styled.div`
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   margin: 15px 0;
   padding: 20px 5px 0;
-  //width: 30%;
 `;
 
 const RemovePlanning = styled(ButtonUi)``;
@@ -245,20 +244,4 @@ const AddOption = styled(ButtonUi)`
   font-size: 16px;
   align-self: center;
   max-width: 20%;
-`;
-
-const TextAreaStyled = styled.textarea`
-  padding: 10px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  width: 100%;
-  box-sizing: border-box;
-  min-height: 38px;
-  max-height: 78px;
-  resize: horizontal;
-  &:focus {
-    outline: none;
-    border-color: #1a4098;
-  }
 `;

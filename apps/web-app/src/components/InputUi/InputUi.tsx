@@ -7,6 +7,7 @@ import {
   UseFormRegister,
 } from 'react-hook-form';
 import { InputField, InputFieldType } from '../../types/customersTypes';
+import { LoginFormFields } from '../../types/loginTypes';
 
 interface InputUiProps<T extends FieldValues> {
   label: string;
@@ -14,10 +15,11 @@ interface InputUiProps<T extends FieldValues> {
   type: InputFieldType;
   required?: boolean;
   register: UseFormRegister<T>;
-  errors: FieldErrors<T>;
+  error?: string;
   field?: InputField;
   className?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur?: VoidFunction;
 }
 
 const InputUi = <T extends FieldValues>(props: InputUiProps<T>) => {
@@ -28,8 +30,9 @@ const InputUi = <T extends FieldValues>(props: InputUiProps<T>) => {
     className,
     type,
     register,
-    errors,
+    error,
     onChange,
+    onBlur,
   } = props;
 
   return (
@@ -40,10 +43,9 @@ const InputUi = <T extends FieldValues>(props: InputUiProps<T>) => {
         placeholder={label}
         required={required}
         onChange={onChange}
+        onBlur={onBlur}
       />
-      {errors[name] && (
-        <ErrorText className="error-massage">This field is required</ErrorText>
-      )}
+      {error && <ErrorText className="error-massage">{error}</ErrorText>}
     </InputContainer>
   );
 };
