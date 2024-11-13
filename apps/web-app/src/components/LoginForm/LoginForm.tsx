@@ -87,7 +87,6 @@ const LoginForm = ({
               type={field.type}
               required
               register={register}
-              onBlur={() => trigger(field.key)}
               onChange={(e) =>
                 setValue(field.key, e.target.value, { shouldValidate: true })
               }
@@ -123,7 +122,6 @@ const LoginForm = ({
                   type={field.type}
                   required
                   register={register}
-                  onBlur={() => trigger(field.key)}
                   onChange={(e) =>
                     setValue(field.key, e.target.value, {
                       shouldValidate: true,

@@ -62,7 +62,7 @@ export const updateEvent = async (
 
     if (existingCustomerId !== newCustomerId) {
       await deleteDocument(collectionPath, eventId);
-      await createEvent(userId, updatedEventData); // Re-create under new customer association
+      await createEvent(userId, updatedEventData);
       console.log('Event reassigned to new customer:', newCustomerId);
     } else {
       await updateDocument(collectionPath, eventId, updatedEventData);

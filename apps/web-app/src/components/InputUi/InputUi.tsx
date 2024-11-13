@@ -19,7 +19,6 @@ interface InputUiProps<T extends FieldValues> {
   field?: InputField;
   className?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: VoidFunction;
 }
 
 const InputUi = <T extends FieldValues>(props: InputUiProps<T>) => {
@@ -32,7 +31,6 @@ const InputUi = <T extends FieldValues>(props: InputUiProps<T>) => {
     register,
     error,
     onChange,
-    onBlur,
   } = props;
 
   return (
@@ -43,7 +41,6 @@ const InputUi = <T extends FieldValues>(props: InputUiProps<T>) => {
         placeholder={label}
         required={required}
         onChange={onChange}
-        onBlur={onBlur}
       />
       {error && <ErrorText className="error-massage">{error}</ErrorText>}
     </InputContainer>

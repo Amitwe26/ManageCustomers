@@ -24,6 +24,7 @@ import { EventCalendar } from '../types/calendarTypes';
 import { formatDateForInput, formatTime } from '../utils/dateUtils';
 import {
   createEvent,
+  deleteEvent,
   getUserEvents,
   updateEvent,
 } from '../service/calendarService';
@@ -93,9 +94,9 @@ const FullCalendarApp: React.FC = () => {
     }
   };
 
-  const handleSubmit = (data: EventCalendar) => {
+  const handleSubmit = async (data: EventCalendar) => {
     if (data) {
-      handleSaveEvent(data);
+      await handleSaveEvent(data);
     }
   };
 
@@ -149,9 +150,13 @@ const FullCalendarApp: React.FC = () => {
     refechEventsData();
   };
 
-  const handleDeleteEvent = () => {
+  const handleDeleteEvent = async () => {
     if (eventToDelete) {
       eventToDelete.remove();
+      await deleteEvent(
+        eventToDelete.extendedProps.createdBy,
+        eventToDelete.id,
+      );
       closeModal();
     }
   };
