@@ -17,11 +17,13 @@ const CustomerInfoUi = ({
   profession,
   isHeaderShown,
   onUpdateCustomer,
+  refetchCustomersData,
 }: {
   customer?: Customer<CustomerFields>;
   profession: Profession | null;
   isHeaderShown: boolean;
   onUpdateCustomer: (updatedCustomer: Customer<CustomerFields>) => void;
+  refetchCustomersData: VoidFunction;
 }) => {
   const { user } = useAppContext();
   const navigate = useNavigate();
@@ -47,7 +49,7 @@ const CustomerInfoUi = ({
   const handleDeleteCustomer = async () => {
     if (user?.id && customer?.id) {
       await deleteCustomer(user.id, customer.id);
-      navigate('/customers');
+      refetchCustomersData();
     }
   };
 

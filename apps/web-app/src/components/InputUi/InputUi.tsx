@@ -14,7 +14,7 @@ interface InputUiProps<T extends FieldValues> {
   name: Path<T>;
   type: InputFieldType;
   required?: boolean;
-  register: UseFormRegister<T>;
+  register?: UseFormRegister<T>;
   error?: string;
   field?: InputField;
   className?: string;
@@ -37,7 +37,7 @@ const InputUi = <T extends FieldValues>(props: InputUiProps<T>) => {
     <InputContainer className={className}>
       <StyledInput
         type={type}
-        {...register(name)}
+        {...register?.(name)}
         placeholder={label}
         required={required}
         onChange={onChange}

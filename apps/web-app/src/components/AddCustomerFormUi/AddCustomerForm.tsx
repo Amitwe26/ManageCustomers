@@ -5,13 +5,7 @@ import { InputField } from '../../types/customersTypes';
 import { useQuery } from 'react-query';
 import { getUserProfession } from '../../service/userService';
 
-const AddCustomerForm = ({
-  setAddCustomerOpen,
-  refetchCustomersData,
-}: {
-  setAddCustomerOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  refetchCustomersData: VoidFunction;
-}) => {
+const AddCustomerForm = () => {
   const { user } = useAppContext();
 
   const { data, isLoading, isError } = useQuery(
@@ -31,13 +25,7 @@ const AddCustomerForm = ({
   if (isLoading) return <div>Loading...</div>;
   if (isError) return <div>Error fetching professions</div>;
 
-  return (
-    <GenericCustomerFormUi
-      fields={fields}
-      setAddCustomerOpen={() => setAddCustomerOpen(false)}
-      refetchCustomersData={refetchCustomersData}
-    />
-  );
+  return <GenericCustomerFormUi fields={fields} />;
 };
 
 export default AddCustomerForm;

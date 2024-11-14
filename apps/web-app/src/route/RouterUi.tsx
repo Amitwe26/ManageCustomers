@@ -1,15 +1,16 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import LoginPage from '../screens/LoginPage';
-import SideNavUi from '../components/NavBarUi/SideNavUi';
+import TopNavBarUi from '../components/NavBarUi/TopNavBarUi';
 import CustomersList from '../screens/CustomersList';
-import CustomerDetails from '../components/CastumerDetailsUi/CustomerDetails';
 import styled from 'styled-components';
 import { useAppContext } from '../context/AppContext';
 import Setting from '../screens/Setting';
 import { getUserInfo } from '../service/userService';
 import { observeAuthState } from '../service/loginService';
 import CalendarUiScreen from '../screens/CalendarUiScreen';
+import TasksScreen from '../screens/TasksScreen';
+import NewCustomerScreen from '../screens/NewCustomerScreen';
 
 const RoutesComponent = () => {
   const location = useLocation();
@@ -32,17 +33,15 @@ const RoutesComponent = () => {
 
   return (
     <Container>
-      {showSidebar && <SideNavUi />}
       <RouteContainer>
+        {showSidebar && <TopNavBarUi />}
         <Routes>
           <Route path={'/'} element={<LoginPage />} />
+          <Route path={'/newCustomer'} element={<NewCustomerScreen />} />
+          <Route path={'/tasks'} element={<TasksScreen />} />
           <Route path={'/customers'} element={<CustomersList />} />
           <Route path={'/calendar'} element={<CalendarUiScreen />} />
           <Route path={'/setting'} element={<Setting />} />
-          <Route
-            path={'/customers/customer/:id'}
-            element={<CustomerDetails />}
-          />
         </Routes>
       </RouteContainer>
     </Container>
@@ -53,16 +52,16 @@ export default RoutesComponent;
 
 const Container = styled.div`
   ${({ theme }) => theme.utils.flexDirectionRtl(theme)};
-  background-color: ${({ theme }) => theme.colors.backgroundColor.white};
+  background-color: ${({ theme }) => theme.colors.backgroundColor.base};
   display: flex;
   overflow-y: hidden;
   height: 100vh;
 `;
 
 const RouteContainer = styled.div`
-  background-color: ${({ theme }) => theme.colors.backgroundColor.base};
+  background-color: ${({ theme }) => theme.colors.backgroundColor.white};
   border-top: 1px solid ${({ theme }) => theme.colors.border.gray};
-  margin-top: 25px;
+  margin-top: 15px;
   width: 100%;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;

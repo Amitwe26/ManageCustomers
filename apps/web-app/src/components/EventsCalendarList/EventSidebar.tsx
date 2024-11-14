@@ -1,14 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import { EventApi } from '@fullcalendar/core';
+import { EventInput } from '@fullcalendar/core';
 import { formatDate } from '@fullcalendar/core';
 import { useTranslation } from 'react-i18next';
 
 const EventSidebar: React.FC<{
-  currentEvents: EventApi[];
-  setWeekendsVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  weekendsVisible: boolean;
-}> = ({ currentEvents, setWeekendsVisible, weekendsVisible }) => {
+  currentEvents: EventInput[];
+  setWeekendsVisible?: React.Dispatch<React.SetStateAction<boolean>>;
+  weekendsVisible?: boolean;
+}> = ({ currentEvents }) => {
   const { t } = useTranslation();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -16,13 +16,19 @@ const EventSidebar: React.FC<{
   const oneWeekFromToday = new Date(today);
   oneWeekFromToday.setDate(today.getDate() + 7);
 
-  const upcomingWeekEvents = [...currentEvents]
-    .filter(
-      (event) =>
-        event.start && event.start >= today && event.start <= oneWeekFromToday,
-    )
-    .sort((a, b) =>
-      a.start && b.start ? a.start.getTime() - b.start.getTime() : 0,
+  const upcomingWeekEvents = currentEvents
+    .filter((event) => {
+      const startDate = new Date(event.start as string | Date);
+      return (
+        !isNaN(startDate.getTime()) &&
+        startDate >= today &&
+        startDate <= oneWeekFromToday
+      );
+    })
+    .sort(
+      (a, b) =>
+        new Date(a.start as string | Date).getTime() -
+        new Date(b.start as string | Date).getTime(),
     );
 
   return (
@@ -31,11 +37,8 @@ const EventSidebar: React.FC<{
         {upcomingWeekEvents.length} {t('customerDetails.events.eventsForWeek')}
       </Header>
       <EventList>
-        {upcomingWeekEvents.map((event: EventApi) => (
-          <EventItem
-            key={event.id}
-            $eventType={event.extendedProps?.type || 'meeting'}
-          >
+        {upcomingWeekEvents.map((event: EventInput) => (
+          <EventItem key={event.id} $eventType={event.type}>
             <DateText>
               {formatDate(event.start!, {
                 locale: 'he',
@@ -49,7 +52,6 @@ const EventSidebar: React.FC<{
           </EventItem>
         ))}
       </EventList>
-      <ToggleContainer></ToggleContainer>
     </SidebarContainer>
   );
 };
@@ -87,15 +89,11 @@ const EventItem = styled.li<{ $eventType: string }>`
     height: 10px;
     border-radius: 50%;
     margin-inline-end: 10px;
-    background-color: ${(props) =>
-      props.$eventType === 'task' ? '#f11e5d' : '#1e90ff'};
+    background-color: ${({ $eventType }) =>
+      $eventType === 'task' ? '#f11e5d' : '#1e90ff'};
   }
 `;
 
 const DateText = styled.b`
   margin-inline-end: 10px;
-`;
-
-const ToggleContainer = styled.div`
-  margin-top: 20px;
 `;

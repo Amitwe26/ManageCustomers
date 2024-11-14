@@ -10,15 +10,7 @@ import { useAppContext } from '../../context/AppContext';
 import SelectionUi from '../SelectionUi/SelectionUi';
 import { useTranslation } from 'react-i18next';
 
-export const GenericCustomerFormUi = ({
-  fields,
-  setAddCustomerOpen,
-  refetchCustomersData,
-}: {
-  fields: InputField[];
-  setAddCustomerOpen: (open: boolean) => void;
-  refetchCustomersData: () => void;
-}) => {
+export const GenericCustomerFormUi = ({ fields }: { fields: InputField[] }) => {
   const { user } = useAppContext();
   const { t } = useTranslation();
   const {
@@ -90,19 +82,13 @@ export const GenericCustomerFormUi = ({
   const onSubmit = async (data: Customer<CustomerFields>) => {
     if (user?.id) {
       await updateCustomer(user.id, data);
-      refetchCustomersData();
-      setAddCustomerOpen(false);
       reset();
     }
   };
 
   return (
     <FormContainer onSubmit={handleSubmit(onSubmit)}>
-      <FormHeader>
-        <CloseButton onClick={() => setAddCustomerOpen(false)}>
-          {t('buttons.cancel')}
-        </CloseButton>
-      </FormHeader>
+      <FormHeader></FormHeader>
       <InputsWrapper $isFirstInputs={true}>{renderFields(true)}</InputsWrapper>
       <InputsWrapper>{renderFields()}</InputsWrapper>
       <ButtonUi

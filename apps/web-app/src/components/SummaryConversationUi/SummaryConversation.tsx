@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { Customer, CustomerHistory } from '../../types/customersTypes';
 import ButtonUi from '../ButtonUi/ButtonUi';
@@ -13,13 +12,15 @@ import { useTranslation } from 'react-i18next';
 import ContainerUi from '../ContainerUi/ContainerUi';
 import TextAreaUi from '../TextAreaUi/TextAreaUi';
 
-const SummaryConversation = ({ isHeaderShown }: { isHeaderShown: boolean }) => {
-  const location = useLocation();
+const SummaryConversation = ({
+  isHeaderShown,
+  customer,
+}: {
+  isHeaderShown: boolean;
+  customer?: Customer<CustomerFields>;
+}) => {
   const { t } = useTranslation();
   const { user } = useAppContext();
-  const { customer } = location.state as {
-    customer: Customer<CustomerFields>;
-  };
 
   const [summaryConversation, setSummaryConversation] = useState<
     CustomerHistory[]
@@ -33,7 +34,7 @@ const SummaryConversation = ({ isHeaderShown }: { isHeaderShown: boolean }) => {
       timestamp: new Date().toISOString(),
     };
 
-    if (user) {
+    if (user && customer?.id) {
       await addCustomerHistory(user.id, customer.id, newSummary);
       const res = await getHistoryUser(user?.id, customer.id);
       if (res?.history) setSummaryConversation(res.history ?? []);

@@ -1,5 +1,4 @@
 import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import CustomerHeaderUi from '../CustomerHeaderInfoUi/customerHeaderUi';
 import { Customer } from '../../types/customersTypes';
@@ -17,23 +16,23 @@ import { getCustomerById } from '../../service/customerService';
 import { useUpdateCustomer } from '../../hooks/useUpdateCustomer';
 import CustomerEventsUi from '../CustomerEventsUi/CustomerEventsUi';
 
-const CustomerDetails = () => {
+const CustomerDetails = ({
+  customerId,
+  refetchCustomersData,
+}: {
+  customerId?: string;
+  refetchCustomersData: VoidFunction;
+}) => {
   const { user } = useAppContext();
   const { t } = useTranslation();
-  const location = useLocation();
-  const navigate = useNavigate();
-  const {
-    customer: { id },
-  } = location.state as { customer: Customer<CustomerFields> };
   const [professionFields, setProfessionFields] =
     React.useState<Profession | null>(null);
   const [isHeaderShown, setIsHeaderShown] = React.useState(true);
-
   const { data: customer, refetch: refetchCustomerData } = useQuery(
-    ['customer', id],
-    () => getCustomerById(user!.id, id),
+    ['customer', customerId],
+    () => getCustomerById(user!.id, customerId ?? ''),
     {
-      enabled: !!id,
+      enabled: !!customerId,
     },
   );
   const { mutate: updateCustomer } = useUpdateCustomer();
@@ -43,12 +42,13 @@ const CustomerDetails = () => {
       updateCustomer(
         {
           userId: user.id,
-          customerId: customer.id,
+          customerId: customerId ?? '',
           updatedData,
         },
         {
           onSuccess: () => {
             refetchCustomerData();
+            refetchCustomersData();
           },
         },
       );
@@ -73,18 +73,28 @@ const CustomerDetails = () => {
     () => [
       {
         label: 'summary',
-        component: () => <SummaryConversation isHeaderShown={isHeaderShown} />,
+        component: () => (
+          <SummaryConversation
+            isHeaderShown={isHeaderShown}
+            customer={customer}
+          />
+        ),
       },
       {
         label: 'strategy',
-        component: () => <StrategyPageListUi isHeaderShown={isHeaderShown} />,
+        component: () => (
+          <StrategyPageListUi
+            isHeaderShown={isHeaderShown}
+            customer={customer}
+          />
+        ),
       },
       {
         label: 'events',
         component: () => (
           <CustomerEventsUi
             userId={user?.id}
-            customerId={customer?.id ?? ''}
+            customerId={customerId ?? ''}
             isHeaderShown={isHeaderShown}
           />
         ),
@@ -97,6 +107,7 @@ const CustomerDetails = () => {
             profession={professionFields}
             isHeaderShown={isHeaderShown}
             onUpdateCustomer={handleUpdateCustomer}
+            refetchCustomersData={refetchCustomersData}
           />
         ),
       },
@@ -106,12 +117,6 @@ const CustomerDetails = () => {
 
   return (
     <CustomerContainer>
-      <BackButton
-        label={t('buttons.goBack')}
-        onClick={() => navigate(-1)}
-        variant="delete"
-        isTransparent
-      />
       <ButtonUi
         label={t(isHeaderShown ? 'buttons.close' : 'buttons.open')}
         onClick={() => setIsHeaderShown((prevState) => !prevState)}
@@ -127,10 +132,5 @@ export default CustomerDetails;
 
 const CustomerContainer = styled.div`
   padding: 0 15px;
-`;
-
-const BackButton = styled(ButtonUi)`
-  &:hover {
-    opacity: 0.7;
-  }
+  width: 100%;
 `;

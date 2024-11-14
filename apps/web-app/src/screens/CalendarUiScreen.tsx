@@ -28,14 +28,12 @@ import {
   getUserEvents,
   updateEvent,
 } from '../service/calendarService';
-import EventSidebar from '../components/EventsCalendarList/EventSidebar';
 import CalendarHeaderUi from '../components/EventsCalendarList/CalendarHeaderUi';
 
 const FullCalendarApp: React.FC = () => {
   const { user } = useAppContext();
   const calendarRef = useRef<FullCalendar>(null);
   const [weekendsVisible, setWeekendsVisible] = useState(true);
-  const [currentEvents, setCurrentEvents] = useState<EventApi[]>([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [taskData, setTaskData] = useState<EventCalendar | null>(null);
   const [eventToDelete, setEventToDelete] = useState<EventApi | null>(null);
@@ -167,10 +165,6 @@ const FullCalendarApp: React.FC = () => {
     setEventToDelete(null);
   };
 
-  const handleEvents = (events: EventApi[]) => {
-    setCurrentEvents(events);
-  };
-
   const handleEventDrop = async (dropInfo: EventDropArg) => {
     const { event } = dropInfo;
     const updatedEvent = {
@@ -199,11 +193,6 @@ const FullCalendarApp: React.FC = () => {
   return (
     <>
       <Container>
-        <EventSidebar
-          currentEvents={currentEvents}
-          setWeekendsVisible={setWeekendsVisible}
-          weekendsVisible={weekendsVisible}
-        />
         <div>
           {isModalOpen && (
             <TaskPopup
@@ -250,7 +239,6 @@ const FullCalendarApp: React.FC = () => {
                   height="auto"
                   select={handleDateSelect}
                   eventClick={handleEventClick}
-                  eventsSet={handleEvents}
                   eventContent={renderEventContent}
                   eventDrop={handleEventDrop}
                   eventColor="transparent"
@@ -271,7 +259,7 @@ export default FullCalendarApp;
 const renderEventContent = (eventContent: EventContentArg) => {
   const { extendedProps, start, title } = eventContent.event ?? {};
   const isFutureEvent = start ? start > new Date() : undefined;
-  const eventColor = extendedProps.type === 'meeting' ? '#f11e5d' : '#1e90ff';
+  const eventColor = extendedProps.type === 'task' ? '#f11e5d' : '#1e90ff';
 
   return (
     <EventContent

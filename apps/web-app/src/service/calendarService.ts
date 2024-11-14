@@ -77,7 +77,7 @@ export const deleteEvent = async (userId: string, eventId: string) => {
   try {
     const collectionPath = `users/${userId}/events`;
     await deleteDocument(collectionPath, eventId);
-    console.log('Event successfully deleted:', eventId);
+    console.log('Successfully deleted:', eventId);
   } catch (error) {
     console.error('Error deleting event:', error);
   }

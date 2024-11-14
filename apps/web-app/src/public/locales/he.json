@@ -15,8 +15,10 @@
     "dietitian": "תזונאי"
   },
   "navBar": {
+    "addNewCustomer": "הוספת לקוח",
     "customersList": "רשימת לקוחות",
     "calendar": "יומן פגישות",
+    "tasks": "משימות",
     "setting": "הגדרות",
     "logOut": "יציאה"
   },
@@ -33,7 +35,9 @@
   "customersListPage": {
   "titles": {
     "customers": "לקוחות",
-    "filterInput": "חיפוש לקוחות"
+    "filterInput": "חיפוש לקוחות",
+    "customersList": "רשימת לקוחות",
+    "listDetails": "רשימה מפורטת"
   },
     "headerCustomerList": {
       "date": "תאריך",

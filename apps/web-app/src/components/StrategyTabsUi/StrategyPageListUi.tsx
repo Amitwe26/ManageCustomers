@@ -9,7 +9,6 @@ import PlanningListUi from '../PlanningListUi/PlanningListUi';
 import CalculateInfo from '../DietitianComponents/CalculateInfo';
 import { useTranslation } from 'react-i18next';
 import ContainerUi from '../ContainerUi/ContainerUi';
-import { useLocation } from 'react-router-dom';
 import { useQuery } from 'react-query';
 import {
   deletePlanning,
@@ -17,22 +16,21 @@ import {
 } from '../../service/planningService';
 import { getUserProfession } from '../../service/userService';
 
-const StrategyPageListUi = ({ isHeaderShown }: { isHeaderShown: boolean }) => {
+const StrategyPageListUi = ({
+  isHeaderShown,
+  customer,
+}: {
+  isHeaderShown: boolean;
+  customer?: Customer<CustomerFields>;
+}) => {
   const { user } = useAppContext();
-  const location = useLocation();
-  const { customer } = location.state as {
-    customer: Customer<CustomerFields>;
-  };
   const { t } = useTranslation();
   const [addPlanningIsOpen, setAddPlanningIsOpen] = React.useState(false);
   const [fields, setFields] = useState<InputField[]>([]);
 
   const { data: professionList } = useQuery(
     ['profession', user?.id],
-    async () => {
-      const data = await getUserProfession();
-      return data;
-    },
+    () => getUserProfession(),
     { enabled: !!user },
   );
 
@@ -63,7 +61,7 @@ const StrategyPageListUi = ({ isHeaderShown }: { isHeaderShown: boolean }) => {
   }, [professionList, user?.profession]);
 
   const handleDeletePlanning = async (id: string) => {
-    if (user && customer.id && id) {
+    if (user && customer?.id && id) {
       try {
         await deletePlanning(user.id, customer.id, id);
         await refetchStrategyList();

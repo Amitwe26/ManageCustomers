@@ -36,17 +36,15 @@ const CustomerListCardUi = ({
         return (
           <CustomerContainer
             key={customer.id}
-            to={`/customers/customer/${customer.id}`}
-            state={{ customer }}
             $isThinking={isThinking}
             $isStop={customer.status === 'stop'}
           >
             <CustomerDetails>
               <DetailItem>
-                <DetailValue>{formatDate(customer.date)}</DetailValue>
+                <DetailValue>{customer.name}</DetailValue>
               </DetailItem>
               <DetailItem>
-                <DetailValue>{customer.name}</DetailValue>
+                <DetailValue>{formatDate(customer.date)}</DetailValue>
               </DetailItem>
               <DetailItem>
                 <DetailValue>{customer.phone}</DetailValue>
@@ -122,7 +120,6 @@ const ListHeader = styled.div`
 `;
 
 const ListContainer = styled.div`
-  margin-bottom: 30px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 `;
 
@@ -134,7 +131,7 @@ const HeaderItem = styled.div`
   letter-spacing: 1px;
 `;
 
-const CustomerContainer = styled(Link)<{
+const CustomerContainer = styled.div<{
   $isThinking: boolean;
   $isStop: boolean;
 }>`
@@ -142,20 +139,16 @@ const CustomerContainer = styled(Link)<{
   grid-template-columns: repeat(7, 15%);
   border-radius: 10px;
   padding: 10px 15px;
-  margin: 10px 0;
+  margin: 5px 0;
   background-color: #ffffff;
   text-decoration: none;
   color: black;
   transition:
     transform 0.2s,
     box-shadow 0.2s;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 5px rgba(0, 0, 0, 0.05);
   overflow: hidden;
   ${({ $isStop }) => $isStop && 'opacity: .5'};
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  }
 `;
 
 const CustomerDetails = styled.div`
@@ -169,6 +162,7 @@ const DetailItem = styled.div`
   color: #495057;
   box-sizing: border-box;
   overflow: hidden;
+  text-decoration: none;
   text-overflow: ellipsis;
   white-space: nowrap;
   width: 90%;
