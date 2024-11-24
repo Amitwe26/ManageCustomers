@@ -9,13 +9,15 @@ import ContainerUi from '../ContainerUi/ContainerUi';
 
 const CustomerListCardUi = ({
   renderList,
+  setActiveCustomer,
 }: {
   renderList?: Customer<CustomerFields>[];
+  setActiveCustomer: (customer: Customer<CustomerFields>) => void;
 }) => {
   const { t } = useTranslation();
   const headers = [
-    'date',
     'name',
+    'date',
     'phone',
     'price',
     'paymentType',
@@ -40,8 +42,8 @@ const CustomerListCardUi = ({
             $isStop={customer.status === 'stop'}
           >
             <CustomerDetails>
-              <DetailItem>
-                <DetailValue>{customer.name}</DetailValue>
+              <DetailItem onClick={() => setActiveCustomer(customer)}>
+                <DetailValue $isClick>{customer.name}</DetailValue>
               </DetailItem>
               <DetailItem>
                 <DetailValue>{formatDate(customer.date)}</DetailValue>
@@ -168,10 +170,11 @@ const DetailItem = styled.div`
   width: 90%;
 `;
 
-const DetailValue = styled.span<{ $color?: string }>`
+const DetailValue = styled.span<{ $color?: string; $isClick?: boolean }>`
+  ${({ $color }) => $color && `color:${$color}`};
+  ${({ $isClick }) => $isClick && `cursor: pointer`};
   font-size: 16px;
   font-weight: 500;
   color: #495057;
   padding: 5px 2px;
-  ${({ $color }) => $color && `color:${$color}`};
 `;

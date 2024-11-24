@@ -8,8 +8,8 @@ import { useAppContext } from '../context/AppContext';
 import CustomerListCardUi from '../components/CustomerListCardUi/CustomerListCardUi';
 import { useTranslation } from 'react-i18next';
 import ButtonUi from '../components/ButtonUi/ButtonUi';
-import CustomerDetails from '../components/CastumerDetailsUi/CustomerDetails';
 import InputUi from '../components/InputUi/InputUi';
+import CustomersNamesListUi from '../components/CustomerListPageUi/CustomersNamesListUi';
 
 const CustomersList = () => {
   const { user } = useAppContext();
@@ -22,14 +22,19 @@ const CustomersList = () => {
     getCustomersUser(user?.id ?? ''),
   );
   const { t } = useTranslation();
-  const [filterList, setFilterList] = useState<
-    Customer<CustomerFields>[] | undefined
-  >([]);
+  const [filterList, setFilterList] = useState<string>('');
   const [activeTab, setActiveTab] = useState('customersList');
-  const [activeCustomer, setActiveCustomer] = useState(customers?.[0]);
+  const [activeCustomer, setActiveCustomer] = useState<
+    Customer<CustomerFields> | undefined
+  >(customers?.[0]);
 
   const renderList = useCallback(() => {
-    return filterList?.length ? filterList : customers;
+    if (!customers) return [];
+    const newList = customers.filter((customer) =>
+      customer.name.includes(filterList),
+    );
+
+    return filterList && newList.length ? newList : customers;
   }, [filterList, customers]);
 
   useEffect(() => {
@@ -41,7 +46,14 @@ const CustomersList = () => {
   return (
     <Container>
       <NavBarOptions>
-        <InputUi type={'text'} name={''} label={''} />
+        <InputContainer>
+          <FilterInput
+            type={'text'}
+            name={''}
+            label={t('customersListPage.titles.filterInput')}
+            onChange={(e) => setFilterList(e.target.value)}
+          />
+        </InputContainer>
         <ButtonUi
           label={t('customersListPage.titles.customersList')}
           onClick={() => setActiveTab('customersList')}
@@ -55,28 +67,21 @@ const CustomersList = () => {
       </NavBarOptions>
 
       {!isLoading && customers && activeTab === 'customersList' && (
-        <Main>
-          <CustomersNameList>
-            {customers.map((customer, index) => (
-              <ButtonUi
-                key={index}
-                onClick={() => setActiveCustomer(customer)}
-                label={customer?.name}
-                isTransparent={Boolean(activeCustomer?.id !== customer.id)}
-              />
-            ))}
-          </CustomersNameList>
-          <CustomerDetails
-            customerId={activeCustomer?.id ?? customers[0]?.id}
-            refetchCustomersData={() => {
-              refetchCustomersData();
-              setActiveCustomer(customers[0]);
-            }}
-          />
-        </Main>
+        <CustomersNamesListUi
+          customers={renderList()}
+          activeCustomer={activeCustomer}
+          setActiveCustomer={setActiveCustomer}
+          refetchCustomersData={refetchCustomersData}
+        />
       )}
       {!isLoading && customers && activeTab === 'listDetails' && (
-        <CustomerListCardUi renderList={renderList()} />
+        <CustomerListCardUi
+          renderList={renderList()}
+          setActiveCustomer={(customer) => {
+            setActiveTab('customersList');
+            setActiveCustomer(customer);
+          }}
+        />
       )}
     </Container>
   );
@@ -87,26 +92,19 @@ const Container = styled.div`
   grid-template-columns: 10% 90%;
   height: 90vh;
 `;
-
-const Main = styled.div`
-  width: 100%;
-  display: flex;
+const InputContainer = styled.div`
+  height: 45px;
 `;
 
-const CustomersNameList = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: ${({ theme }) => theme.colors.backgroundColor.base};
-  margin-top: 4px;
-  padding: 0 4px;
-  gap: 5px;
-  width: 10%;
-  box-shadow: 0 14px 10px 2px rgba(0, 0, 0, 0.1);
+const FilterInput = styled(InputUi)`
+  //width: 100%;
+  //display: flex;
+  //height: 15px;
 `;
 
 const NavBarOptions = styled.div`
-  padding-top: 20px;
   background-color: ${({ theme }) => theme.colors.backgroundColor.base};
+  padding-top: 4px;
   gap: 4px;
   display: flex;
   z-index: 3;
